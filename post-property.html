@@ -89,12 +89,11 @@
                 <div class="form-group" style="margin-bottom: 20px;">
                     <label class="input-label">You are looking to</label>
                     <div class="chip-group">
-                        <label class="chip-label" style="display:inline-block;">
-                            <input type="radio" name="intent" value="Sell" required> Sell
-                        </label>
-                        <label class="chip-label" style="display:inline-block;">
-                            <input type="radio" name="intent" value="Rent"> Rent
-                        </label>
+                        <input type="radio" name="intent" id="intent-sell" value="Sell" required>
+                        <label class="chip-label" for="intent-sell" style="display:inline-block;">Sell</label>
+                        
+                        <input type="radio" name="intent" id="intent-rent" value="Rent">
+                        <label class="chip-label" for="intent-rent" style="display:inline-block;">Rent</label>
                     </div>
                 </div>
 
