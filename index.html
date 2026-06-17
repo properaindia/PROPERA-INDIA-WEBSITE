@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propera India | Premium Real Estate Platform</title>
+  
+  <meta name="description" content="Discover premium real estate, luxury villas, and commercial properties in India with Propera.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/home.css">
+  
+  <!-- Forms Handler for Google Sheets Integration -->
+  <script src="js/form-handler.js" defer></script>
+</head>
+<body class="theme-root" style="background: var(--color-5);">
+
+  <!-- SECTION 1: NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="logo">
+        <a href="index.html" style="display:flex; align-items:center;">
+            <img src="assets/ribbonfile.png" alt="Propera Logo" style="height: 56px; width: auto; object-fit: contain;">
+        </a>
+      </div>
+      <nav class="nav-links">
+        <div class="nav-dropdown">
+          <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Buy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="nav-dropdown-content">
+            <a href="searchbuy.html?prop=apartments">Apartments</a>
+            <a href="searchbuy.html?prop=villas">Villas</a>
+            <div class="nav-nested-dropdown">
+              <a href="#">Plots <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+              <div class="nav-nested-dropdown-content">
+                <a href="searchplots.html?subtype=residential">Residential Plot</a>
+                <a href="searchplots.html?subtype=commercial">Commercial land</a>
+                <a href="searchplots.html?subtype=agricultural">Agricultural Land</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Rent/Lease <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="nav-dropdown-content">
+            <div class="nav-nested-dropdown">
+              <a href="#">Apartments <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+              <div class="nav-nested-dropdown-content">
+                <a href="searchrent.html?bhk=1">1 BHK</a>
+                <a href="searchrent.html?bhk=2">2 BHK</a>
+                <a href="searchrent.html?bhk=3">3 BHK</a>
+                <a href="searchrent.html?bhk=4">4+ BHK</a>
+              </div>
+            </div>
+            <div class="nav-nested-dropdown">
+              <a href="#">Commercial Spaces <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+              <div class="nav-nested-dropdown-content">
+                <a href="searchcommercial.html?subtype=shop">Shop/Showroom</a>
+                <a href="searchcommercial.html?subtype=office">Office Space</a>
+                <a href="searchcommercial.html?subtype=warehouse">Warehouse/Godown</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <a href="premium-services.html" class="nav-item" style="display:flex; align-items:center; gap:4px;">Premium Services <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="nav-dropdown-content">
+            <a href="premium-services.html#home-loans">Home Loans</a>
+            <a href="premium-services.html#legal-services">Legal Assistance</a>
+            <a href="premium-services.html#interiors">Home Interiors</a>
+          </div>
+        </div>
+      </nav>
+      <div class="nav-actions">
+        <a href="post-property.html" class="nav-owner-cta">
+          <div class="cta-default">
+            <span class="sparkle" style="font-size:1.1rem; line-height:1;">&#10022;</span> Property Owner?
+          </div>
+          <div class="cta-hover">
+            Sell/Rent FREE &rsaquo;
+          </div>
+        </a>
+        <a href="about-contact.html#contact" class="nav-item contact-expert-btn">Contact Expert</a>
+      </div>
+      <button class="mobile-toggle" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- SECTION 2: HERO -->
+  <section class="hero-redesign" style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 80vh; padding: 4rem 1.5rem; text-align: center; color: white;">
+    <!-- Background Carousel -->
+    <div class="hero-bg-carousel" id="hero-img-carousel" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+        <!-- Images injected by JS -->
+    </div>
+    <!-- Overlay -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)); z-index: 2;"></div>
+
+    <!-- Content -->
+    <div class="hero-content" style="position: relative; z-index: 3; max-width: 800px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+      <h1 class="text-h1" style="font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.02em; color: white;">
+        Find Your Dream<br>Property in India
+      </h1>
+      <p class="text-body-lg" style="margin-bottom: 2.5rem; max-width: 600px; color: rgba(255,255,255,0.9);">
+        Discover premium apartments, luxury villas, and exclusive commercial spaces with 100% verified listings.
+      </p>
+
+      <div class="search-container" style="width: 100%; background: white; border-radius: var(--radius-lg); padding: var(--space-xs); box-shadow: 0 8px 32px rgba(0,0,0,0.15); border: 2px solid rgba(255,255,255,0.2);">
+        <div class="hero-search-tabs" style="border-bottom: 1px solid #e5e5e5; display: flex; gap: var(--space-md); padding: 0 var(--space-md);">
+          <a href="#" class="hero-tab active">Buy</a>
+          <a href="#" class="hero-tab">Rent</a>
+          <a href="#" class="hero-tab">Commercial</a>
+          <a href="#" class="hero-tab">Plots</a>
+        </div>
+        <form class="hero-search-bar" action="searchbuy.html" method="GET" style="display: flex; gap: var(--space-sm); padding: var(--space-sm);">
+          <div class="search-input-wrapper" style="flex: 1; display: flex; align-items: center; gap: var(--space-sm); background: var(--color-5); border-radius: var(--radius); padding: 0 var(--space-md);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" name="q" class="hero-input" placeholder="Search by locality, builder, or project..." style="flex: 1; background: transparent; border: none; padding: var(--space-sm) 0; outline: none; font-size: 1rem; color: #333;">
+          </div>
+          <button type="submit" class="hero-search-btn btn btn-primary" style="padding: 0 2rem;">Search</button>
+        </form>
+      </div>
+
+      <div class="hero-localities" style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+        <div class="locality-title" style="color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Popular Searches
+        </div>
+        <div class="locality-tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <a href="searchbuy.html?q=Whitefield" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.875rem; text-decoration: none; backdrop-filter: blur(4px);">Whitefield</a>
+          <a href="searchbuy.html?q=Sarjapur" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.875rem; text-decoration: none; backdrop-filter: blur(4px);">Sarjapur</a>
+          <a href="searchbuy.html?q=Hebbal" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.875rem; text-decoration: none; backdrop-filter: blur(4px);">Hebbal</a>
+          <a href="searchbuy.html?q=Electronic+City" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.875rem; text-decoration: none; backdrop-filter: blur(4px);">Electronic City</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: QUICK LINKS / LOCALITY CHIPS -->
+  <section class="locality-section container">
+    <div class="locality-wrapper">
+      <span class="locality-label">Explore by Property Type:</span>
+      <div class="chips-container">
+        <a href="searchbuy.html?prop=villas" class="chip">Luxury Villas</a>
+        <a href="searchbuy.html?prop=apartments&bhk=3" class="chip">3 BHK Apartments</a>
+        <a href="searchcommercial.html" class="chip">Office Spaces</a>
+        <a href="searchplots.html" class="chip">Residential Plots</a>
+        <a href="searchrent.html?prop=apartments" class="chip">Flats for Rent</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: PREMIUM PROPERTIES CAROUSEL -->
+  <section class="premium-section bg-alt">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <h2 class="premium-title text-h2">Premium Exclusive Properties</h2>
+          <p class="text-muted">Handpicked luxury homes and projects across the city.</p>
+        </div>
+        <div class="carousel-nav">
+          <button class="nav-arrow" id="prev-premium">&larr;</button>
+          <button class="nav-arrow" id="next-premium">&rarr;</button>
+        </div>
+      </div>
+
+      <div class="carousel-track" id="premium-track">
+        <!-- These will be hydrated by JS, but providing a skeleton structure so it's not empty -->
+        <div class="property-card">
+          <div class="card-image-wrapper">
+            <div class="card-badges">
+              <span class="badge badge-premium">Premium</span>
+            </div>
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" class="card-image" alt="Prestige Sunrise">
+          </div>
+          <div class="card-content">
+            <div class="property-meta">Under Construction</div>
+            <h3 class="property-name text-h3">Prestige Sunrise Park</h3>
+            <p class="property-location">Electronic City, Bangalore</p>
+            <div class="property-price">o" 1.45 Cr</div>
+            <div class="card-actions">
+              <a href="property-detail.html?id=prestige-sunrise" class="btn btn-outline flex-1">View Details</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="property-card">
+          <div class="card-image-wrapper">
+            <div class="card-badges">
+              <span class="badge badge-featured">Featured</span>
+            </div>
+            <img src="https://images.unsplash.com/photo-1600607687931-cece5ce21fac?auto=format&fit=crop&w=600&q=80" class="card-image" alt="Sobha City">
+          </div>
+          <div class="card-content">
+            <div class="property-meta">Ready to Move</div>
+            <h3 class="property-name text-h3">Sobha City Casa Paradiso</h3>
+            <p class="property-location">Hegde Nagar, Bangalore</p>
+            <div class="property-price">o" 2.10 Cr</div>
+            <div class="card-actions">
+              <a href="property-detail.html?id=sobha-city" class="btn btn-outline flex-1">View Details</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="property-card">
+          <div class="card-image-wrapper">
+            <div class="card-badges">
+              <span class="badge badge-new">New Launch</span>
+            </div>
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" class="card-image" alt="Brigade Woods">
+          </div>
+          <div class="card-content">
+            <div class="property-meta">New Launch</div>
+            <h3 class="property-name text-h3">Brigade Woods</h3>
+            <p class="property-location">Whitefield, Bangalore</p>
+            <div class="property-price">o" 1.85 Cr</div>
+            <div class="card-actions">
+              <a href="property-detail.html?id=brigade-woods" class="btn btn-outline flex-1">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: BUDGET FRIENDLY -->
+  <section class="discovery-section">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <h2 class="premium-title text-h2">Budget Friendly Homes</h2>
+          <p class="text-muted">Explore affordable properties that fit your budget.</p>
+        </div>
+      </div>
+      <div class="carousel-track" id="track-budget">
+        <div style="padding: 20px;">Loading Budget properties...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: PLOTS -->
+  <section class="discovery-section bg-alt">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <h2 class="premium-title text-h2">Premium Plots</h2>
+          <p class="text-muted">Invest in residential and commercial land.</p>
+        </div>
+      </div>
+      <div class="carousel-track" id="track-plots">
+        <div style="padding: 20px;">Loading Plots...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: COMMERCIAL SPACES -->
+  <section class="discovery-section">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <h2 class="premium-title text-h2">Commercial Spaces</h2>
+          <p class="text-muted">Premium office and retail spaces for your business.</p>
+        </div>
+      </div>
+      <div class="carousel-track" id="track-commercial">
+        <div style="padding: 20px;">Loading Commercial Spaces...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding: 60px 20px; background: white; border-top: 1px solid var(--border);">
+    <div class="container grid grid-cols-4" style="gap: 40px; margin-bottom: 40px;">
+      <div>
+        <img src="assets/ribbonfile.png" alt="Propera Logo" style="height: 40px; margin-bottom: 20px;">
+        <p class="text-muted text-body-sm">Propera India is your trusted partner in finding premium real estate across the country. 100% verified listings, zero hassle.</p>
+      </div>
+      <div>
+        <h4 class="text-h4" style="margin-bottom: 20px;">Quick Links</h4>
+        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+          <li><a href="searchbuy.html" style="color: var(--text-secondary); text-decoration: none;">Buy Properties</a></li>
+          <li><a href="searchrent.html" style="color: var(--text-secondary); text-decoration: none;">Rent Properties</a></li>
+          <li><a href="premium-services.html" style="color: var(--text-secondary); text-decoration: none;">Premium Services</a></li>
+          <li><a href="post-property.html" style="color: var(--text-secondary); text-decoration: none;">Post Property Free</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-h4" style="margin-bottom: 20px;">Contact</h4>
+        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+          <li style="color: var(--text-secondary);">o +91 88001 23456</li>
+          <li style="color: var(--text-secondary);">o" info@properaindia.com</li>
+          <li style="color: var(--text-secondary);">" Bangalore, India</li>
+        </ul>
+      </div>
+    </div>
+    <div style="text-align: center; color: var(--text-muted); padding-top: 20px; border-top: 1px solid var(--border);">
+      <p>&copy; 2026 Propera India. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/918800123456" target="_blank" rel="noopener" class="floating-whatsapp" aria-label="Chat on WhatsApp">
+    <svg class="whatsapp-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- Link your app logic if any -->
+  <script src="js/property-loader.js"></script>
+  <script src="js/dynamic-loader.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Simple logic for tabs and carousels
+    document.querySelectorAll('.hero-tab').forEach(tab => {
+        tab.addEventListener('click', e => {
+            e.preventDefault();
+            document.querySelectorAll('.hero-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const action = tab.innerText.toLowerCase();
+            document.querySelector('.hero-search-bar').action = 'search' + action + '.html';
+        });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Property - Propera India</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/post-property.css">
+    
+    <script src="js/form-handler.js" defer></script>
+</head>
+<body class="theme-root">
+
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="logo">
+        <a href="index.html" style="display:flex; align-items:center;">
+            <img src="assets/ribbonfile.png" alt="Propera Logo" style="height: 56px; width: auto; object-fit: contain;">
+        </a>
+      </div>
+      <nav class="nav-links">
+        <a href="searchbuy.html" class="nav-item">Buy</a>
+        <a href="searchrent.html" class="nav-item">Rent</a>
+        <a href="premium-services.html" class="nav-item">Premium Services</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="about-contact.html#contact" class="nav-item contact-expert-btn">Contact Expert</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="post-layout">
+        
+        <div class="post-value-props">
+            <h1 class="text-h1">Sell or Rent your Property for Free</h1>
+            <p class="text-muted">List your property in minutes and reach thousands of verified buyers and tenants instantly.</p>
+            
+            <div class="trust-grid">
+                <div class="trust-card">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <span>100% Verified Leads</span>
+                </div>
+                <div class="trust-card">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span>Quick Responses</span>
+                </div>
+                <div class="trust-card">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Secure Platform</span>
+                </div>
+            </div>
+
+            <div class="response-time">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <div>
+                    <strong>Super Fast Verification</strong>
+                    <p style="margin: 0;">Your property goes live within 24 hours of submission.</p>
+                </div>
+            </div>
+
+            <div class="hiw-list">
+                <h3 class="text-h3">How it works</h3>
+                <div class="hiw-step">
+                    <div class="hiw-num">1</div>
+                    <div>Post your Property Details</div>
+                </div>
+                <div class="hiw-step">
+                    <div class="hiw-num">2</div>
+                    <div>We verify the information</div>
+                </div>
+                <div class="hiw-step">
+                    <div class="hiw-num">3</div>
+                    <div>Get contacted by interested buyers/tenants</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="post-form-container">
+            <h2 class="text-h2" style="margin-bottom: 24px;">Property Details</h2>
+            <form class="form-auto-submit" data-source="Post Property">
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">You are looking to</label>
+                    <div class="chip-group">
+                        <label class="chip-label" style="display:inline-block;">
+                            <input type="radio" name="intent" value="Sell" required> Sell
+                        </label>
+                        <label class="chip-label" style="display:inline-block;">
+                            <input type="radio" name="intent" value="Rent"> Rent
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">Property Type</label>
+                    <select class="input-field" name="type" required>
+                        <option value="">Select Property Type</option>
+                        <option>Apartment</option>
+                        <option>Villa</option>
+                        <option>Plot / Land</option>
+                        <option>Commercial Space</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">Location</label>
+                    <input type="text" class="input-field" name="location" placeholder="Locality, City" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">Expected Price</label>
+                    <input type="text" class="input-field" name="price" placeholder="e.g. 1.5 Cr" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">Your Name</label>
+                    <input type="text" class="input-field" name="name" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">Phone Number</label>
+                    <input type="tel" class="input-field" name="phone" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">Property Description</label>
+                    <textarea class="input-field" name="description" rows="4" placeholder="Highlight the best features..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 15px; width: 100%;">Submit Property</button>
+            </form>
+        </div>
+
+    </div>
+  </main>
+  
+  <footer style="padding: 40px 20px; text-align: center; border-top: 1px solid var(--border); margin-top: 60px;">
+      <p class="text-muted">&copy; 2026 Propera India. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

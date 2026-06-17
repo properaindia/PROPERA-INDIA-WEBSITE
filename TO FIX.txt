@@ -1,0 +1,28 @@
+Small Issues to Fix Later
+Hero image slightly too generic (needs premium branded-project feeling later)
+Search card should eventually include budget filter
+Navbar could later get hover dropdowns
+“Premium Services” eventually needs mega menu
+Hero should become rotating featured property slider later
+
+Small Fixes Later
+First card image broke (fix lazy/image fallback later)
+WhatsApp button is too generic green circle — later make it premium and smaller
+Cards slightly too tall → reduce vertical space ~10–15%
+Add price + property type alignment consistency
+Eventually add “Verified by Propera” badge for trust
+
+Small Fixes Later
+Broken images still exist → add image fallback placeholder logic
+Some cards are too tall → reduce vertical padding ~10%
+Add “View All →” on each section heading later
+Budget section should later prioritize lowest price first
+Rental cards should later show:
+deposit
+furnishing
+availability
+Commercial should later include:
+sqft
+furnishing
+office type
+

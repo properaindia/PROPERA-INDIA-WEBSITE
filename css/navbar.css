@@ -1,0 +1,296 @@
+/* Shared Navbar - Consistent across all pages */
+.navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: #f4f6f9; /* Subtle brand theme tint instead of stark white */
+    backdrop-filter: blur(8px);
+    z-index: 50;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px; /* Increased from 64px to comfortably fit the larger 56px logo */
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.logo {
+    flex-shrink: 0;
+}
+
+.logo a {
+    text-decoration: none;
+}
+
+.nav-links {
+    display: none;
+    gap: 1rem; /* Reduced gap to fit all items */
+    align-items: center;
+    flex-shrink: 1; /* allow shrinking if needed */
+}
+
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+    }
+}
+
+@media (min-width: 1200px) {
+    .nav-links {
+        gap: 1.5rem; /* More space on large screens */
+    }
+}
+
+.nav-item {
+    font-size: 0.95rem; /* Increased from 0.85rem */
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+.nav-item:hover {
+    color: #2B5C8F;
+}
+
+.nav-badge {
+    background: #6366f1; /* updated badge color */
+    color: white;
+    font-size: 0.7rem; /* Increased from 0.625rem */
+    font-weight: 600;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    margin-left: 0.25rem;
+    vertical-align: middle;
+}
+
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    min-width: 200px;
+    z-index: 100;
+}
+
+.nav-dropdown:hover > .nav-dropdown-content {
+    display: block;
+}
+
+/* Nested dropdown styles */
+.nav-nested-dropdown {
+    position: relative;
+}
+
+.nav-nested-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    min-width: 150px;
+    z-index: 101;
+    margin-left: 2px;
+}
+
+.nav-nested-dropdown:hover > .nav-nested-dropdown-content {
+    display: block;
+}
+
+.nav-dropdown-content .nav-nested-dropdown > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-dropdown-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.nav-dropdown-content a {
+    display: block;
+    padding: 0.4rem 0;
+    font-size: 0.95rem; /* Increased from 0.875rem */
+    color: #374151;
+    text-decoration: none;
+}
+
+.nav-dropdown-content a:hover {
+    color: #2B5C8F;
+}
+
+.nav-actions {
+    display: none;
+    gap: 0.75rem; /* Slightly increased gap for larger elements */
+    align-items: center;
+    flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+    .nav-actions {
+        display: flex;
+    }
+}
+
+.mobile-toggle {
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    color: #374151;
+}
+
+@media (min-width: 768px) {
+    .mobile-toggle {
+        display: none;
+    }
+}
+
+/* Mobile menu */
+.nav-links.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    gap: 0.75rem;
+}
+
+@media (max-width: 767px) {
+    .nav-actions {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 1rem;
+        gap: 0.5rem;
+    }
+    .nav-actions.active {
+        display: flex;
+        position: absolute;
+        top: calc(56px + 230px); /* Positioned below nav-links */
+        left: 0; right: 0;
+        background: white;
+        padding: 0 1.5rem 1.5rem 1.5rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        border-bottom: 1px solid #e5e5e5;
+        z-index: 100;
+    }
+    .nav-owner-cta, .contact-expert-btn, .whatsapp-btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+@media (min-width: 768px) {
+    .nav-links.active {
+        display: none;
+    }
+}
+
+/* Nav Owner CTA */
+.nav-owner-cta {
+    position: relative;
+    overflow: hidden;
+    background: #2a2656;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1.25rem;
+    height: 40px; /* Increased from 36px */
+    border-radius: 9999px;
+    font-size: 0.95rem; /* Increased from 0.85rem */
+    text-decoration: none;
+    font-weight: 600;
+    min-width: 170px; /* Increased to fit larger text */
+}
+
+.contact-expert-btn {
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    white-space: nowrap;
+}
+
+.whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #25D366;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.whatsapp-btn:hover {
+    background: #20BA56;
+}
+
+.cta-default, .cta-hover {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+.cta-default {
+    transform: translateY(0);
+    filter: blur(0);
+    opacity: 1;
+}
+
+.cta-hover {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.nav-owner-cta:hover .cta-default {
+    transform: translateY(-50%);
+    filter: blur(4px);
+    opacity: 0;
+}
+
+.nav-owner-cta:hover .cta-hover {
+    transform: translateY(0);
+    opacity: 1;
+}

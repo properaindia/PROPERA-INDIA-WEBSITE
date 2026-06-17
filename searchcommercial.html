@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commercial Properties - Propera India</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/search.css">
+    
+    <script src="js/form-handler.js" defer></script>
+</head>
+<body class="search-body">
+
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="logo">
+        <a href="index.html" style="display:flex; align-items:center;">
+            <img src="assets/ribbonfile.png" alt="Propera Logo" style="height: 56px; width: auto; object-fit: contain;">
+        </a>
+      </div>
+      <nav class="nav-links">
+        <div class="nav-dropdown">
+          <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Buy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="nav-dropdown-content">
+            <a href="searchbuy.html?prop=apartments">Apartments</a>
+            <a href="searchbuy.html?prop=villas">Villas</a>
+            <div class="nav-nested-dropdown">
+              <a href="#">Plots <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+              <div class="nav-nested-dropdown-content">
+                <a href="searchplots.html?subtype=residential">Residential Plot</a>
+                <a href="searchplots.html?subtype=commercial">Commercial land</a>
+                <a href="searchplots.html?subtype=agricultural">Agricultural Land</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Rent/Lease <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="nav-dropdown-content">
+            <div class="nav-nested-dropdown">
+              <a href="#">Apartments <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+              <div class="nav-nested-dropdown-content">
+                <a href="searchrent.html?bhk=1">1 BHK</a>
+                <a href="searchrent.html?bhk=2">2 BHK</a>
+                <a href="searchrent.html?bhk=3">3 BHK</a>
+                <a href="searchrent.html?bhk=4">4+ BHK</a>
+              </div>
+            </div>
+            <div class="nav-nested-dropdown">
+              <a href="#">Commercial Spaces <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+              <div class="nav-nested-dropdown-content">
+                <a href="searchcommercial.html?subtype=shop">Shop/Showroom</a>
+                <a href="searchcommercial.html?subtype=office">Office Space</a>
+                <a href="searchcommercial.html?subtype=warehouse">Warehouse/Godown</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <a href="premium-services.html" class="nav-item" style="display:flex; align-items:center; gap:4px;">Premium Services <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="nav-dropdown-content">
+            <a href="premium-services.html#home-loans">Home Loans</a>
+            <a href="premium-services.html#legal-services">Legal Assistance</a>
+            <a href="premium-services.html#interiors">Home Interiors</a>
+          </div>
+        </div>
+      </nav>
+      <div class="nav-actions">
+        <a href="post-property.html" class="nav-owner-cta">
+          <div class="cta-default">
+            <span class="sparkle" style="font-size:1.1rem; line-height:1;">&#10022;</span> Property Owner?
+          </div>
+          <div class="cta-hover">
+            Sell/Rent FREE &rsaquo;
+          </div>
+        </a>
+        <a href="about-contact.html#contact" class="nav-item contact-expert-btn">Contact Expert</a>
+      </div>
+    </div>
+  </header>
+
+    <main class="search-page-container">
+        <!-- LEFT SIDEBAR -->
+        <aside class="search-sidebar">
+            <div class="sidebar-header">
+                <h3 class="text-h3" style="margin:0; font-size: 1.1rem;">Filters</h3>
+                <button style="background:none; border:none; color:var(--color-3); cursor:pointer; font-size:0.875rem; font-weight:600;">Reset All</button>
+            </div>
+
+            <details class="filter-section" open>
+                <summary>Intent</summary>
+                <div class="filter-options">
+                    <label class="custom-label"><input type="radio" name="intent" value="buy" > Buy</label>
+                    <label class="custom-label"><input type="radio" name="intent" value="rent" > Rent</label>
+                    <label class="custom-label"><input type="radio" name="intent" value="commercial" checked> Commercial</label>
+                </div>
+            </details>
+
+            <details class="filter-section" open>
+                <summary>Property Type</summary>
+                <div class="filter-options">
+                    <label class="custom-label"><input type="checkbox" checked> Apartment</label>
+                    <label class="custom-label"><input type="checkbox"> Villa</label>
+                    <label class="custom-label"><input type="checkbox" > Plot</label>
+                    <label class="custom-label"><input type="checkbox" checked> Commercial</label>
+                </div>
+            </details>
+
+            <details class="filter-section" open>
+                <summary>Budget</summary>
+                <div class="filter-options">
+                    <label class="custom-label"><input type="radio" name="budget" value="u50"> Under 50L</label>
+                    <label class="custom-label"><input type="radio" name="budget" value="50-100"> 50L - 1Cr</label>
+                    <label class="custom-label"><input type="radio" name="budget" value="100-200" checked> 1Cr - 2Cr</label>
+                    <label class="custom-label"><input type="radio" name="budget" value="200-500"> 2Cr - 5Cr</label>
+                    <label class="custom-label"><input type="radio" name="budget" value="500+"> 5Cr+</label>
+                </div>
+            </details>
+
+            <details class="filter-section" open>
+                <summary>Location</summary>
+                <div class="filter-options">
+                    <label class="custom-label"><input type="checkbox" checked> Whitefield</label>
+                    <label class="custom-label"><input type="checkbox"> Sarjapur</label>
+                    <label class="custom-label"><input type="checkbox"> Electronic City</label>
+                    <label class="custom-label"><input type="checkbox"> Hebbal</label>
+                </div>
+            </details>
+
+            <details class="filter-section">
+                <summary>BHK Setup</summary>
+                <div class="filter-options">
+                    <label class="custom-label"><input type="checkbox"> 1 BHK</label>
+                    <label class="custom-label"><input type="checkbox" checked> 2 BHK</label>
+                    <label class="custom-label"><input type="checkbox" checked> 3 BHK</label>
+                    <label class="custom-label"><input type="checkbox"> 4+ BHK</label>
+                </div>
+            </details>
+        </aside>
+
+        <!-- RIGHT PROPERTIES GRID -->
+        <section class="search-results-area">
+            <div class="sort-bar">
+                <span class="text-muted" style="font-size: 0.9375rem;">Showing properties</span>
+                <select class="sort-select">
+                    <option>Premium First</option>
+                    <option>Verified First</option>
+                    <option>Newest</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                </select>
+            </div>
+
+            <div id="dynamic-search-results">
+                <!-- Properties injected by JS -->
+            </div>
+            
+            <div id="loading-state" style="text-align:center; padding: 40px; display:none;">
+                <p>Loading properties...</p>
+            </div>
+            
+            <div id="no-results-state" style="text-align:center; padding: 40px; display:none;">
+                <h3 class="text-h3">No properties found</h3>
+                <p class="text-muted">Try adjusting your filters.</p>
+            </div>
+        </section>
+    </main>
+    
+    <script src="js/dynamic-loader.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
