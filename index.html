@@ -24,14 +24,14 @@
     <div class="navbar-container">
       <div class="logo">
         <a href="index.html" style="display:flex; align-items:center;">
-            <img src="assets/ribbonfile.png" alt="Propera Logo" style="height: 56px; width: auto; object-fit: contain;">
+            <img src="assets/RibbonLogo.png" alt="Propera Logo" style="height: 56px; width: auto; object-fit: contain;">
         </a>
       </div>
-      <nav class="nav-links">
-        <div class="nav-dropdown">
-          <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Buy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="nav-dropdown-content">
-            <a href="searchbuy.html?prop=apartments">Apartments</a>
+        <nav class="nav-links">
+          <div class="nav-dropdown scroll-reveal-item" style="opacity: 0; pointer-events: none; transform: translateY(-10px); transition: all 0.3s ease; width: 0; overflow: hidden; margin: 0; padding: 0;">
+            <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Buy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+            <div class="nav-dropdown-content">
+              <a href="searchbuy.html?prop=apartments">Apartments</a>
             <a href="searchbuy.html?prop=villas">Villas</a>
             <div class="nav-nested-dropdown">
               <a href="#">Plots <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
@@ -44,10 +44,10 @@
           </div>
         </div>
 
-        <div class="nav-dropdown">
-          <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Rent/Lease <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="nav-dropdown-content">
-            <div class="nav-nested-dropdown">
+          <div class="nav-dropdown scroll-reveal-item" style="opacity: 0; pointer-events: none; transform: translateY(-10px); transition: all 0.3s ease; width: 0; overflow: hidden; margin: 0; padding: 0;">
+            <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Rent/Lease <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+            <div class="nav-dropdown-content">
+              <div class="nav-nested-dropdown">
               <a href="#">Apartments <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
               <div class="nav-nested-dropdown-content">
                 <a href="searchrent.html?bhk=1">1 BHK</a>
@@ -66,6 +66,8 @@
             </div>
           </div>
         </div>
+      </nav>
+      <div class="nav-actions">
 
         <div class="nav-dropdown">
           <a href="premium-services.html" class="nav-item" style="display:flex; align-items:center; gap:4px;">Premium Services <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
@@ -75,8 +77,6 @@
             <a href="premium-services.html#interiors">Home Interiors</a>
           </div>
         </div>
-      </nav>
-      <div class="nav-actions">
         <a href="post-property.html" class="nav-owner-cta">
           <div class="cta-default">
             <span class="sparkle" style="font-size:1.1rem; line-height:1;">&#10022;</span> Property Owner?
@@ -94,7 +94,7 @@
   </header>
 
   <!-- SECTION 2: HERO -->
-  <section class="hero-redesign" style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 80vh; padding: 4rem 1.5rem; text-align: center; color: white;">
+  <section class="hero-redesign" style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin-top: -72px; padding: calc(4rem + 72px) 1.5rem 4rem; text-align: center; color: white;">
     <!-- Background Carousel -->
     <div class="hero-bg-carousel" id="hero-img-carousel" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
         <!-- Images injected by JS -->
@@ -111,13 +111,50 @@
         Discover premium apartments, luxury villas, and exclusive commercial spaces with 100% verified listings.
       </p>
 
-      <div class="search-container" style="width: 100%; background: white; border-radius: var(--radius-lg); padding: var(--space-xs); box-shadow: 0 8px 32px rgba(0,0,0,0.15); border: 2px solid rgba(255,255,255,0.2);">
-        <div class="hero-search-tabs" style="border-bottom: 1px solid #e5e5e5; display: flex; gap: var(--space-md); padding: 0 var(--space-md);">
-          <a href="#" class="hero-tab active">Buy</a>
-          <a href="#" class="hero-tab">Rent</a>
-          <a href="#" class="hero-tab">Commercial</a>
-          <a href="#" class="hero-tab">Plots</a>
-        </div>
+        <div class="search-container" style="width: 100%; background: white; border-radius: var(--radius-lg); padding: var(--space-xs); box-shadow: 0 8px 32px rgba(0,0,0,0.15); border: 2px solid rgba(255,255,255,0.2); position: relative; z-index: 10;">
+          <div class="hero-search-tabs" style="border-bottom: 1px solid #e5e5e5; display: flex; gap: var(--space-md); padding: 0 var(--space-md); align-items: center;">
+            <div class="nav-dropdown">
+              <a href="#" class="hero-tab active" style="display:flex; align-items:center; gap:4px; padding: 1rem 0;">Buy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+              <div class="nav-dropdown-content" style="text-align: left; top: calc(100% - 1px);">
+                <a href="searchbuy.html?prop=apartments">Apartments</a>
+                <a href="searchbuy.html?prop=villas">Villas</a>
+                <div class="nav-nested-dropdown">
+                  <a href="#">Plots <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+                  <div class="nav-nested-dropdown-content">
+                    <a href="searchplots.html?subtype=residential">Residential Plot</a>
+                    <a href="searchplots.html?subtype=commercial">Commercial land</a>
+                    <a href="searchplots.html?subtype=agricultural">Agricultural Land</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="nav-dropdown">
+              <a href="#" class="hero-tab" style="display:flex; align-items:center; gap:4px; padding: 1rem 0;">Rent <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+              <div class="nav-dropdown-content" style="text-align: left; top: calc(100% - 1px);">
+                <div class="nav-nested-dropdown">
+                  <a href="#">Apartments <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+                  <div class="nav-nested-dropdown-content">
+                    <a href="searchrent.html?bhk=1">1 BHK</a>
+                    <a href="searchrent.html?bhk=2">2 BHK</a>
+                    <a href="searchrent.html?bhk=3">3 BHK</a>
+                    <a href="searchrent.html?bhk=4">4+ BHK</a>
+                  </div>
+                </div>
+                <div class="nav-nested-dropdown">
+                  <a href="#">Commercial Spaces <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+                  <div class="nav-nested-dropdown-content">
+                    <a href="searchcommercial.html?subtype=shop">Shop/Showroom</a>
+                    <a href="searchcommercial.html?subtype=office">Office Space</a>
+                    <a href="searchcommercial.html?subtype=warehouse">Warehouse/Godown</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <a href="#" class="hero-tab" style="padding: 1rem 0;">Commercial</a>
+            <a href="#" class="hero-tab" style="padding: 1rem 0;">Plots</a>
+          </div>
         <form class="hero-search-bar" action="searchbuy.html" method="GET" style="display: flex; gap: var(--space-sm); padding: var(--space-sm);">
           <div class="search-input-wrapper" style="flex: 1; display: flex; align-items: center; gap: var(--space-sm); background: var(--color-5); border-radius: var(--radius); padding: 0 var(--space-md);">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -278,7 +315,7 @@
   <footer style="padding: 60px 20px; background: white; border-top: 1px solid var(--border);">
     <div class="container grid grid-cols-4" style="gap: 40px; margin-bottom: 40px;">
       <div>
-        <img src="assets/ribbonfile.png" alt="Propera Logo" style="height: 40px; margin-bottom: 20px;">
+        <img src="assets/RibbonLogo.png" alt="Propera Logo" style="height: 40px; margin-bottom: 20px;">
         <p class="text-muted text-body-sm">Propera India is your trusted partner in finding premium real estate across the country. 100% verified listings, zero hassle.</p>
       </div>
       <div>
@@ -312,6 +349,38 @@
   <script src="js/property-loader.js"></script>
   <script src="js/dynamic-loader.js"></script>
   <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Scroll Reveal logic for navbar items
+      const searchContainer = document.querySelector('.search-container');
+      const revealItems = document.querySelectorAll('.scroll-reveal-item');
+      
+      if (searchContainer && revealItems.length > 0) {
+        window.addEventListener('scroll', () => {
+          const rect = searchContainer.getBoundingClientRect();
+          // If the top of the search container goes above the middle of the viewport
+          if (rect.top < window.innerHeight / 2) {
+            revealItems.forEach(item => {
+              item.style.opacity = '1';
+              item.style.pointerEvents = 'auto';
+              item.style.transform = 'translateY(0)';
+              item.style.width = 'auto';
+              item.style.margin = '0';
+              item.style.overflow = 'visible';
+            });
+          } else {
+            revealItems.forEach(item => {
+              item.style.opacity = '0';
+              item.style.pointerEvents = 'none';
+              item.style.transform = 'translateY(-10px)';
+              item.style.width = '0';
+              item.style.overflow = 'hidden';
+            });
+          }
+        });
+      }
+    });
+  </script>
   <script>
     // Simple logic for tabs and carousels
     document.querySelectorAll('.hero-tab').forEach(tab => {

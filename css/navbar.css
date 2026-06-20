@@ -3,10 +3,12 @@
     position: sticky;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.97);
-    backdrop-filter: blur(8px);
-    z-index: 50;
-    border-bottom: 1px solid #e5e5e5;
+    background-color: rgb(29, 92, 162) !important;
+    background: rgb(29, 92, 162) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .navbar-container {
@@ -49,14 +51,14 @@
 .nav-item {
     font-size: 0.95rem; /* Increased from 0.85rem */
     font-weight: 500;
-    color: #374151;
+    color: rgba(255, 255, 255, 0.95);
     text-decoration: none;
     white-space: nowrap;
     transition: color 0.2s;
 }
 
 .nav-item:hover {
-    color: #2B5C8F;
+    color: #ffffff;
 }
 
 .nav-badge {
