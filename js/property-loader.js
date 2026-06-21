@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         let properties = null;
-        const cachedProps = sessionStorage.getItem('propera_properties_v2');
+        const cachedProps = sessionStorage.getItem('propera_properties_v3');
         
         if (cachedProps) {
             properties = JSON.parse(cachedProps);
@@ -28,9 +28,23 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
             properties = await response.json();
             
-            // Cache for future page loads in the same session
+            // Sanitize properties directly
             if (properties && properties.length > 0 && !properties.error) {
-                sessionStorage.setItem('propera_properties_v2', JSON.stringify(properties));
+                properties = properties.map(prop => {
+                    const sanitize = (obj) => {
+                        for (let key in obj) {
+                            if (typeof obj[key] === 'string') {
+                                obj[key] = obj[key].replace(/<>/g, '-');
+                            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                                sanitize(obj[key]);
+                            }
+                        }
+                    };
+                    sanitize(prop);
+                    return prop;
+                });
+                
+                sessionStorage.setItem('propera_properties_v3', JSON.stringify(properties));
             }
         }
         

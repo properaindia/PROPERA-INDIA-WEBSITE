@@ -7,7 +7,7 @@ let allProperties = [];
 
 async function fetchProperties() {
     try {
-        const cachedProps = sessionStorage.getItem('propera_properties_v2');
+        const cachedProps = sessionStorage.getItem('propera_properties_v3');
         if (cachedProps) {
             allProperties = JSON.parse(cachedProps);
             return allProperties;
@@ -40,10 +40,22 @@ async function fetchProperties() {
                         return url;
                     });
                 }
+                // 3. Replace <> with - across all string fields
+                const sanitize = (obj) => {
+                    for (let key in obj) {
+                        if (typeof obj[key] === 'string') {
+                            obj[key] = obj[key].replace(/<>/g, '-');
+                        } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                            sanitize(obj[key]);
+                        }
+                    }
+                };
+                sanitize(prop);
+
                 return prop;
             });
             allProperties = properties;
-            sessionStorage.setItem('propera_properties_v2', JSON.stringify(properties));
+            sessionStorage.setItem('propera_properties_v3', JSON.stringify(properties));
         }
         return properties;
     } catch (e) {

@@ -104,3 +104,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Generic Carousel Scroll Logic
+window.scrollCarousel = function(trackId, direction) {
+    const track = document.getElementById(trackId);
+    if (!track) return;
+    const firstCard = track.querySelector('.property-card, .discovery-card, .result-card-hz');
+    if (!firstCard) return;
+    const cardWidth = firstCard.offsetWidth;
+    // Assume gap is roughly 24px (1.5rem)
+    const gap = 32;
+    const scrollAmount = cardWidth + gap;
+    track.closest(".carousel-viewport").scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+};
+
