@@ -117,6 +117,10 @@ function renderProperty(data) {
     const titleEl = document.querySelector('.prop-title');
     if (titleEl) titleEl.textContent = data.title;
     
+    // Set the hidden input in the Site Visit modal
+    const visitPropInput = document.getElementById('visit-property-name');
+    if (visitPropInput) visitPropInput.value = data.title;
+    
     currentPropertyLocation = data.location;
     
     const subtitleEl = document.querySelector('.prop-subtitle');
@@ -304,6 +308,63 @@ window.closeLightbox = function() {
         document.body.style.overflow = '';
     }
 };
+
+// Gallery Auto-Scroll Logic
+let galleryPauseUntil = 0;
+
+window.pauseGallery = function() {
+    galleryPauseUntil = Date.now() + 5000;
+};
+
+window.prevMainImage = function(e) {
+    if (e) {
+        e.stopPropagation();
+        window.pauseGallery();
+    }
+    if (!currentPropertyImages.length) return;
+    let nextIndex = currentLightboxIndex - 1;
+    if (nextIndex < 0) nextIndex = currentPropertyImages.length - 1;
+    const thumbs = document.querySelectorAll('.thumbnail-gallery .thumb');
+    if (thumbs.length > nextIndex) {
+        window.updateMainImage(thumbs[nextIndex], nextIndex);
+    }
+};
+
+window.nextMainImage = function(e) {
+    if (e) {
+        e.stopPropagation();
+        window.pauseGallery();
+    }
+    if (!currentPropertyImages.length) return;
+    let nextIndex = currentLightboxIndex + 1;
+    if (nextIndex >= currentPropertyImages.length) nextIndex = 0;
+    const thumbs = document.querySelectorAll('.thumbnail-gallery .thumb');
+    if (thumbs.length > nextIndex) {
+        window.updateMainImage(thumbs[nextIndex], nextIndex);
+    }
+};
+
+// Add pause on touch/hover for gallery
+document.addEventListener('DOMContentLoaded', () => {
+    // We bind it globally or directly to the gallery since it's dynamically populated
+    document.addEventListener('touchstart', (e) => {
+        if (e.target.closest('.prop-gallery')) window.pauseGallery();
+    }, {passive: true});
+    
+    document.addEventListener('mousemove', (e) => {
+        if (e.target.closest('.prop-gallery')) window.pauseGallery();
+    }, {passive: true});
+});
+
+// Auto cycle the gallery every 2s
+setInterval(() => {
+    if (currentPropertyImages.length <= 1) return;
+    if (document.getElementById('gallery-lightbox') && document.getElementById('gallery-lightbox').classList.contains('active')) return;
+    
+    if (Date.now() > galleryPauseUntil) {
+        window.nextMainImage();
+    }
+}, 2000);
 
 window.changeLightboxImage = function(direction) {
     if (!currentPropertyImages.length) return;

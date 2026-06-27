@@ -49,7 +49,38 @@ function doPost(e) {
     // Generate Lead ID (timestamp + random)
     const leadId = `LEAD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
-    // Get next row
+    // Handle Site Visit Booking to Sheet4
+    if (data.source === "Site Visit") {
+      const visitSheet = ss.getSheetByName("Sheet4");
+      if (visitSheet) {
+        const visitId = `VISIT-${Date.now()}`;
+        const leadContact = `${data.name || ''} - ${data.phone || ''} ${data.email ? '('+data.email+')' : ''}`;
+        
+        const visitRow = [
+          visitId,                           // A: Visit ID
+          leadContact,                       // B: Lead
+          data.property || "",               // C: Property
+          data.visitDate || "",              // D: Date
+          data.visitTime || "",              // E: Time
+          "Pending Confirmation",            // F: Status
+          ""                                 // G: Feedback
+        ];
+        visitSheet.getRange(visitSheet.getLastRow() + 1, 1, 1, visitRow.length).setValues([visitRow]);
+        
+        // Also send email notification for Site Visit
+        sendEmailNotification(visitId, data);
+        
+        return ContentService.createTextOutput(
+          JSON.stringify({
+            success: true,
+            message: "Site visit requested successfully",
+            leadId: visitId
+          })
+        ).setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+
+    // Default: Handle General Leads to Sheet2
     const nextRow = sheet.getLastRow() + 1;
 
     // Prepare data row

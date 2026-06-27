@@ -123,8 +123,10 @@
                 </div>
 
                 <div class="prop-gallery" style="width: 100%; margin: 0;">
-                    <div class="main-image-container">
+                    <div class="main-image-container" style="position: relative;">
                         <img id="main-prop-image" src="assets/Logo.jpeg" alt="Loading Image" class="main-image" fetchpriority="high">
+                        <button class="carousel-prev gallery-nav-btn" onclick="window.prevMainImage(event)" aria-label="Previous image">‹</button>
+                        <button class="carousel-next gallery-nav-btn" onclick="window.nextMainImage(event)" aria-label="Next image">›</button>
                         <div class="badge-container">
                             <!-- Filled dynamically by JS -->
                         </div>
@@ -264,8 +266,7 @@
                 </div>
 
                 <div class="instant-actions" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
-                    <button type="button" class="btn btn-primary btn-block" style="font-weight: 600; padding: 0.8rem;" data-interest="Buy">Get Price Sheet</button>
-                    <button type="button" class="btn btn-secondary btn-block" style="font-weight: 600; padding: 0.8rem;" onclick="toggleModal('visit-modal')" data-interest="Buy">Book Free Site Visit</button>
+                    <button type="button" class="btn btn-primary btn-block" style="font-weight: 600; padding: 0.8rem;" onclick="toggleModal('visit-modal')" data-interest="Buy">Book Free Site Visit</button>
                     <a href="https://wa.me/917975954357" target="_blank" rel="noopener" class="btn btn-whatsapp btn-block" style="font-weight: 600; padding: 0.8rem;" data-interest="Buy">
                         <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px; display:inline-block; vertical-align:middle;"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.204-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
                         WhatsApp Expert
@@ -320,39 +321,40 @@
     </main>
 
     <!-- SECTION 7: BOOK VISIT MODAL -->
-    <div class="modal-overlay hidden" id="visit-modal" onclick="closeModalOutside(event, 'visit-modal')">
-        <div class="modal-content" style="border-radius: var(--radius-lg); padding: var(--space-xl);">
+    <div class="modal-overlay" id="visit-modal" onclick="closeModalOutside(event, 'visit-modal')">
+        <div class="modal-content" style="border-radius: var(--radius-lg); padding: var(--space-xl); position: relative;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg);">
-                <h3 class="text-h3" style="margin: 0;">Schedule a Site Visit</h3>
-                <button onclick="toggleModal('visit-modal')" style="font-size: 1.5rem; color: var(--text-secondary); background: none; border: none; cursor: pointer;">&times;</button>
+                <h3 class="text-h3" style="margin: 0; color: var(--text-primary);">Schedule a Site Visit</h3>
+                <button onclick="toggleModal('visit-modal')" style="font-size: 1.5rem; color: var(--text-primary); background: var(--bg-off-white); border: none; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</button>
             </div>
             
-            <form class="lead-form form-auto-submit" data-source="Property Inquiry">
+            <form class="lead-form form-auto-submit" data-source="Site Visit">
+                <!-- Hidden property name field so it can be sent to Google Script -->
+                <input type="hidden" name="property" id="visit-property-name" value="">
+                
                 <div class="input-group">
                     <label class="input-label">Full Name</label>
                     <input type="text" class="input-field" name="name" placeholder="Your Name" required>
                 </div>
-                <div class="input-group">
-                    <label class="input-label">Phone Number</label>
-                    <input type="tel" class="input-field" name="phone" placeholder="+91" required>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Email (Optional)</label>
-                    <input type="email" class="input-field" name="email" placeholder="Your email">
+                <div class="grid grid-cols-2" style="gap: var(--space-sm); margin-bottom: var(--space-md);">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label">Phone Number</label>
+                        <input type="tel" class="input-field" name="phone" placeholder="+91" required>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label">Email (Optional)</label>
+                        <input type="email" class="input-field" name="email" placeholder="Your email">
+                    </div>
                 </div>
                 
                 <div class="grid grid-cols-2" style="gap: var(--space-sm); margin-bottom: var(--space-md);">
                     <div class="input-group" style="margin-bottom: 0;">
-                        <label class="input-label">Interested In</label>
-                        <select class="input-field" name="interestedIn">
-                            <option>Buy</option>
-                            <option>Rent</option>
-                            <option>Lease</option>
-                        </select>
+                        <label class="input-label">Preferred Date</label>
+                        <input type="date" class="input-field" name="visitDate" required>
                     </div>
                     <div class="input-group" style="margin-bottom: 0;">
-                        <label class="input-label">Budget</label>
-                        <input type="text" class="input-field" name="budget" placeholder="Your budget range">
+                        <label class="input-label">Preferred Time</label>
+                        <input type="time" class="input-field" name="visitTime" required>
                     </div>
                 </div>
 
@@ -388,19 +390,21 @@
         function toggleModal(modalId) {
             var modal = document.getElementById(modalId);
             if (!modal) return;
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            } else {
-                modal.classList.add('hidden');
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
                 document.body.style.overflow = '';
+            } else {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
         }
 
         function closeModalOutside(e, modalId) {
-            if (e.target.id === modalId) toggleModal(modalId);
+            if (e.target.id === modalId) {
+                toggleModal(modalId);
+            }
         }
-
+        
         document.querySelectorAll('form').forEach(function(form) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();

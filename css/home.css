@@ -326,6 +326,12 @@
   gap: var(--space-sm);
   align-items: center;
 }
+@media (max-width: 767px) {
+  .hero-search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
 .search-input-wrapper {
   flex: 1;
   display: flex;
@@ -351,6 +357,11 @@
   font-size: 1rem;
   cursor: pointer;
   transition: opacity 0.2s;
+}
+@media (max-width: 767px) {
+  .hero-search-btn {
+    width: 100%;
+  }
 }
 .hero-search-btn:hover { opacity: 0.9; }
 

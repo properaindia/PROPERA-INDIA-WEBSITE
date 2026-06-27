@@ -6,7 +6,7 @@
     flex-direction: column;
     gap: var(--space-xl);
     padding: var(--space-lg) var(--space-md);
-    max-width: 1200px;
+    max-width: 1080px;
     margin: 0 auto;
 }
 
@@ -33,8 +33,8 @@
 }
 
 .value-icon {
-    width: 48px;
-    height: 48px;
+    width: 43px;
+    height: 43px;
     background: var(--color-1, #F8F9FA);
     color: var(--color-4, #2B5C8F);
     border-radius: var(--radius-full);
@@ -53,7 +53,7 @@
     padding: var(--space-lg);
     border: 1px solid var(--color-1, #F8F9FA);
     width: 100%;
-    max-width: 600px;
+    max-width: 540px;
     margin: 0 auto;
 }
 
@@ -78,8 +78,8 @@
 }
 
 .progress-step {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: var(--radius-full);
     background: var(--color-1, #F8F9FA);
     color: var(--text-secondary);
@@ -176,7 +176,7 @@
 
 textarea.input-field {
     resize: vertical;
-    min-height: 100px;
+    min-height: 90px;
 }
 
 .chip-group input[type="radio"]:checked + .chip-label {
@@ -232,7 +232,7 @@ textarea.input-field {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-md);
-    max-width: 1200px;
+    max-width: 1080px;
     margin: 0 auto;
 }
 
@@ -271,7 +271,7 @@ textarea.input-field {
 }
 
 .commission-inner {
-    max-width: 800px;
+    max-width: 720px;
     margin: 0 auto;
 }
 
@@ -323,8 +323,8 @@ textarea.input-field {
 }
 
 .hiw-num {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     background: var(--color-1, #F8F9FA);
     color: var(--color-4, #2B5C8F);
     border-radius: var(--radius-full);
@@ -348,8 +348,8 @@ textarea.input-field {
 }
 
 .preview-img {
-    width: 100px;
-    height: 80px;
+    width: 90px;
+    height: 72px;
     background: var(--color-1, #F8F9FA);
     border-radius: var(--radius-sm);
     object-fit: cover;

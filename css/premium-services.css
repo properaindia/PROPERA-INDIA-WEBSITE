@@ -9,7 +9,7 @@
 }
 
 .services-hero-content {
-    max-width: 800px;
+    max-width: 720px;
     margin: 0 auto;
 }
 
@@ -30,7 +30,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-lg);
-    max-width: 1200px;
+    max-width: 1080px;
     margin: -40px auto var(--space-2xl);
     padding: 0 var(--space-md);
     position: relative;
@@ -62,8 +62,8 @@
 }
 
 .service-icon-large {
-    width: 64px;
-    height: 64px;
+    width: 58px;
+    height: 58px;
     background: var(--color-5);
     color: var(--color-3);
     border-radius: 50%;
@@ -87,7 +87,7 @@
 /* Section Layouts */
 .premium-section {
     padding: var(--space-2xl) var(--space-md);
-    max-width: 1200px;
+    max-width: 1080px;
     margin: 0 auto;
 }
 
@@ -217,7 +217,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-lg);
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -235,8 +235,8 @@
 }
 
 .trust-icon {
-    width: 56px;
-    height: 56px;
+    width: 50px;
+    height: 50px;
     background: rgba(255,255,255,0.1);
     border-radius: 50%;
     display: flex;

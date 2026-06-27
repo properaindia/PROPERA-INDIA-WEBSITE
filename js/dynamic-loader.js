@@ -67,14 +67,33 @@ async function fetchProperties() {
 // Generate HTML for a "Discovery Card" (Used on Homepage)
 function createDiscoveryCardHTML(prop, hideBadge = false) {
     const defaultImg = "assets/Logo.jpeg"; // Fallback image
-    const imgUrl = prop.images && prop.images.length > 0 ? prop.images[0] : defaultImg;
+    const images = prop.images && prop.images.length > 0 ? prop.images : [defaultImg];
+    
+    let carouselHTML = '';
+    if (images.length > 1) {
+        let slides = images.map(img => `<img src="${img}" alt="${prop.title}" loading="lazy" class="carousel-slide">`).join('');
+        carouselHTML = `
+            <div class="card-carousel" style="width: 100%; height: 100%;">
+                <div class="card-carousel-track">
+                    ${slides}
+                </div>
+                <button class="carousel-prev" aria-label="Previous image">‹</button>
+                <button class="carousel-next" aria-label="Next image">›</button>
+                <div class="carousel-dots">
+                    ${images.map((_, i) => `<span class="carousel-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        carouselHTML = `<img src="${images[0]}" loading="lazy" alt="${prop.title}" class="card-image" style="object-fit: cover; height: 100%; width: 100%;">`;
+    }
     
     let badgeWrapper = '';
     if (!hideBadge) {
         const badgeHTML = prop.badges && prop.badges.length > 0 
             ? `<span class="badge badge-${prop.badges[0].toLowerCase().replace(' ', '-')}">${prop.badges[0]}</span>`
             : `<span class="badge badge-verified">Verified</span>`;
-        badgeWrapper = `<div class="card-badges">${badgeHTML}</div>`;
+        badgeWrapper = `<div class="card-badges" style="z-index: 10;">${badgeHTML}</div>`;
     }
         
     const propertySlug = prop.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -82,7 +101,7 @@ function createDiscoveryCardHTML(prop, hideBadge = false) {
         <article class="discovery-card">
           <div class="card-image-wrapper">
             ${badgeWrapper}
-            <img src="${imgUrl}" loading="lazy" alt="${prop.title}" class="card-image" style="object-fit: cover; height: 100%;">
+            ${carouselHTML}
           </div>
           <div class="card-content">
             <div class="property-meta">${prop.specs.configuration || ''} ${prop.specs.type || ''}</div>
@@ -100,7 +119,27 @@ function createDiscoveryCardHTML(prop, hideBadge = false) {
 // Generate HTML for a "Property Card" (Used on Priority Premium Homepage)
 function createPropertyCardHTML(prop) {
     const defaultImg = "assets/Logo.jpeg"; // Fallback image
-    const imgUrl = prop.images && prop.images.length > 0 ? prop.images[0] : defaultImg;
+    const images = prop.images && prop.images.length > 0 ? prop.images : [defaultImg];
+    
+    let carouselHTML = '';
+    if (images.length > 1) {
+        let slides = images.map(img => `<img src="${img}" alt="${prop.title}" loading="lazy" class="carousel-slide">`).join('');
+        carouselHTML = `
+            <div class="card-carousel" style="width: 100%; height: 100%;">
+                <div class="card-carousel-track">
+                    ${slides}
+                </div>
+                <button class="carousel-prev" aria-label="Previous image">‹</button>
+                <button class="carousel-next" aria-label="Next image">›</button>
+                <div class="carousel-dots">
+                    ${images.map((_, i) => `<span class="carousel-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        carouselHTML = `<img src="${images[0]}" loading="lazy" alt="${prop.title}" class="card-image" style="object-fit: cover; height: 100%; width: 100%;">`;
+    }
+
     const badgeHTML = prop.badges && prop.badges.length > 0 
         ? `<span class="badge badge-${prop.badges[0].toLowerCase().replace(' ', '-')}">${prop.badges[0]}</span>`
         : `<span class="badge badge-verified">Verified</span>`;
@@ -109,10 +148,10 @@ function createPropertyCardHTML(prop) {
     return `
         <article class="property-card">
           <div class="card-image-wrapper">
-            <div class="card-badges">
+            <div class="card-badges" style="z-index: 10;">
               ${badgeHTML}
             </div>
-            <img src="${imgUrl}" loading="lazy" alt="${prop.title}" class="card-image" style="object-fit: cover; height: 100%;">
+            ${carouselHTML}
           </div>
           <div class="card-content">
             <div class="property-meta">
@@ -136,7 +175,26 @@ function createPropertyCardHTML(prop) {
 // Generate HTML for a "Result Card" (Used on Search Pages)
 function createResultCardHTML(prop) {
     const defaultImg = "assets/Logo.jpeg";
-    const imgUrl = prop.images && prop.images.length > 0 ? prop.images[0] : defaultImg;
+    const images = prop.images && prop.images.length > 0 ? prop.images : [defaultImg];
+    
+    let carouselHTML = '';
+    if (images.length > 1) {
+        let slides = images.map(img => `<img src="${img}" alt="${prop.title}" loading="lazy" class="carousel-slide">`).join('');
+        carouselHTML = `
+            <div class="card-carousel">
+                <div class="card-carousel-track">
+                    ${slides}
+                </div>
+                <button class="carousel-prev" aria-label="Previous image">‹</button>
+                <button class="carousel-next" aria-label="Next image">›</button>
+                <div class="carousel-dots">
+                    ${images.map((_, i) => `<span class="carousel-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        carouselHTML = `<img src="${images[0]}" alt="${prop.title}" loading="lazy" style="width:100%; height:auto; aspect-ratio:16/10; object-fit:cover;">`;
+    }
     
     // Convert badges to HTML
     const badgesHTML = (prop.badges || []).map(b => 
@@ -158,10 +216,10 @@ function createResultCardHTML(prop) {
     return `
         <article class="result-card-hz">
             <div class="result-card-image">
-                <div class="result-badges">
+                <div class="result-badges" style="z-index: 10;">
                     ${badgesHTML}
                 </div>
-                <img src="${imgUrl}" alt="${prop.title}" loading="lazy">
+                ${carouselHTML}
             </div>
             <div class="result-card-content">
                 <div class="result-card-header">
@@ -170,7 +228,7 @@ function createResultCardHTML(prop) {
                         ${prop.builder ? `<div class="result-builder">by ${prop.builder}</div>` : ''}
                         <div class="result-location">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            ${prop.location}
+                            <span class="location-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${prop.location}</span>
                         </div>
                     </div>
                     <div class="result-price">${prop.priceRange || 'Price on Request'}</div>
@@ -199,9 +257,9 @@ function createResultCardHTML(prop) {
                     <div class="result-amenities">
                         <p style="font-size: 0.85rem; color: var(--color-text-muted); margin:0;">${(prop.description && prop.description.length > 0) ? prop.description[0].substring(0, 80) + '...' : ''}</p>
                     </div>
-                    <div style="display:flex; gap:0.5rem;">
+                    <div class="card-actions">
                         <a href="property-detail.html?propertyname=${propertySlug}" class="btn btn-outline" style="text-decoration: none;">View Details</a>
-                        <a href="about-contact.html#contact" class="btn btn-primary" style="text-decoration: none;">Contact Expert</a>
+                        <a href="about-contact.html#contact" class="btn btn-solid" style="text-decoration: none;">Contact Expert</a>
                     </div>
                 </div>
             </div>
@@ -334,3 +392,77 @@ document.addEventListener("DOMContentLoaded", () => {
         initSearchPage();
     }
 });
+
+// ==========================================
+// Result Card Carousel Logic
+// ==========================================
+
+// Global object to track paused state
+window.carouselPauseStates = window.carouselPauseStates || new WeakMap();
+
+function pauseCarousel(track) {
+    if (!track) return;
+    // Pause for 5 seconds
+    window.carouselPauseStates.set(track, Date.now() + 5000);
+}
+
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.carousel-prev') || e.target.closest('.carousel-next')) {
+        const btn = e.target.closest('button');
+        const carousel = btn.closest('.card-carousel');
+        const track = carousel.querySelector('.card-carousel-track');
+        if (!track) return;
+        
+        pauseCarousel(track);
+        
+        const direction = btn.classList.contains('carousel-next') ? 1 : -1;
+        const maxScrollLeft = track.scrollWidth - track.clientWidth;
+        let nextScroll = track.scrollLeft + (track.clientWidth * direction);
+        
+        if (nextScroll < 0) nextScroll = maxScrollLeft;
+        else if (nextScroll > maxScrollLeft + 10) nextScroll = 0;
+        
+        track.scrollTo({ left: nextScroll, behavior: 'smooth' });
+    }
+});
+
+document.addEventListener('scroll', function(e) {
+    if (e.target && e.target.classList && e.target.classList.contains('card-carousel-track')) {
+        const track = e.target;
+        const index = Math.round(track.scrollLeft / track.clientWidth);
+        const dots = track.parentElement.querySelectorAll('.carousel-dot');
+        if (dots && dots.length > index) {
+            dots.forEach(d => d.classList.remove('active'));
+            dots[index].classList.add('active');
+        }
+    }
+}, true);
+
+// Pause on touch interaction (swipe)
+document.addEventListener('touchstart', function(e) {
+    const track = e.target.closest('.card-carousel-track');
+    if (track) pauseCarousel(track);
+}, {passive: true});
+
+// Auto-scroll interval (every 2 seconds)
+setInterval(() => {
+    const tracks = document.querySelectorAll('.card-carousel-track');
+    const now = Date.now();
+    tracks.forEach(track => {
+        // Only scroll if there's more than 1 image
+        if (track.children.length > 1) {
+            const pausedUntil = window.carouselPauseStates.get(track) || 0;
+            if (now > pausedUntil) {
+                const maxScrollLeft = track.scrollWidth - track.clientWidth;
+                let nextScroll = track.scrollLeft + track.clientWidth;
+                
+                // loop back
+                if (nextScroll > maxScrollLeft + 10) {
+                    nextScroll = 0;
+                }
+                
+                track.scrollTo({ left: nextScroll, behavior: 'smooth' });
+            }
+        }
+    });
+}, 2000);

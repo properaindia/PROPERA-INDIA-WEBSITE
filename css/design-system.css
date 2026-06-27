@@ -76,7 +76,8 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  /* Fluid typography: scaled down by 10% from original (14.4px max instead of 16px) */
+  font-size: clamp(12.6px, 0.9vw + 9px, 14.4px);
 }
 
 body {
@@ -87,7 +88,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  zoom: 0.9;
+  /* Removed zoom: 0.9 as it breaks responsive design on resize */
 }
 
 img, picture, video, canvas, svg {
@@ -132,7 +133,7 @@ h1, h2, h3, h4, h5, h6 {
    ========================================================================== */
 .container {
   width: 100%;
-  max-width: 1600px; /* Spacious */
+  max-width: 1440px; /* Scaled down 10% from 1600px */
   margin: 0 auto;
   padding: 0 var(--space-md);
 }
@@ -289,7 +290,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   width: 90%;
-  max-width: 600px;
+  max-width: 540px; /* Scaled down 10% from 600px */
   transform: translateY(20px);
   transition: var(--transition-smooth);
   max-height: 90vh;
@@ -391,4 +392,95 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   border-radius: var(--radius-lg);
   margin: var(--space-lg) 0;
+}
+
+/* ==========================================================================
+   GLOBAL CARD CAROUSEL STYLES
+   ========================================================================== */
+.card-carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.card-carousel-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    scroll-behavior: smooth;
+    width: 100%;
+    height: 100%;
+}
+.card-carousel-track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    scroll-snap-align: start;
+}
+
+.carousel-prev, .carousel-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s;
+    z-index: 2;
+}
+
+.carousel-prev:hover, .carousel-next:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+.card-carousel:hover .carousel-prev,
+.card-carousel:hover .carousel-next {
+    opacity: 1;
+}
+
+.carousel-prev {
+    left: 8px;
+}
+.carousel-next {
+    right: 8px;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    z-index: 2;
+}
+
+.carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: background 0.2s;
+}
+
+.carousel-dot.active {
+    background: white;
 }
