@@ -1,0 +1,118 @@
+/* 
+  Global Responsive Reset & Utilities
+  Ensures layout adaptability across all devices without altering the primary design language.
+*/
+
+/* 1. Universal Resets for Fluidity */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Ensure all media and wrappers remain contained */
+img, video, iframe, canvas, object, embed {
+  max-width: 100% !important;
+  height: auto;
+}
+
+/* Prevent long unbreakable strings from destroying layouts */
+p, h1, h2, h3, h4, h5, h6, a, span, div {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Prevent table overflows */
+table {
+  max-width: 100%;
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Ensure inputs and textareas don't overflow */
+input, textarea, select {
+  max-width: 100%;
+}
+
+/* Prevent button overflow */
+button, .btn {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+
+/* 2. Responsive Container Override */
+.container, .container-fluid, .wrapper, .main-container {
+  width: 100% !important;
+  max-width: 1440px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(1rem, 4vw, 2rem) !important;
+  padding-right: clamp(1rem, 4vw, 2rem) !important;
+}
+
+/* 3. Typography Clamping Fallbacks (Injects responsiveness where fixed sizes exist) */
+h1, .h1, .text-h1 { font-size: clamp(2rem, 5vw, 3.5rem) !important; line-height: 1.2 !important; }
+h2, .h2, .text-h2 { font-size: clamp(1.75rem, 4vw, 2.5rem) !important; line-height: 1.3 !important; }
+h3, .h3, .text-h3 { font-size: clamp(1.5rem, 3vw, 2rem) !important; line-height: 1.4 !important; }
+h4, .h4, .text-h4 { font-size: clamp(1.25rem, 2.5vw, 1.5rem) !important; line-height: 1.4 !important; }
+h5, .h5, .text-h5 { font-size: clamp(1.1rem, 2vw, 1.25rem) !important; line-height: 1.5 !important; }
+
+/* 4. Global Flex and Grid Resets */
+/* Transform fixed flex containers into wrapping flex containers if they overflow */
+.flex, .flex-row, .d-flex {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+/* Protect CSS Grids on small screens */
+.grid, .grid-container, .card-grid, .properties-grid, .features-grid, .stats-grid, .highlights-grid, .amenities-grid, .landmarks-grid {
+  display: grid;
+  max-width: 100%;
+}
+
+/* Generic media queries to handle any straggling rigid columns */
+@media (max-width: 1024px) {
+  /* Force multiple columns to wrap gracefully if they rely on absolute widths */
+  .col-md-6, .half-width, .w-50 {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Stack sections dynamically */
+  section {
+    padding-top: clamp(2rem, 5vw, 4rem) !important;
+    padding-bottom: clamp(2rem, 5vw, 4rem) !important;
+  }
+  
+  /* Reset rigid widths globally for mobile */
+  [style*="width:"] {
+    max-width: 100% !important;
+  }
+  
+  /* Center align content block elements naturally */
+  .center-mobile, .text-center-mobile {
+    text-align: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Footers */
+  footer .grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  
+  /* Navbar */
+  .nav-links {
+    flex-wrap: wrap;
+  }
+}
