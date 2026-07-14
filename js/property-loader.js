@@ -31,6 +31,22 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Sanitize properties directly
             if (properties && properties.length > 0 && !properties.error) {
                 properties = properties.map(prop => {
+                    if (prop.badges) {
+                        prop.badges = prop.badges.filter(b => b.toLowerCase() !== 'verified');
+                    } else {
+                        prop.badges = [];
+                    }
+                    
+                    const isPremium = (prop.premium || prop.Premium || '').toString().toLowerCase() === 'yes';
+                    const isBudget = (prop.premium || prop.Premium || '').toString().toLowerCase() === 'no';
+                    
+                    if (isPremium) {
+                        if (!prop.badges.includes('Premium Property')) prop.badges.unshift('Premium Property');
+                        if (!prop.badges.includes('Premium')) prop.badges.unshift('Premium');
+                    } else if (isBudget) {
+                        if (!prop.badges.includes('Budget Friendly Home')) prop.badges.unshift('Budget Friendly Home');
+                    }
+
                     const sanitize = (obj) => {
                         for (let key in obj) {
                             if (typeof obj[key] === 'string') {
@@ -397,15 +413,59 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Map Embed Logic
 window.loadMapEmbed = function() {
     const mapContainer = document.getElementById('prop-map-container');
     if (!mapContainer || !currentPropertyLocation) return;
     
-    const query = encodeURIComponent(currentPropertyLocation);
-    const iframeHtml = `<iframe width="100%" height="400" frameborder="0" style="border:0; border-radius: var(--radius-md);" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${query}&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>`;
-    
-    mapContainer.style.background = 'none';
+    mapContainer.style.background = '#e5e3df'; // light grey background while map loads
     mapContainer.style.padding = '0';
-    mapContainer.innerHTML = iframeHtml;
+    mapContainer.style.height = '400px';
+    mapContainer.innerHTML = '<div style="display: flex; height: 100%; align-items: center; justify-content: center;">Loading interactive map...</div>';
+    
+    const initMap = () => {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: currentPropertyLocation + ", India" }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+                const location = results[0].geometry.location;
+                
+                // Clear the 'Loading' text
+                mapContainer.innerHTML = '';
+                
+                const map = new google.maps.Map(mapContainer, {
+                    center: location,
+                    zoom: 13,
+                    mapTypeControl: true,
+                    streetViewControl: false,
+                });
+                
+                new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
+                
+                new google.maps.Circle({
+                    strokeColor: "#4285F4",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: "#4285F4",
+                    fillOpacity: 0.15,
+                    map: map,
+                    center: location,
+                    radius: 5000 // 5km radius
+                });
+            } else {
+                mapContainer.innerHTML = `<p style="padding: 2rem; text-align: center;">Unable to load map for this location.</p>`;
+            }
+        });
+    };
+
+    if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+        const script = document.createElement('script');
+        // IMPORTANT: Replace YOUR_API_KEY_HERE with an actual Google Maps API Key
+        script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE`;
+        script.onload = initMap;
+        document.head.appendChild(script);
+    } else {
+        initMap();
+    }
 };

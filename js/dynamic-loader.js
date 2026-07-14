@@ -28,6 +28,18 @@ async function fetchProperties() {
                 // 1. Remove hardcoded 'Verified' badge from backend
                 if (prop.badges) {
                     prop.badges = prop.badges.filter(b => b.toLowerCase() !== 'verified');
+                } else {
+                    prop.badges = [];
+                }
+                
+                const isPremium = (prop.premium || prop.Premium || '').toString().toLowerCase() === 'yes';
+                const isBudget = (prop.premium || prop.Premium || '').toString().toLowerCase() === 'no';
+                
+                if (isPremium) {
+                    if (!prop.badges.includes('Premium Property')) prop.badges.unshift('Premium Property');
+                    if (!prop.badges.includes('Premium')) prop.badges.unshift('Premium');
+                } else if (isBudget) {
+                    if (!prop.badges.includes('Budget Friendly Home')) prop.badges.unshift('Budget Friendly Home');
                 }
                 
                 // 2. Rewrite old Google Drive image URLs to the working lh3 API
@@ -295,7 +307,8 @@ async function initHomepage() {
     // Budget Track
     const budgetTrack = document.getElementById('track-budget');
     if (budgetTrack) {
-        budgetTrack.innerHTML = props.map(p => createDiscoveryCardHTML(p, true)).join('');
+        const budgetProps = props.filter(p => (p.premium || p.Premium || '').toString().toLowerCase() === 'no');
+        budgetTrack.innerHTML = budgetProps.map(p => createDiscoveryCardHTML(p)).join('');
     }
 
     // Rent Track
