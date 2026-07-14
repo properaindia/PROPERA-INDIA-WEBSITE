@@ -4,81 +4,120 @@
  */
 
 let allProperties = [];
+let fetchPromise = null;
 
-async function fetchProperties() {
-    try {
-        const cachedProps = sessionStorage.getItem('propera_properties_v3');
+// If user does a hard refresh (F5/Reload), clear the cache so they get the absolute newest data
+try {
+    const navEntries = performance.getEntriesByType("navigation");
+    if ((navEntries.length > 0 && navEntries[0].type === "reload") || 
+        (window.performance && window.performance.navigation && window.performance.navigation.type === 1)) {
+        sessionStorage.removeItem('propera_data_v5');
+    }
+} catch (e) {}
+
+async function fetchProperties(forceFresh = false) {
+    // 1. Memory cache (for multiple calls on same page)
+    if (allProperties.length > 0 && !forceFresh) return allProperties;
+    
+    // 2. Session cache (lightning fast navigation)
+    if (!forceFresh) {
+        const cachedProps = sessionStorage.getItem('propera_data_v5');
         if (cachedProps) {
             allProperties = JSON.parse(cachedProps);
+            
+            // Stale-while-revalidate: Fetch fresh data in the background
+            // so the NEXT page load is updated without penalizing this one.
+            setTimeout(fetchFreshData, 100);
             return allProperties;
         }
-
-        const scriptUrl = typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' ? GOOGLE_APPS_SCRIPT_URL : "https://script.google.com/macros/s/AKfycbyZw_D87_-iHK-rPJrxoIORzlePkkTjqUUFNT38tlpI8lAVdcEZd-2AvjGgErz2slS_vg/exec";
-        const url = scriptUrl + '?action=getProperties';
-        
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-        let properties = await response.json();
-        
-        // --- CLIENT-SIDE HOTFIX ---
-        // If the backend is running an older deployment, this will clean the data on the fly
-        if (properties && properties.length > 0 && !properties.error) {
-            properties = properties.map(prop => {
-                // 1. Remove hardcoded 'Verified' badge from backend
-                if (prop.badges) {
-                    prop.badges = prop.badges.filter(b => b.toLowerCase() !== 'verified');
-                } else {
-                    prop.badges = [];
-                }
-                
-                const isPremium = (prop.premium || prop.Premium || '').toString().toLowerCase() === 'yes';
-                const isBudget = (prop.premium || prop.Premium || '').toString().toLowerCase() === 'no';
-                const type = (prop.specs && prop.specs.type) ? prop.specs.type.toString().toLowerCase() : '';
-                
-                if (type.includes('plot')) {
-                    if (!prop.badges.includes('Premium Plot')) prop.badges.unshift('Premium Plot');
-                    if (!prop.badges.includes('Premium')) prop.badges.unshift('Premium');
-                } else if (isPremium) {
-                    if (!prop.badges.includes('Premium Property')) prop.badges.unshift('Premium Property');
-                    if (!prop.badges.includes('Premium')) prop.badges.unshift('Premium');
-                } else if (isBudget) {
-                    if (!prop.badges.includes('Budget Friendly Home')) prop.badges.unshift('Budget Friendly Home');
-                    if (!prop.badges.includes('Budget')) prop.badges.unshift('Budget');
-                }
-                
-                // 2. Rewrite old Google Drive image URLs to the working lh3 API
-                if (prop.images) {
-                    prop.images = prop.images.map(url => {
-                        const match = url.match(/id=([a-zA-Z0-9_-]+)/);
-                        if (match && url.includes('drive.google.com')) {
-                            return `https://lh3.googleusercontent.com/d/${match[1]}`;
-                        }
-                        return url;
-                    });
-                }
-                // 3. Replace <> with - across all string fields
-                const sanitize = (obj) => {
-                    for (let key in obj) {
-                        if (typeof obj[key] === 'string') {
-                            obj[key] = obj[key].replace(/<>/g, '-');
-                        } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-                            sanitize(obj[key]);
-                        }
-                    }
-                };
-                sanitize(prop);
-
-                return prop;
-            });
-            allProperties = properties;
-            sessionStorage.setItem('propera_properties_v3', JSON.stringify(properties));
-        }
-        return properties;
-    } catch (e) {
-        console.error("Failed to fetch properties:", e);
-        return [];
     }
+    
+    // 3. Network fetch
+    return await fetchFreshData();
+}
+
+async function fetchFreshData() {
+    if (fetchPromise) return fetchPromise;
+    
+    fetchPromise = (async () => {
+        try {
+            const scriptUrl = typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' ? GOOGLE_APPS_SCRIPT_URL : "https://script.google.com/macros/s/AKfycbyZw_D87_-iHK-rPJrxoIORzlePkkTjqUUFNT38tlpI8lAVdcEZd-2AvjGgErz2slS_vg/exec";
+            const url = scriptUrl + '?action=getProperties&t=' + Date.now();
+            
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            let properties = await response.json();
+            
+            if (properties && properties.length > 0 && !properties.error) {
+                properties = properties.map(prop => {
+                    // 1. Remove hardcoded 'Verified' badge from backend
+                    if (prop.badges) {
+                        prop.badges = prop.badges.filter(b => b.toLowerCase() !== 'verified');
+                    } else {
+                        prop.badges = [];
+                    }
+                    
+                    const isPremium = prop.badges && prop.badges.includes('Premium');
+                    const isBudget = !isPremium;
+                    const type = (prop.specs && prop.specs.type) ? prop.specs.type.toString().toLowerCase() : '';
+                    
+                    if (type.includes('plot')) {
+                        if (!prop.badges.includes('Plots')) prop.badges.unshift('Plots');
+                    } else if (type.includes('commercial')) {
+                        if (!prop.badges.includes('Commercial Space')) prop.badges.unshift('Commercial Space');
+                    } else if (isPremium) {
+                        if (!prop.badges.includes('Premium Flat')) prop.badges.unshift('Premium Flat');
+                    } else if (isBudget) {
+                        if (!prop.badges.includes('Budget Flat')) prop.badges.unshift('Budget Flat');
+                    }
+                    
+                    // 2. Rewrite old Google Drive image URLs to the working lh3 API
+                    if (prop.images) {
+                        prop.images = prop.images.map(url => {
+                            const match = url.match(/id=([a-zA-Z0-9_-]+)/);
+                            if (match && url.includes('drive.google.com')) {
+                                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+                            }
+                            return url;
+                        });
+                    }
+                    // 3. Replace <> with - across all string fields
+                    const sanitize = (obj) => {
+                        for (let key in obj) {
+                            if (typeof obj[key] === 'string') {
+                                obj[key] = obj[key].replace(/<>/g, '-');
+                            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                                sanitize(obj[key]);
+                            }
+                        }
+                    };
+                    sanitize(prop);
+
+                    return prop;
+                });
+                
+                // If data actually changed from memory, we could trigger a re-render here
+                const dataChanged = JSON.stringify(properties) !== JSON.stringify(allProperties);
+                allProperties = properties;
+                sessionStorage.setItem('propera_data_v5', JSON.stringify(properties));
+                
+                // If data changed in the background, automatically update the UI!
+                if (dataChanged && document.readyState === 'complete') {
+                    if (document.getElementById('track-premium') || document.getElementById('track-buy')) initHomepage();
+                    if (document.getElementById('dynamic-search-results')) initSearchPage();
+                }
+            }
+            return properties;
+        } catch (e) {
+            console.error("Failed to fetch properties:", e);
+            return [];
+        } finally {
+            fetchPromise = null;
+        }
+    })();
+    
+    return fetchPromise;
 }
 
 // Generate HTML for a "Discovery Card" (Used on Homepage)
@@ -214,9 +253,10 @@ function createResultCardHTML(prop) {
     }
     
     // Convert badges to HTML
-    const badgesHTML = (prop.badges || []).map(b => 
-        `<span class="badge badge-${b.toLowerCase().replace(' ', '-')}">${b}</span>`
-    ).join('');
+    const badgesHTML = (prop.badges || [])
+        .filter(b => b !== 'Premium')
+        .map(b => `<span class="badge badge-${b.toLowerCase().replace(' ', '-')}">${b}</span>`)
+        .join('');
 
     let formattedPossession = prop.specs.possession || 'N/A';
     if (formattedPossession && formattedPossession.includes('GMT')) {
@@ -313,12 +353,12 @@ async function initHomepage() {
     // Budget Track
     const budgetTrack = document.getElementById('track-budget');
     if (budgetTrack) {
-        const budgetProps = props.filter(p => {
-            const isBudgetCol = (p.premium || p.Premium || '').toString().toLowerCase() === 'no';
-            const type = (p.specs && p.specs.type) ? p.specs.type.toString().toLowerCase() : '';
-            return isBudgetCol && !type.includes('plot');
-        });
-        budgetTrack.innerHTML = budgetProps.map(p => createDiscoveryCardHTML(p)).join('');
+        const budgetProps = props.filter(p => p.badges && p.badges.includes('Budget Flat'));
+        if (budgetProps.length > 0) {
+            budgetTrack.innerHTML = budgetProps.map(p => createDiscoveryCardHTML(p)).join('');
+        } else {
+            budgetTrack.innerHTML = '<div style="padding: 20px;">No Budget properties found.</div>';
+        }
     }
 
     // Rent Track

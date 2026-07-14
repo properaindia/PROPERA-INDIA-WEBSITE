@@ -265,6 +265,10 @@ body.search-body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+.result-badges .badge-premium-flat { background: #FFD700 !important; color: #000 !important; }
+.result-badges .badge-budget-flat { background: #4CAF50 !important; color: #fff !important; }
+.result-badges .badge-plots { background: #8B4513 !important; color: #fff !important; }
+
 .result-card-content {
     padding: var(--space-md);
     flex: 1;

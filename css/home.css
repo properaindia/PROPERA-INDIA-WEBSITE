@@ -643,6 +643,9 @@
 }
 
 .badge-premium { background: rgba(212, 175, 55, 0.9); color: #000; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.badge-premium-flat { background: #FFD700; color: #000; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.badge-budget-flat { background: #4CAF50; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.badge-plots { background: #8B4513; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 .badge-featured { background: rgba(99, 102, 241, 0.9); color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 .badge-verified { background: rgba(37, 211, 102, 0.9); color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 .badge-new { background: rgba(239, 68, 68, 0.9); color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }

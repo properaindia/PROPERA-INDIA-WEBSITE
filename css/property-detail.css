@@ -118,6 +118,9 @@
 }
 
 .badge-premium { background-color: #D4AF37; color: #FFFFFF; } /* Gold on dark */
+.badge-premium-flat { background-color: #FFD700; color: #000; } /* Bright Yellow */
+.badge-budget-flat { background-color: #4CAF50; color: #fff; } /* Green */
+.badge-plots { background-color: #8B4513; color: #fff; } /* Brown */
 .badge-verified { background-color: #e8f5e9; color: #2e7d32; } /* Green */
 .badge-featured { background-color: var(--color-3, #2B5C8F); color: white; } /* Brand color */
 
