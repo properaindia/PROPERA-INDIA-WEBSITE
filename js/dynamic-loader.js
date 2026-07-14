@@ -34,12 +34,17 @@ async function fetchProperties() {
                 
                 const isPremium = (prop.premium || prop.Premium || '').toString().toLowerCase() === 'yes';
                 const isBudget = (prop.premium || prop.Premium || '').toString().toLowerCase() === 'no';
+                const type = (prop.specs && prop.specs.type) ? prop.specs.type.toString().toLowerCase() : '';
                 
-                if (isPremium) {
+                if (type.includes('plot')) {
+                    if (!prop.badges.includes('Premium Plot')) prop.badges.unshift('Premium Plot');
+                    if (!prop.badges.includes('Premium')) prop.badges.unshift('Premium');
+                } else if (isPremium) {
                     if (!prop.badges.includes('Premium Property')) prop.badges.unshift('Premium Property');
                     if (!prop.badges.includes('Premium')) prop.badges.unshift('Premium');
                 } else if (isBudget) {
                     if (!prop.badges.includes('Budget Friendly Home')) prop.badges.unshift('Budget Friendly Home');
+                    if (!prop.badges.includes('Budget')) prop.badges.unshift('Budget');
                 }
                 
                 // 2. Rewrite old Google Drive image URLs to the working lh3 API
@@ -301,20 +306,26 @@ async function initHomepage() {
     // Buy Track
     const buyTrack = document.getElementById('track-buy');
     if (buyTrack) {
-        buyTrack.innerHTML = props.map(createDiscoveryCardHTML).join('');
+        const buyProps = props.filter(p => !((p.specs && p.specs.type) ? p.specs.type.toString().toLowerCase() : '').includes('plot'));
+        buyTrack.innerHTML = buyProps.map(createDiscoveryCardHTML).join('');
     }
 
     // Budget Track
     const budgetTrack = document.getElementById('track-budget');
     if (budgetTrack) {
-        const budgetProps = props.filter(p => (p.premium || p.Premium || '').toString().toLowerCase() === 'no');
+        const budgetProps = props.filter(p => {
+            const isBudgetCol = (p.premium || p.Premium || '').toString().toLowerCase() === 'no';
+            const type = (p.specs && p.specs.type) ? p.specs.type.toString().toLowerCase() : '';
+            return isBudgetCol && !type.includes('plot');
+        });
         budgetTrack.innerHTML = budgetProps.map(p => createDiscoveryCardHTML(p)).join('');
     }
 
     // Rent Track
     const rentTrack = document.getElementById('track-rent');
     if (rentTrack) {
-        rentTrack.innerHTML = props.map(createDiscoveryCardHTML).join('');
+        const rentProps = props.filter(p => !((p.specs && p.specs.type) ? p.specs.type.toString().toLowerCase() : '').includes('plot'));
+        rentTrack.innerHTML = rentProps.map(createDiscoveryCardHTML).join('');
     }
     
     // Commercial Track
