@@ -9,7 +9,7 @@
  */
 
 // ⚠️ IMPORTANT: Replace this with your actual Google Apps Script deployment URL
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZw_D87_-iHK-rPJrxoIORzlePkkTjqUUFNT38tlpI8lAVdcEZd-2AvjGgErz2slS_vg/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkBu-BIS1bzOKV-lDDeZNtXm3B8wfHHUNzgw6LJ-8QoyttAckjs2-mDYyz5zGOMKFDgQ/exec";
 
 /**
  * Submit form data to Google Sheets

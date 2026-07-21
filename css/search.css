@@ -219,15 +219,16 @@ body.search-body {
     background: var(--bg-white);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: visible; /* ensure no clipping on hover if elements expand */
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
     width: 100%;
     max-width: none;
 }
 
 .result-card-hz:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    z-index: 10;
 }
 
 .result-card-image {
@@ -235,6 +236,8 @@ body.search-body {
     width: 100%;
     height: auto;
     flex-shrink: 0;
+    overflow: hidden;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .result-card-image img {
@@ -242,6 +245,11 @@ body.search-body {
     height: auto;
     aspect-ratio: 16/10;
     object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.result-card-hz:hover .result-card-image img {
+    transform: scale(1.05);
 }
 
 

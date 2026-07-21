@@ -132,9 +132,10 @@
                 <div class="prop-gallery" style="width: 100%; margin: 0;">
                     <div class="main-image-container" style="position: relative;">
                         <img id="main-prop-image" src="assets/Logo.jpeg" alt="Loading Image" class="main-image" fetchpriority="high">
-                        <button class="carousel-prev gallery-nav-btn" onclick="window.prevMainImage(event)" aria-label="Previous image">‹</button>
-                        <button class="carousel-next gallery-nav-btn" onclick="window.nextMainImage(event)" aria-label="Next image">›</button>
-                        <div class="badge-container">
+                        <iframe id="main-prop-video" src="" style="display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; border: none; z-index: 5;" allow="autoplay" allowfullscreen></iframe>
+                        <button class="carousel-prev gallery-nav-btn" onclick="window.prevMainImage(event)" aria-label="Previous image" style="z-index: 10;">‹</button>
+                        <button class="carousel-next gallery-nav-btn" onclick="window.nextMainImage(event)" aria-label="Next image" style="z-index: 10;">›</button>
+                        <div class="badge-container" style="z-index: 10;">
                             <!-- Filled dynamically by JS -->
                         </div>
                     </div>
@@ -377,6 +378,7 @@
         <button class="lightbox-nav lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</button>
         <div class="lightbox-img-container">
             <img src="" alt="Property Preview" class="lightbox-img" id="lightbox-main-img">
+            <iframe id="lightbox-main-video" src="" style="display: none; width: 100%; height: 100%; max-height: 80vh; border: none;" allow="autoplay" allowfullscreen></iframe>
         </div>
         <button class="lightbox-nav lightbox-next" onclick="changeLightboxImage(1)">&#10095;</button>
         <div class="lightbox-counter" id="lightbox-counter">1 / 1</div>

@@ -178,7 +178,16 @@ function renderProperty(data) {
         rawImages = rawImages.concat(ensureArray(data.gallery));
     }
     // Deduplicate and fix URLs
-    const images = [...new Set(rawImages)].map(fixImageUrl).filter(Boolean);
+    let images = [...new Set(rawImages)].map(fixImageUrl).filter(Boolean);
+    
+    // Check if video exists and extract ID
+    const videoData = data.video || data.Video;
+    if (videoData) {
+        const match = videoData.match(/d\/([a-zA-Z0-9_-]+)/) || videoData.match(/id=([a-zA-Z0-9_-]+)/);
+        if (match) {
+            images.push('video:' + match[1]);
+        }
+    }
     
     const description = ensureArray(data.description);
 
@@ -198,15 +207,34 @@ function renderProperty(data) {
     currentPropertyImages = images;
     
     const mainImg = document.getElementById('main-prop-image');
-    if (mainImg && images.length > 0) {
-        mainImg.src = images[0].replace('&w=300', '&w=1200');
-        // Update onclick to use lightbox index
-        mainImg.onclick = () => openLightbox(currentLightboxIndex);
+    const mainVideo = document.getElementById('main-prop-video');
+    if (images.length > 0) {
+        if (images[0].startsWith('video:')) {
+            const videoId = images[0].split(':')[1];
+            if (mainImg) mainImg.style.display = 'none';
+            if (mainVideo) {
+                mainVideo.src = `https://drive.google.com/file/d/${videoId}/preview`;
+                mainVideo.style.display = 'block';
+            }
+        } else {
+            if (mainVideo) mainVideo.style.display = 'none';
+            if (mainImg) {
+                mainImg.style.display = 'block';
+                mainImg.src = images[0].replace('&w=300', '&w=1200');
+                // Update onclick to use lightbox index
+                mainImg.onclick = () => openLightbox(currentLightboxIndex);
+            }
+        }
     }
     
     const thumbnailGallery = document.querySelector('.thumbnail-gallery');
     if (thumbnailGallery && images.length > 0) {
         thumbnailGallery.innerHTML = images.map((imgUrl, index) => {
+            if (imgUrl.startsWith('video:')) {
+                return `<div class="thumb video-thumb ${index === 0 ? 'active' : ''}" onclick="updateMainImage(this, ${index})" style="display: flex; align-items: center; justify-content: center; background: #222; color: #fff; cursor: pointer;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </div>`;
+            }
             const thumbUrl = imgUrl.includes('&w=') ? imgUrl.replace(/&w=\d+/, '&w=300') : imgUrl;
             // Overriding inline switchImage to also update the currentLightboxIndex
             return `<img src="${thumbUrl}" alt="Thumb ${index+1}" class="thumb ${index === 0 ? 'active' : ''}" onclick="updateMainImage(this, ${index})" loading="${index === 0 ? 'eager' : 'lazy'}">`;
@@ -304,11 +332,33 @@ function renderProperty(data) {
 window.updateMainImage = function(thumbnail, index) {
     currentLightboxIndex = index;
     const mainImg = document.getElementById('main-prop-image');
-    if (mainImg) {
-        mainImg.src = thumbnail.src.replace('&w=300', '&w=1200');
+    const mainVideo = document.getElementById('main-prop-video');
+    const media = currentPropertyImages[index];
+    
+    if (media && media.startsWith('video:')) {
+        const videoId = media.split(':')[1];
+        if (mainImg) mainImg.style.display = 'none';
+        if (mainVideo) {
+            mainVideo.src = `https://drive.google.com/file/d/${videoId}/preview`;
+            mainVideo.style.display = 'block';
+        }
+    } else {
+        if (mainVideo) {
+            mainVideo.src = '';
+            mainVideo.style.display = 'none';
+        }
+        if (mainImg) {
+            mainImg.style.display = 'block';
+            if (thumbnail && thumbnail.tagName && thumbnail.tagName.toLowerCase() === 'img') {
+                mainImg.src = thumbnail.src.replace('&w=300', '&w=1200');
+            } else if (media) {
+                mainImg.src = media.replace('&w=300', '&w=1200');
+            }
+        }
     }
+
     document.querySelectorAll('.thumbnail-gallery .thumb').forEach(th => th.classList.remove('active'));
-    thumbnail.classList.add('active');
+    if (thumbnail) thumbnail.classList.add('active');
 };
 
 window.openLightbox = function(index) {
@@ -324,9 +374,13 @@ window.openLightbox = function(index) {
 
 window.closeLightbox = function() {
     const lightbox = document.getElementById('gallery-lightbox');
+    const lightboxVideo = document.getElementById('lightbox-main-video');
     if (lightbox) {
         lightbox.classList.remove('active');
         document.body.style.overflow = '';
+    }
+    if (lightboxVideo) {
+        lightboxVideo.src = '';
     }
 };
 
@@ -400,10 +454,28 @@ window.changeLightboxImage = function(direction) {
 
 function updateLightboxView() {
     const img = document.getElementById('lightbox-main-img');
+    const video = document.getElementById('lightbox-main-video');
     const counter = document.getElementById('lightbox-counter');
-    if (img && currentPropertyImages[currentLightboxIndex]) {
-        img.src = currentPropertyImages[currentLightboxIndex].replace('&w=300', '&w=1200');
+    const media = currentPropertyImages[currentLightboxIndex];
+    
+    if (media && media.startsWith('video:')) {
+        const videoId = media.split(':')[1];
+        if (img) img.style.display = 'none';
+        if (video) {
+            video.src = `https://drive.google.com/file/d/${videoId}/preview`;
+            video.style.display = 'block';
+        }
+    } else {
+        if (video) {
+            video.src = '';
+            video.style.display = 'none';
+        }
+        if (img && media) {
+            img.style.display = 'block';
+            img.src = media.replace('&w=300', '&w=1200');
+        }
     }
+    
     if (counter) {
         counter.textContent = `${currentLightboxIndex + 1} / ${currentPropertyImages.length}`;
     }

@@ -41,7 +41,7 @@ async function fetchFreshData() {
     
     fetchPromise = (async () => {
         try {
-            const scriptUrl = typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' ? GOOGLE_APPS_SCRIPT_URL : "https://script.google.com/macros/s/AKfycbyZw_D87_-iHK-rPJrxoIORzlePkkTjqUUFNT38tlpI8lAVdcEZd-2AvjGgErz2slS_vg/exec";
+            const scriptUrl = typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' ? GOOGLE_APPS_SCRIPT_URL : "https://script.google.com/macros/s/AKfycbxkBu-BIS1bzOKV-lDDeZNtXm3B8wfHHUNzgw6LJ-8QoyttAckjs2-mDYyz5zGOMKFDgQ/exec";
             const url = scriptUrl + '?action=getProperties&t=' + Date.now();
             
             const response = await fetch(url);
@@ -121,7 +121,7 @@ async function fetchFreshData() {
 }
 
 // Generate HTML for a "Discovery Card" (Used on Homepage)
-function createDiscoveryCardHTML(prop, hideBadge = false) {
+function createDiscoveryCardHTML(prop, index = 0, hideBadge = false) {
     const defaultImg = "assets/Logo.jpeg"; // Fallback image
     const images = prop.images && prop.images.length > 0 ? prop.images : [defaultImg];
     
@@ -154,7 +154,7 @@ function createDiscoveryCardHTML(prop, hideBadge = false) {
         
     const propertySlug = prop.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     return `
-        <article class="discovery-card">
+        <article class="discovery-card animate-card" style="animation-delay: ${Math.min(index * 0.08, 0.8)}s">
           <div class="card-image-wrapper">
             ${badgeWrapper}
             ${carouselHTML}
@@ -173,7 +173,7 @@ function createDiscoveryCardHTML(prop, hideBadge = false) {
 }
 
 // Generate HTML for a "Property Card" (Used on Priority Premium Homepage)
-function createPropertyCardHTML(prop) {
+function createPropertyCardHTML(prop, index = 0) {
     const defaultImg = "assets/Logo.jpeg"; // Fallback image
     const images = prop.images && prop.images.length > 0 ? prop.images : [defaultImg];
     
@@ -202,7 +202,7 @@ function createPropertyCardHTML(prop) {
         
     const propertySlug = prop.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     return `
-        <article class="property-card">
+        <article class="property-card animate-card" style="animation-delay: ${Math.min(index * 0.08, 0.8)}s">
           <div class="card-image-wrapper">
             <div class="card-badges" style="z-index: 10;">
               ${badgeHTML}
@@ -229,7 +229,7 @@ function createPropertyCardHTML(prop) {
 }
 
 // Generate HTML for a "Result Card" (Used on Search Pages)
-function createResultCardHTML(prop) {
+function createResultCardHTML(prop, index = 0) {
     const defaultImg = "assets/Logo.jpeg";
     const images = prop.images && prop.images.length > 0 ? prop.images : [defaultImg];
     
@@ -271,7 +271,7 @@ function createResultCardHTML(prop) {
     const propertySlug = prop.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
     return `
-        <article class="result-card-hz">
+        <article class="result-card-hz animate-card" style="animation-delay: ${Math.min(index * 0.08, 0.8)}s">
             <div class="result-card-image">
                 <div class="result-badges" style="z-index: 10;">
                     ${badgesHTML}
@@ -324,30 +324,133 @@ function createResultCardHTML(prop) {
     `;
 }
 
+function showLoaders() {
+    if (!document.getElementById('pro-loader-styles')) {
+        const style = document.createElement('style');
+        style.id = 'pro-loader-styles';
+        style.textContent = `
+            .pro-loader-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; width: 100%; min-height: 420px; gap: 15px; }
+            .pro-spinner { width: 40px; height: 40px; border: 4px solid rgba(0, 0, 0, 0.1); border-left-color: var(--color-1, #0f172a); border-radius: 50%; animation: spin 1s linear infinite; }
+            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            .pro-loader-text { font-size: 0.95rem; font-weight: 600; color: var(--color-2, #334155); font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.5px; }
+            .pro-progress { color: var(--color-3, #2B5C8F); font-weight: 700; }
+            
+            @keyframes cardFadeInUp {
+                from { opacity: 0; transform: translateY(40px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-card {
+                animation: cardFadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+                opacity: 0;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    const loaderHTML = `
+        <div class="pro-loader-container">
+            <div class="pro-spinner"></div>
+            <div class="pro-loader-text">Loading Properties... <span class="pro-progress">0%</span></div>
+        </div>
+    `;
+    const tracks = ['premium-track', 'track-premium', 'track-buy', 'track-budget', 'track-rent', 'track-plots', 'track-commercial', 'dynamic-search-results'];
+    tracks.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = loaderHTML;
+    });
+
+    if (window.proLoaderInterval) clearInterval(window.proLoaderInterval);
+    let progress = 0; // use float for smooth slowdowns
+    window.proLoaderInterval = setInterval(() => {
+        let increment;
+        if (progress < 40) {
+            increment = Math.random() * 20 + 15; // 15-35
+        } else if (progress < 75) {
+            increment = Math.random() * 10 + 5;  // 5-15
+        } else if (progress < 88) {
+            increment = Math.random() * 3 + 1;   // 1-4
+        } else if (progress < 95) {
+            increment = Math.random() * 0.8 + 0.2; // 0.2-1.0
+        } else if (progress < 98) {
+            increment = Math.random() * 0.3 + 0.05; // 0.05-0.35
+        } else {
+            increment = Math.random() * 0.05;      // almost stopped, creeping to 99
+        }
+        
+        progress += increment;
+        if (progress > 99.9) progress = 99.9;
+        
+        let displayProgress = Math.floor(progress);
+        document.querySelectorAll('.pro-progress').forEach(el => el.innerText = displayProgress + '%');
+    }, 100);
+}
+
+function clearLoaders() {
+    if (window.proLoaderInterval) clearInterval(window.proLoaderInterval);
+    document.querySelectorAll('.pro-progress').forEach(el => el.innerText = '100%');
+}
+
+function fastForwardLoadersTo99() {
+    return new Promise(resolve => {
+        if (!window.proLoaderInterval) { resolve(); return; }
+        clearInterval(window.proLoaderInterval);
+        
+        let progress = parseFloat(document.querySelector('.pro-progress')?.innerText || "0");
+        let fastInterval = setInterval(() => {
+            if (progress >= 99) {
+                clearInterval(fastInterval);
+                window.proLoaderInterval = null; // Prevent re-clearing
+                resolve();
+            } else {
+                let diff = 99 - progress;
+                let inc = Math.max(1, Math.floor(diff / 2));
+                progress += inc;
+                if (progress > 99) progress = 99;
+                document.querySelectorAll('.pro-progress').forEach(el => el.innerText = Math.floor(progress) + '%');
+            }
+        }, 30);
+    });
+}
+
 // Initialization for Homepage
 async function initHomepage() {
+    let loadersShown = false;
+    if (allProperties.length === 0 && !sessionStorage.getItem('propera_data_v5')) {
+        showLoaders();
+        loadersShown = true;
+    }
     const props = await fetchProperties();
+    if (loadersShown) await fastForwardLoadersTo99();
+    clearLoaders();
     if (!props || props.length === 0) return;
 
     // Priority Premium Track
     const priorityTrack = document.getElementById('premium-track');
     if (priorityTrack) {
         const premiumProps = props.filter(p => p.badges && p.badges.includes('Premium'));
-        priorityTrack.innerHTML = premiumProps.map(createPropertyCardHTML).join('');
+        priorityTrack.innerHTML = premiumProps.map((p, i) => createPropertyCardHTML(p, i)).join('');
     }
 
     // Premium Track
     const premiumTrack = document.getElementById('track-premium');
     if (premiumTrack) {
         const premiumProps = props.filter(p => p.badges && p.badges.includes('Premium'));
-        premiumTrack.innerHTML = premiumProps.map(createDiscoveryCardHTML).join('');
+        premiumTrack.innerHTML = premiumProps.map((p, i) => createDiscoveryCardHTML(p, i)).join('');
     }
 
     // Buy Track
     const buyTrack = document.getElementById('track-buy');
     if (buyTrack) {
-        const buyProps = props.filter(p => !((p.specs && p.specs.type) ? p.specs.type.toString().toLowerCase() : '').includes('plot'));
-        buyTrack.innerHTML = buyProps.map(createDiscoveryCardHTML).join('');
+        const buyProps = props.filter(p => {
+            const intent = (p.specs && p.specs.intent) ? p.specs.intent.toString().toLowerCase() : '';
+            const type = (p.specs && p.specs.type) ? p.specs.type.toString().toLowerCase() : '';
+            return intent !== 'rent' && !type.includes('plot');
+        });
+        if (buyProps.length > 0) {
+            buyTrack.innerHTML = buyProps.map((p, i) => createDiscoveryCardHTML(p, i)).join('');
+        } else {
+            buyTrack.innerHTML = '<div style="padding: 20px;">No Buy properties found.</div>';
+        }
     }
 
     // Budget Track
@@ -355,7 +458,7 @@ async function initHomepage() {
     if (budgetTrack) {
         const budgetProps = props.filter(p => p.badges && p.badges.includes('Budget Flat'));
         if (budgetProps.length > 0) {
-            budgetTrack.innerHTML = budgetProps.map(p => createDiscoveryCardHTML(p)).join('');
+            budgetTrack.innerHTML = budgetProps.map((p, i) => createDiscoveryCardHTML(p, i)).join('');
         } else {
             budgetTrack.innerHTML = '<div style="padding: 20px;">No Budget properties found.</div>';
         }
@@ -364,22 +467,29 @@ async function initHomepage() {
     // Rent Track
     const rentTrack = document.getElementById('track-rent');
     if (rentTrack) {
-        const rentProps = props.filter(p => !((p.specs && p.specs.type) ? p.specs.type.toString().toLowerCase() : '').includes('plot'));
-        rentTrack.innerHTML = rentProps.map(createDiscoveryCardHTML).join('');
+        const rentProps = props.filter(p => {
+            const intent = (p.specs && p.specs.intent) ? p.specs.intent.toString().toLowerCase() : '';
+            return intent === 'rent';
+        });
+        if (rentProps.length > 0) {
+            rentTrack.innerHTML = rentProps.map((p, i) => createDiscoveryCardHTML(p, i)).join('');
+        } else {
+            rentTrack.innerHTML = '<div style="padding: 20px;">No Rental properties found.</div>';
+        }
     }
     
     // Commercial Track
     const commercialTrack = document.getElementById('track-commercial');
     if (commercialTrack) {
         const commercialProps = props.filter(p => p.specs.type && p.specs.type.toLowerCase().includes('commercial'));
-        commercialTrack.innerHTML = commercialProps.map(createDiscoveryCardHTML).join('');
+        commercialTrack.innerHTML = commercialProps.map((p, i) => createDiscoveryCardHTML(p, i)).join('');
     }
     
     // Plots Track
     const plotsTrack = document.getElementById('track-plots');
     if (plotsTrack) {
         const plotsProps = props.filter(p => p.specs.type && p.specs.type.toLowerCase().includes('plot'));
-        plotsTrack.innerHTML = plotsProps.map(createDiscoveryCardHTML).join('');
+        plotsTrack.innerHTML = plotsProps.map((p, i) => createDiscoveryCardHTML(p, i)).join('');
     }
     
     // Update Hero Slider dynamically with Premium Properties
@@ -412,9 +522,15 @@ async function initSearchPage() {
     const resultsContainer = document.getElementById('dynamic-search-results');
     if (!resultsContainer) return;
     
-    resultsContainer.innerHTML = '<div style="padding: 2rem; text-align: center;">Loading properties...</div>';
+    let loadersShown = false;
+    if (allProperties.length === 0 && !sessionStorage.getItem('propera_data_v5')) {
+        showLoaders();
+        loadersShown = true;
+    }
 
     const props = await fetchProperties();
+    if (loadersShown) await fastForwardLoadersTo99();
+    clearLoaders();
     if (!props || props.length === 0) {
         resultsContainer.innerHTML = '<div style="padding: 2rem; text-align: center;">No properties found.</div>';
         return;
@@ -438,7 +554,7 @@ async function initSearchPage() {
     if (filteredProps.length === 0) {
         resultsContainer.innerHTML = '<div style="padding: 2rem; text-align: center;">No matching properties found.</div>';
     } else {
-        resultsContainer.innerHTML = filteredProps.map(createResultCardHTML).join('');
+        resultsContainer.innerHTML = filteredProps.map((p, i) => createResultCardHTML(p, i)).join('');
     }
     
     const countElement = document.getElementById('result-count');
@@ -501,32 +617,78 @@ document.addEventListener('scroll', function(e) {
         }
     }
 }, true);
+function smoothScrollTo(element, targetLeft, duration = 400) {
+    const start = element.scrollLeft;
+    const change = targetLeft - start;
+    const startTime = performance.now();
 
-// Pause on touch interaction (swipe)
-document.addEventListener('touchstart', function(e) {
-    const track = e.target.closest('.card-carousel-track');
-    if (track) pauseCarousel(track);
-}, {passive: true});
+    function animateScroll(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeInOutQuad = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
+        element.scrollLeft = start + change * easeInOutQuad;
 
-// Auto-scroll interval (every 2 seconds)
-setInterval(() => {
-    const tracks = document.querySelectorAll('.card-carousel-track');
-    const now = Date.now();
-    tracks.forEach(track => {
-        // Only scroll if there's more than 1 image
-        if (track.children.length > 1) {
-            const pausedUntil = window.carouselPauseStates.get(track) || 0;
-            if (now > pausedUntil) {
-                const maxScrollLeft = track.scrollWidth - track.clientWidth;
-                let nextScroll = track.scrollLeft + track.clientWidth;
-                
-                // loop back
-                if (nextScroll > maxScrollLeft + 10) {
-                    nextScroll = 0;
-                }
-                
-                track.scrollTo({ left: nextScroll, behavior: 'smooth' });
+        if (progress < 1) {
+            window.requestAnimationFrame(animateScroll);
+        }
+    }
+    window.requestAnimationFrame(animateScroll);
+}
+
+window.hoverIntervals = new Map();
+window.hoverTimeouts = new Map();
+
+document.addEventListener('mouseover', function(e) {
+    const card = e.target && e.target.closest ? e.target.closest('.discovery-card, .property-card, .result-card-hz') : null;
+    if (card && !card.dataset.isHovered) {
+        card.dataset.isHovered = 'true';
+        const carousel = card.querySelector('.card-carousel');
+        if (carousel) {
+            const track = carousel.querySelector('.card-carousel-track');
+            if (track && track.children.length > 1) {
+                // Wait 1 second before first slide
+                const timeoutId = setTimeout(() => {
+                    const maxScrollLeft = track.scrollWidth - track.clientWidth;
+                    let nextScroll = track.scrollLeft + track.clientWidth;
+                    if (nextScroll > maxScrollLeft + 10) nextScroll = 0;
+                    smoothScrollTo(track, nextScroll, 400);
+                    
+                    const intervalId = setInterval(() => {
+                        let nextScroll = track.scrollLeft + track.clientWidth;
+                        if (nextScroll > maxScrollLeft + 10) nextScroll = 0;
+                        smoothScrollTo(track, nextScroll, 400);
+                    }, 2000);
+                    window.hoverIntervals.set(card, intervalId);
+                }, 1000);
+                window.hoverTimeouts.set(card, timeoutId);
             }
         }
-    });
-}, 2000);
+    }
+});
+
+document.addEventListener('mouseout', function(e) {
+    const card = e.target && e.target.closest ? e.target.closest('.discovery-card, .property-card, .result-card-hz') : null;
+    if (card) {
+        if (!e.relatedTarget || !card.contains(e.relatedTarget)) {
+            card.dataset.isHovered = '';
+            
+            if (window.hoverTimeouts.has(card)) {
+                clearTimeout(window.hoverTimeouts.get(card));
+                window.hoverTimeouts.delete(card);
+            }
+            if (window.hoverIntervals.has(card)) {
+                clearInterval(window.hoverIntervals.get(card));
+                window.hoverIntervals.delete(card);
+            }
+            
+            const carousel = card.querySelector('.card-carousel');
+            if (carousel) {
+                const track = carousel.querySelector('.card-carousel-track');
+                if (track) {
+                    // Slide back to main image with guaranteed animation
+                    smoothScrollTo(track, 0, 400);
+                }
+            }
+        }
+    }
+});

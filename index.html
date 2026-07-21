@@ -200,60 +200,7 @@
 
       <div class="carousel-viewport">
         <div class="carousel-track" id="premium-track">
-          <!-- These will be hydrated by JS, but providing a skeleton structure so it's not empty -->
-          <div class="property-card">
-            <div class="card-image-wrapper">
-              <div class="card-badges">
-                <span class="badge badge-premium">Premium</span>
-              </div>
-              <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" class="card-image" alt="Prestige Sunrise">
-            </div>
-            <div class="card-content">
-              <div class="property-meta">Under Construction</div>
-              <h3 class="property-name text-h3">Prestige Sunrise Park</h3>
-              <p class="property-location">Electronic City, Bangalore</p>
-              <div class="property-price">o" 1.45 Cr</div>
-              <div class="card-actions">
-                <a href="property-detail.html?id=prestige-sunrise" class="btn btn-outline flex-1">View Details</a>
-              </div>
-            </div>
-          </div>
-          
-          <div class="property-card">
-            <div class="card-image-wrapper">
-              <div class="card-badges">
-                <span class="badge badge-featured">Featured</span>
-              </div>
-              <img src="https://images.unsplash.com/photo-1600607687931-cece5ce21fac?auto=format&fit=crop&w=600&q=80" class="card-image" alt="Sobha City">
-            </div>
-            <div class="card-content">
-              <div class="property-meta">Ready to Move</div>
-              <h3 class="property-name text-h3">Sobha City Casa Paradiso</h3>
-              <p class="property-location">Hegde Nagar, Bangalore</p>
-              <div class="property-price">o" 2.10 Cr</div>
-              <div class="card-actions">
-                <a href="property-detail.html?id=sobha-city" class="btn btn-outline flex-1">View Details</a>
-              </div>
-            </div>
-          </div>
-          
-          <div class="property-card">
-            <div class="card-image-wrapper">
-              <div class="card-badges">
-                <span class="badge badge-new">New Launch</span>
-              </div>
-              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" class="card-image" alt="Brigade Woods">
-            </div>
-            <div class="card-content">
-              <div class="property-meta">New Launch</div>
-              <h3 class="property-name text-h3">Brigade Woods</h3>
-              <p class="property-location">Whitefield, Bangalore</p>
-              <div class="property-price">o" 1.85 Cr</div>
-              <div class="card-actions">
-                <a href="property-detail.html?id=brigade-woods" class="btn btn-outline flex-1">View Details</a>
-              </div>
-            </div>
-          </div>
+          <div style="padding: 20px;">Loading Premium properties...</div>
         </div>
       </div>
     </div>
@@ -309,8 +256,33 @@
     </div>
   </section>
 
-  <!-- SECTION 7: COMMERCIAL SPACES -->
+  <!-- SECTION 6.5: RENTAL PROPERTIES -->
   <section class="discovery-section">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <h2 class="premium-title text-h2">Properties For Rent</h2>
+          <p class="text-muted">Find your perfect rental home across top locations.</p>
+        </div>
+        <div class="carousel-nav">
+          <button class="nav-arrow" aria-label="Previous" onclick="scrollCarousel('track-rent', -1)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <button class="nav-arrow" aria-label="Next" onclick="scrollCarousel('track-rent', 1)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+      </div>
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="track-rent">
+          <div style="padding: 20px;">Loading Rental Properties...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: COMMERCIAL SPACES -->
+  <section class="discovery-section bg-alt">
     <div class="container">
       <div class="flex-between">
         <div>

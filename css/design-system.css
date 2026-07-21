@@ -451,8 +451,206 @@ h1, h2, h3, h4, h5, h6 {
     background: rgba(255, 255, 255, 1);
 }
 
-.card-carousel:hover .carousel-prev,
-.card-carousel:hover .carousel-next {
+/* Floating UI / Modals / Floating Search */
+.floating-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-floating);
+  padding: var(--space-lg);
+  z-index: 10;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px); /* Minimal performance hit */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition-smooth);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  width: 90%;
+  max-width: 540px; /* Scaled down 10% from 600px */
+  transform: translateY(20px);
+  transition: var(--transition-smooth);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+
+/* Form Inputs & Search Bars */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+.input-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.input-field {
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--color-2, #d3d6db);
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  background: var(--bg-white);
+  transition: var(--transition-fast);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--color-3, #2B5C8F);
+  box-shadow: 0 0 0 3px rgba(65, 95, 157, 0.1);
+}
+
+.search-bar {
+  display: flex;
+  background: var(--bg-white);
+  border-radius: var(--radius-full);
+  padding: 0.5rem;
+  box-shadow: var(--shadow-md);
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  font-size: 1rem;
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+
+
+/* Carousel Container Placeholder */
+.carousel-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-md);
+  scrollbar-width: none; /* Firefox */
+}
+
+.carousel-container::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.carousel-item {
+  scroll-snap-align: start;
+  flex: 0 0 85%;
+}
+
+@media (min-width: 768px) {
+  .carousel-item {
+    flex: 0 0 45%;
+  }
+}
+@media (min-width: 1024px) {
+  .carousel-item {
+    flex: 0 0 30%;
+  }
+}
+
+/* CTA Section */
+.cta-section {
+  background-color: var(--color-4, #2B5C8F);
+  color: var(--text-light);
+  padding: var(--space-xxl) 0;
+  text-align: center;
+  border-radius: var(--radius-lg);
+  margin: var(--space-lg) 0;
+}
+
+/* ==========================================================================
+   GLOBAL CARD CAROUSEL STYLES
+   ========================================================================== */
+.card-carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.card-carousel-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    scroll-behavior: smooth;
+    width: 100%;
+    height: 100%;
+}
+.card-carousel-track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    scroll-snap-align: start;
+}
+
+.carousel-prev, .carousel-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s;
+    z-index: 2;
+}
+
+.carousel-prev:hover, .carousel-next:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+.property-card:hover .carousel-prev,
+.property-card:hover .carousel-next,
+.discovery-card:hover .carousel-prev,
+.discovery-card:hover .carousel-next,
+.result-card-hz:hover .carousel-prev,
+.result-card-hz:hover .carousel-next {
     opacity: 1;
 }
 
@@ -471,6 +669,14 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     gap: 4px;
     z-index: 2;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.property-card:hover .carousel-dots,
+.discovery-card:hover .carousel-dots,
+.result-card-hz:hover .carousel-dots {
+    opacity: 1;
 }
 
 .carousel-dot {

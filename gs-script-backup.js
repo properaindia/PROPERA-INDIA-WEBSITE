@@ -49,9 +49,9 @@ function doPost(e) {
     // Generate Lead ID (timestamp + random)
     const leadId = `LEAD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
-    // Handle Site Visit Booking to Sheet4
+    // Handle Site Visit Booking to Sheet3
     if (data.source === "Site Visit") {
-      const visitSheet = ss.getSheetByName("Sheet4");
+      const visitSheet = ss.getSheetByName("Sheet3");
       if (visitSheet) {
         const visitId = `VISIT-${Date.now()}`;
         const leadContact = `${data.name || ''} - ${data.phone || ''} ${data.email ? '('+data.email+')' : ''}`;
@@ -75,6 +75,52 @@ function doPost(e) {
             success: true,
             message: "Site visit requested successfully",
             leadId: visitId
+          })
+        ).setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+
+    // Handle Post Property to Sheet4
+    if (data.source === "Post Property") {
+      const propertySheet = ss.getSheetByName("Sheet4");
+      if (propertySheet) {
+        const ownerId = `OWNER-${Date.now()}`;
+        
+        // Extract amenities which might come as an array
+        let amenitiesStr = "";
+        const amenitiesKey = data['amenities[]'] ? 'amenities[]' : 'amenities';
+        if (data[amenitiesKey]) {
+          amenitiesStr = Array.isArray(data[amenitiesKey]) ? data[amenitiesKey].join(", ") : data[amenitiesKey];
+        }
+        if (data.otherAmenities) {
+          amenitiesStr += (amenitiesStr ? ", " : "") + data.otherAmenities;
+        }
+
+        const propRow = [
+          ownerId,                           // A: Owner ID
+          data.type || "",                   // B: Property Type
+          data.propertyName || "",           // C: Property Name
+          data.intent || "",                 // D: Sale/Rent
+          data.description || "",            // E: Property Desc
+          data.location || "",               // F: Location
+          data.price || "",                  // G: Expected Price
+          amenitiesStr,                      // H: Amenities
+          data.name || "",                   // I: Owner Name
+          data.phone || "",                  // J: Owner Phone
+          "Pending",                         // K: Verification
+          "New Lead"                         // L: Status
+        ];
+        
+        propertySheet.getRange(propertySheet.getLastRow() + 1, 1, 1, propRow.length).setValues([propRow]);
+        
+        // Send email notification for Property Posting
+        sendEmailNotification(ownerId, data);
+        
+        return ContentService.createTextOutput(
+          JSON.stringify({
+            success: true,
+            message: "Property submitted successfully",
+            leadId: ownerId
           })
         ).setMimeType(ContentService.MimeType.JSON);
       }
@@ -140,79 +186,132 @@ function doGet(e) {
       const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
       const sheet = ss.getSheetByName(PROPERTY_SHEET_NAME);
       const dataRange = sheet.getDataRange();
-      const values = dataRange.getValues();
-      
-      if (values.length <= 1) {
-        return ContentService.createTextOutput(JSON.stringify([])).setMimeType(ContentService.MimeType.JSON);
+      const rentSheet = ss.getSheetByName("Sheet1.5");
+      let rentValues = [];
+      if (rentSheet) {
+        rentValues = rentSheet.getDataRange().getValues();
       }
       
       const properties = [];
-      // Skip header row (index 0)
-      for (let i = 1; i < values.length; i++) {
-        const row = values[i];
+      
+      function processRows(rows, isRentSheet) {
+        if (!rows || rows.length <= 1) return;
         
-        // Helper to safely get value and handle '<>' placeholder
-        const getVal = (idx) => (row[idx] !== undefined && row[idx] !== null && row[idx].toString() !== '<>') ? row[idx].toString().trim() : '';
-        
-        const propName = getVal(1);
-        // Ensure row has data (check Property Name instead of ID since ID can be <>)
-        if (!propName) continue;
-        
-        // Auto-generate ID from Property Name if ID is missing or '<>'
-        let propId = getVal(0);
-        if (!propId) {
-            propId = propName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i];
+          const getVal = (idx) => (row[idx] !== undefined && row[idx] !== null && row[idx].toString() !== '<>') ? row[idx].toString().trim() : '';
+          
+          const propName = getVal(1);
+          if (!propName) continue;
+          
+          let propId = getVal(0);
+          if (!propId) {
+              propId = propName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+          }
+          
+          const badges = [];
+          let isPremium = false;
+          let isFeatured = false;
+          let mainImageStr = '';
+          let galleryStr = '';
+          let descriptionStr = '';
+          let videoStr = '';
+          let rera = '';
+          let possession = '';
+          let status = '';
+          let intent = '';
+          let type = '';
+          let builder = '';
+          let location = '';
+          let priceRange = '';
+          let size = '';
+          let config = '';
+          let agent = '';
+
+          if (isRentSheet) {
+              // 0: ID, 1: Name, 2: Builder, 3: Type, 4: Buy/Rent
+              // 5: BHK, 6: Area, 7: Locality, 8: Price, 9: Premium/Budget, 10: Description
+              // 11: Main Image, 12: Gallery, 13: Video, 14: RERA
+              builder = getVal(2);
+              type = getVal(3);
+              intent = getVal(4);
+              config = getVal(5);
+              size = getVal(6);
+              location = getVal(7);
+              priceRange = getVal(8);
+              isPremium = getVal(9).toLowerCase().includes('premium');
+              descriptionStr = getVal(10);
+              mainImageStr = getVal(11);
+              galleryStr = getVal(12);
+              videoStr = getVal(13);
+              rera = getVal(14);
+              status = 'Ready to Move';
+          } else {
+              // Sheet1
+              // 0: ID, 1: Name, 2: Builder, 3: Type, 4: Buy/Rent
+              // 5: BHK, 6: Area, 7: Locality, 8: Price, 9: Possession, 10: Status
+              // 11: Featured, 12: Premium, 13: Description, 14: Main Image, 15: Gallery
+              // 16: RERA, 17: Assigned Agent, 18: Video
+              builder = getVal(2);
+              type = getVal(3);
+              intent = getVal(4);
+              config = getVal(5);
+              size = getVal(6);
+              location = getVal(7);
+              priceRange = getVal(8);
+              possession = getVal(9);
+              status = getVal(10);
+              isFeatured = getVal(11).toLowerCase() === 'yes';
+              isPremium = getVal(12).toLowerCase() === 'yes';
+              descriptionStr = getVal(13);
+              mainImageStr = getVal(14);
+              galleryStr = getVal(15);
+              rera = getVal(16);
+              agent = getVal(17);
+              videoStr = getVal(18);
+          }
+          
+          if (isPremium) badges.push('Premium');
+          if (isFeatured) badges.push('Featured');
+          
+          const mainImage = mainImageStr ? convertDriveLink(mainImageStr) : '';
+          const gallery = galleryStr ? galleryStr.split(',').map(s => convertDriveLink(s.trim())).filter(s => s) : [];
+          const images = mainImage ? [mainImage].concat(gallery) : gallery;
+          
+          const description = descriptionStr ? descriptionStr.split('\n').filter(s => s.trim()) : [];
+          
+          const prop = {
+            id: propId,
+            title: propName,
+            builder: builder,
+            location: location,
+            priceRange: priceRange,
+            badges: badges,
+            urgency: [],
+            images: images,
+            video: videoStr,
+            specs: {
+              type: type,
+              size: size,
+              possession: possession,
+              configuration: config,
+              status: status,
+              intent: intent
+            },
+            description: description,
+            amenities: [],
+            highlights: [],
+            landmarks: [],
+            rera: rera,
+            agent: agent
+          };
+          
+          properties.push(prop);
         }
-
-        // Column Indices (0-based):
-        // 0: Property ID, 1: Property Name, 2: Builder, 3: Property Type, 4: Buy/Rent
-        // 5: BHK, 6: Area, 7: Locality, 8: Price, 9: Possession, 10: Status
-        // 11: Featured, 12: Premium, 13: Description, 14: Main Image, 15: Gallery
-        // 16: RERA, 17: Assigned Agent
-
-        const badges = [];
-        const isPremium = getVal(12).toLowerCase() === 'yes';
-        const isFeatured = getVal(11).toLowerCase() === 'yes';
-        
-        if (isPremium) badges.push('Premium');
-        if (isFeatured) badges.push('Featured');
-        
-        const mainImageStr = getVal(14);
-        const galleryStr = getVal(15);
-        
-        const mainImage = mainImageStr ? convertDriveLink(mainImageStr) : '';
-        const gallery = galleryStr ? galleryStr.split(',').map(s => convertDriveLink(s.trim())).filter(s => s) : [];
-        const images = mainImage ? [mainImage].concat(gallery) : gallery;
-        
-        const descriptionStr = getVal(13);
-        const description = descriptionStr ? descriptionStr.split('\n').filter(s => s.trim()) : [];
-        
-        const prop = {
-          id: propId,
-          title: propName,
-          builder: getVal(2),
-          location: getVal(7),
-          priceRange: getVal(8),
-          badges: badges,
-          urgency: [], // Can be populated dynamically if needed later
-          images: images,
-          specs: {
-            type: getVal(3),
-            size: getVal(6),
-            possession: getVal(9),
-            configuration: getVal(5),
-            status: getVal(10)
-          },
-          description: description,
-          amenities: [], // Default empty, can add logic later
-          highlights: [],
-          landmarks: [],
-          rera: getVal(16),
-          agent: getVal(17)
-        };
-        
-        properties.push(prop);
       }
+      
+      processRows(dataRange.getValues(), false);
+      processRows(rentValues, true);
       
       return ContentService.createTextOutput(JSON.stringify(properties)).setMimeType(ContentService.MimeType.JSON);
     }
