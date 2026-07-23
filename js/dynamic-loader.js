@@ -127,7 +127,7 @@ function createDiscoveryCardHTML(prop, index = 0, hideBadge = false) {
     
     let carouselHTML = '';
     if (images.length > 1) {
-        let slides = images.map(img => `<img src="${img}" alt="${prop.title}" loading="lazy" class="carousel-slide">`).join('');
+        let slides = images.map(img => `<img src="${img}" alt="${prop.title}" class="carousel-slide">`).join('');
         carouselHTML = `
             <div class="card-carousel" style="width: 100%; height: 100%;">
                 <div class="card-carousel-track">
@@ -179,7 +179,7 @@ function createPropertyCardHTML(prop, index = 0) {
     
     let carouselHTML = '';
     if (images.length > 1) {
-        let slides = images.map(img => `<img src="${img}" alt="${prop.title}" loading="lazy" class="carousel-slide">`).join('');
+        let slides = images.map(img => `<img src="${img}" alt="${prop.title}" class="carousel-slide">`).join('');
         carouselHTML = `
             <div class="card-carousel" style="width: 100%; height: 100%;">
                 <div class="card-carousel-track">
@@ -235,7 +235,7 @@ function createResultCardHTML(prop, index = 0) {
     
     let carouselHTML = '';
     if (images.length > 1) {
-        let slides = images.map(img => `<img src="${img}" alt="${prop.title}" loading="lazy" class="carousel-slide">`).join('');
+        let slides = images.map(img => `<img src="${img}" alt="${prop.title}" class="carousel-slide">`).join('');
         carouselHTML = `
             <div class="card-carousel">
                 <div class="card-carousel-track">
@@ -586,6 +586,14 @@ function pauseCarousel(track) {
     window.carouselPauseStates.set(track, Date.now() + 5000);
 }
 
+function updateCarouselDots(carousel, index) {
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    if (dots && dots.length > index) {
+        dots.forEach(d => d.classList.remove('active'));
+        dots[index].classList.add('active');
+    }
+}
+
 document.addEventListener('click', function(e) {
     if (e.target.closest('.carousel-prev') || e.target.closest('.carousel-next')) {
         const btn = e.target.closest('button');
@@ -596,44 +604,17 @@ document.addEventListener('click', function(e) {
         pauseCarousel(track);
         
         const direction = btn.classList.contains('carousel-next') ? 1 : -1;
-        const maxScrollLeft = track.scrollWidth - track.clientWidth;
-        let nextScroll = track.scrollLeft + (track.clientWidth * direction);
+        const totalSlides = track.children.length;
+        let index = parseInt(carousel.dataset.index || 0) + direction;
         
-        if (nextScroll < 0) nextScroll = maxScrollLeft;
-        else if (nextScroll > maxScrollLeft + 10) nextScroll = 0;
+        if (index < 0) index = totalSlides - 1;
+        else if (index >= totalSlides) index = 0;
         
-        track.scrollTo({ left: nextScroll, behavior: 'smooth' });
+        carousel.dataset.index = index;
+        track.style.transform = `translateX(-${index * 100}%)`;
+        updateCarouselDots(carousel, index);
     }
 });
-
-document.addEventListener('scroll', function(e) {
-    if (e.target && e.target.classList && e.target.classList.contains('card-carousel-track')) {
-        const track = e.target;
-        const index = Math.round(track.scrollLeft / track.clientWidth);
-        const dots = track.parentElement.querySelectorAll('.carousel-dot');
-        if (dots && dots.length > index) {
-            dots.forEach(d => d.classList.remove('active'));
-            dots[index].classList.add('active');
-        }
-    }
-}, true);
-function smoothScrollTo(element, targetLeft, duration = 400) {
-    const start = element.scrollLeft;
-    const change = targetLeft - start;
-    const startTime = performance.now();
-
-    function animateScroll(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeInOutQuad = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
-        element.scrollLeft = start + change * easeInOutQuad;
-
-        if (progress < 1) {
-            window.requestAnimationFrame(animateScroll);
-        }
-    }
-    window.requestAnimationFrame(animateScroll);
-}
 
 window.hoverIntervals = new Map();
 window.hoverTimeouts = new Map();
@@ -646,17 +627,22 @@ document.addEventListener('mouseover', function(e) {
         if (carousel) {
             const track = carousel.querySelector('.card-carousel-track');
             if (track && track.children.length > 1) {
+                const totalSlides = track.children.length;
+                
                 // Wait 1 second before first slide
                 const timeoutId = setTimeout(() => {
-                    const maxScrollLeft = track.scrollWidth - track.clientWidth;
-                    let nextScroll = track.scrollLeft + track.clientWidth;
-                    if (nextScroll > maxScrollLeft + 10) nextScroll = 0;
-                    smoothScrollTo(track, nextScroll, 400);
+                    let index = parseInt(carousel.dataset.index || 0) + 1;
+                    if (index >= totalSlides) index = 0;
+                    carousel.dataset.index = index;
+                    track.style.transform = `translateX(-${index * 100}%)`;
+                    updateCarouselDots(carousel, index);
                     
                     const intervalId = setInterval(() => {
-                        let nextScroll = track.scrollLeft + track.clientWidth;
-                        if (nextScroll > maxScrollLeft + 10) nextScroll = 0;
-                        smoothScrollTo(track, nextScroll, 400);
+                        let idx = parseInt(carousel.dataset.index || 0) + 1;
+                        if (idx >= totalSlides) idx = 0;
+                        carousel.dataset.index = idx;
+                        track.style.transform = `translateX(-${idx * 100}%)`;
+                        updateCarouselDots(carousel, idx);
                     }, 2000);
                     window.hoverIntervals.set(card, intervalId);
                 }, 1000);
@@ -686,7 +672,9 @@ document.addEventListener('mouseout', function(e) {
                 const track = carousel.querySelector('.card-carousel-track');
                 if (track) {
                     // Slide back to main image with guaranteed animation
-                    smoothScrollTo(track, 0, 400);
+                    carousel.dataset.index = 0;
+                    track.style.transform = `translateX(0%)`;
+                    updateCarouselDots(carousel, 0);
                 }
             }
         }
