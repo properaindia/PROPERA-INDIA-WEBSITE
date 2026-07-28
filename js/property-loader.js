@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         let properties = null;
-        const cachedProps = sessionStorage.getItem('propera_properties_v3');
+        const cachedProps = sessionStorage.getItem('propera_data_v5') || sessionStorage.getItem('propera_properties_v3');
         
         if (cachedProps) {
             properties = JSON.parse(cachedProps);
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     return prop;
                 });
                 
-                sessionStorage.setItem('propera_properties_v3', JSON.stringify(properties));
+                sessionStorage.setItem('propera_data_v5', JSON.stringify(properties));
             }
         }
         
@@ -330,6 +330,7 @@ function renderProperty(data) {
 
 // Global functions for new gallery/lightbox
 window.updateMainImage = function(thumbnail, index) {
+    isVideoInteracted = false;
     currentLightboxIndex = index;
     const mainImg = document.getElementById('main-prop-image');
     const mainVideo = document.getElementById('main-prop-video');
@@ -386,10 +387,18 @@ window.closeLightbox = function() {
 
 // Gallery Auto-Scroll Logic
 let galleryPauseUntil = 0;
+let isVideoInteracted = false;
 
 window.pauseGallery = function() {
     galleryPauseUntil = Date.now() + 5000;
 };
+
+window.addEventListener('blur', () => {
+    const mainVideo = document.getElementById('main-prop-video');
+    if (mainVideo && document.activeElement === mainVideo) {
+        isVideoInteracted = true;
+    }
+});
 
 window.prevMainImage = function(e) {
     if (e) {
@@ -435,6 +444,11 @@ document.addEventListener('DOMContentLoaded', () => {
 setInterval(() => {
     if (currentPropertyImages.length <= 1) return;
     if (document.getElementById('gallery-lightbox') && document.getElementById('gallery-lightbox').classList.contains('active')) return;
+    
+    // If current slide is a video and user interacted with it, pause auto-scroll
+    if (isVideoInteracted && currentPropertyImages[currentLightboxIndex] && currentPropertyImages[currentLightboxIndex].startsWith('video:')) {
+        return;
+    }
     
     if (Date.now() > galleryPauseUntil) {
         window.nextMainImage();
