@@ -31,9 +31,17 @@
             <img src="assets/RibbonLogo.png" alt="Propera Logo" style="height: 44px; width: auto; object-fit: contain;">
         </a>
       </div>
+        <div class="city-selector">
+          <button class="city-btn">
+            Bangalore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="city-dropdown">
+            Other cities coming soon!
+          </div>
+        </div>
       <nav class="nav-links">
-        <a href="searchbuy.html" class="nav-item">Buy</a>
-        <a href="searchrent.html" class="nav-item">Rent</a>
+        <a href="search.html?intent=buy" class="nav-item">Buy</a>
+        <a href="search.html?intent=rent" class="nav-item">Rent</a>
       </nav>
       <div class="nav-actions">
         <a href="premium-services.html" class="nav-item" style="color: white;">Premium Services</a>
@@ -180,8 +188,8 @@
       <div>
         <h4 class="text-h4" style="margin-bottom: 20px;">Quick Links</h4>
         <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
-          <li><a href="searchbuy.html" style="color: var(--text-secondary); text-decoration: none;">Buy Properties</a></li>
-          <li><a href="searchrent.html" style="color: var(--text-secondary); text-decoration: none;">Rent Properties</a></li>
+          <li><a href="search.html?intent=buy" style="color: var(--text-secondary); text-decoration: none;">Buy Properties</a></li>
+          <li><a href="search.html?intent=rent" style="color: var(--text-secondary); text-decoration: none;">Rent Properties</a></li>
           <li><a href="premium-services.html" style="color: var(--text-secondary); text-decoration: none;">Premium Services</a></li>
           <li><a href="post-property.html" style="color: var(--text-secondary); text-decoration: none;">Post Property Free</a></li>
         </ul>

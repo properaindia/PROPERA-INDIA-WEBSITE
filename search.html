@@ -28,7 +28,7 @@
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
-<body class="search-body">
+<body class="search-body theme-root">
 
   <header class="navbar">
     <div class="navbar-container">
@@ -37,18 +37,26 @@
             <img src="assets/RibbonLogo.png" alt="Propera Logo" style="height: 44px; width: auto; object-fit: contain;">
         </a>
       </div>
+        <div class="city-selector">
+          <button class="city-btn">
+            Bangalore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="city-dropdown">
+            Other cities coming soon!
+          </div>
+        </div>
       <nav class="nav-links">
         <div class="nav-dropdown">
           <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Buy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
           <div class="nav-dropdown-content">
-            <a href="searchbuy.html?prop=apartments">Apartments</a>
-            <a href="searchbuy.html?prop=villas">Villas</a>
+            <a href="search.html?intent=buy&type=apartment">Apartments</a>
+            <a href="search.html?intent=buy&type=villa">Villas</a>
             <div class="nav-nested-dropdown">
               <a href="#">Plots <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
               <div class="nav-nested-dropdown-content">
-                <a href="searchplots.html?subtype=residential">Residential Plot</a>
-                <a href="searchplots.html?subtype=commercial">Commercial land</a>
-                <a href="searchplots.html?subtype=agricultural">Agricultural Land</a>
+                <a href="search.html?intent=buy&type=plot">Residential Plot</a>
+                <a href="search.html?intent=commercial&type=plot">Commercial land</a>
+                <a href="search.html?intent=buy&type=plot">Agricultural Land</a>
               </div>
             </div>
           </div>
@@ -60,18 +68,18 @@
             <div class="nav-nested-dropdown">
               <a href="#">Apartments <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
               <div class="nav-nested-dropdown-content">
-                <a href="searchrent.html?bhk=1">1 BHK</a>
-                <a href="searchrent.html?bhk=2">2 BHK</a>
-                <a href="searchrent.html?bhk=3">3 BHK</a>
-                <a href="searchrent.html?bhk=4">4+ BHK</a>
+                <a href="search.html?intent=rent&bhk=1">1 BHK</a>
+                <a href="search.html?intent=rent&bhk=2">2 BHK</a>
+                <a href="search.html?intent=rent&bhk=3">3 BHK</a>
+                <a href="search.html?intent=rent&bhk=4+">4+ BHK</a>
               </div>
             </div>
             <div class="nav-nested-dropdown">
               <a href="#">Commercial Spaces <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
               <div class="nav-nested-dropdown-content">
-                <a href="searchcommercial.html?subtype=shop">Shop/Showroom</a>
-                <a href="searchcommercial.html?subtype=office">Office Space</a>
-                <a href="searchcommercial.html?subtype=warehouse">Warehouse/Godown</a>
+                <a href="search.html?intent=commercial">Shop/Showroom</a>
+                <a href="search.html?intent=commercial">Office Space</a>
+                <a href="search.html?intent=commercial">Warehouse/Godown</a>
               </div>
             </div>
           </div>
@@ -103,45 +111,58 @@
     <main class="search-page-container">
         <!-- LEFT SIDEBAR -->
         <aside class="search-sidebar">
-            <div class="sidebar-header">
-                <h3 class="text-h3" style="margin:0; font-size: 1.1rem;">Filters</h3>
-                <button style="background:none; border:none; color:var(--color-3); cursor:pointer; font-size:0.875rem; font-weight:600;">Reset All</button>
+            <div class="sidebar-header" style="justify-content: flex-start; gap: 1rem;">
+                <div class="intent-toggle">
+                    <input type="radio" id="intent-buy" name="intent_switch" value="buy" checked>
+                    <label for="intent-buy">Buy</label>
+                    <input type="radio" id="intent-rent" name="intent_switch" value="rent">
+                    <label for="intent-rent">Rent</label>
+                    <div class="toggle-slider"></div>
+                </div>
+                <button id="reset-filters-btn" style="background:none; border:none; color:var(--color-3); cursor:pointer; font-size:0.875rem; font-weight:600; margin-left: auto;">Reset All</button>
             </div>
 
-            <details class="filter-section" open>
-                <summary>Intent</summary>
-                <div class="filter-options">
-                    <label class="custom-label"><input type="radio" name="intent" value="buy" checked> Buy</label>
-                    <label class="custom-label"><input type="radio" name="intent" value="rent" > Rent</label>
-                    <label class="custom-label"><input type="radio" name="intent" value="commercial" > Commercial</label>
-                </div>
-            </details>
+            <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-border);">
+                <select class="sort-select" id="desktop-sort-select" style="width: 100%;">
+                    <option value="relevant">Relevant</option>
+                    <option value="newest">Newest</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                </select>
+            </div>
 
-            <details class="filter-section" open>
+
+
+            <details class="filter-section">
                 <summary>Property Type</summary>
                 <div class="filter-options">
-                    <label class="custom-label"><input type="checkbox" checked> Apartment</label>
+                    <label class="custom-label"><input type="checkbox"> Apartment</label>
                     <label class="custom-label"><input type="checkbox"> Villa</label>
                     <label class="custom-label"><input type="checkbox" > Plot</label>
                     <label class="custom-label"><input type="checkbox" > Commercial</label>
                 </div>
             </details>
 
-            <details class="filter-section" open>
+            <details class="filter-section">
                 <summary>Budget</summary>
-                <div class="filter-options">
-                    <label class="custom-label"><input type="radio" name="budget" value="u50"> Under 50L</label>
-                    <label class="custom-label"><input type="radio" name="budget" value="50-100"> 50L - 1Cr</label>
-                    <label class="custom-label"><input type="radio" name="budget" value="100-200" checked> 1Cr - 2Cr</label>
-                    <label class="custom-label"><input type="radio" name="budget" value="200-500"> 2Cr - 5Cr</label>
-                    <label class="custom-label"><input type="radio" name="budget" value="500+"> 5Cr+</label>
+                <div class="range-slider-container">
+                    <div class="range-display" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div><span id="range-min-val">₹40 L</span> &ndash; <span id="range-max-val">₹7 Cr+</span></div>
+                        <button id="apply-budget-btn" style="background: var(--color-3); color: white; border: none; padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Update</button>
+                    </div>
+                    <div class="range-controls">
+                        <div class="range-track"></div>
+                        <div class="range-fill" id="range-fill"></div>
+                        <input type="range" id="budget-min" min="4000000" max="70000000" step="100000" value="4000000">
+                        <input type="range" id="budget-max" min="4000000" max="70000000" step="100000" value="70000000">
+                    </div>
                 </div>
             </details>
 
-            <details class="filter-section" open>
-                <summary>Location</summary>
+            <details class="filter-section">
+                <summary>Localities</summary>
                 <div class="filter-options">
-                    <label class="custom-label"><input type="checkbox" checked> Whitefield</label>
+                    <label class="custom-label"><input type="checkbox"> Whitefield</label>
                     <label class="custom-label"><input type="checkbox"> Sarjapur</label>
                     <label class="custom-label"><input type="checkbox"> Electronic City</label>
                     <label class="custom-label"><input type="checkbox"> Hebbal</label>
@@ -152,8 +173,8 @@
                 <summary>BHK Setup</summary>
                 <div class="filter-options">
                     <label class="custom-label"><input type="checkbox"> 1 BHK</label>
-                    <label class="custom-label"><input type="checkbox" checked> 2 BHK</label>
-                    <label class="custom-label"><input type="checkbox" checked> 3 BHK</label>
+                    <label class="custom-label"><input type="checkbox"> 2 BHK</label>
+                    <label class="custom-label"><input type="checkbox"> 3 BHK</label>
                     <label class="custom-label"><input type="checkbox"> 4+ BHK</label>
                 </div>
             </details>
@@ -161,16 +182,6 @@
 
         <!-- RIGHT PROPERTIES GRID -->
         <section class="search-results-area">
-            <div class="sort-bar">
-                <span class="text-muted" style="font-size: 0.9375rem;">Showing properties</span>
-                <select class="sort-select">
-                    <option>Premium First</option>
-                    <option>Verified First</option>
-                    <option>Newest</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                </select>
-            </div>
 
             <div id="dynamic-search-results">
                 <!-- Properties injected by JS -->
@@ -212,8 +223,8 @@
       <div>
         <h4 class="text-h4" style="margin-bottom: 20px;">Quick Links</h4>
         <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
-          <li><a href="searchbuy.html" style="color: var(--text-secondary); text-decoration: none;">Buy Properties</a></li>
-          <li><a href="searchrent.html" style="color: var(--text-secondary); text-decoration: none;">Rent Properties</a></li>
+          <li><a href="search.html?intent=buy" style="color: var(--text-secondary); text-decoration: none;">Buy Properties</a></li>
+          <li><a href="search.html?intent=rent" style="color: var(--text-secondary); text-decoration: none;">Rent Properties</a></li>
           <li><a href="premium-services.html" style="color: var(--text-secondary); text-decoration: none;">Premium Services</a></li>
           <li><a href="post-property.html" style="color: var(--text-secondary); text-decoration: none;">Post Property Free</a></li>
         </ul>

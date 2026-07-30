@@ -25,18 +25,26 @@
             <img src="assets/RibbonLogo.png" alt="Propera Logo" style="height: 44px; width: auto; object-fit: contain;">
         </a>
       </div>
+        <div class="city-selector">
+          <button class="city-btn">
+            Bangalore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="city-dropdown">
+            Other cities coming soon!
+          </div>
+        </div>
       <nav class="nav-links">
         <div class="nav-dropdown">
           <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px;">Buy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
           <div class="nav-dropdown-content">
-            <a href="searchbuy.html?prop=apartments">Apartments</a>
-            <a href="searchbuy.html?prop=villas">Villas</a>
+            <a href="search.html?intent=buy&type=apartment">Apartments</a>
+            <a href="search.html?intent=buy&type=villa">Villas</a>
             <div class="nav-nested-dropdown">
               <a href="#">Plots <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
               <div class="nav-nested-dropdown-content">
-                <a href="searchplots.html?subtype=residential">Residential Plot</a>
-                <a href="searchplots.html?subtype=commercial">Commercial land</a>
-                <a href="searchplots.html?subtype=agricultural">Agricultural Land</a>
+                <a href="search.html?intent=buy&type=plot">Residential Plot</a>
+                <a href="search.html?intent=commercial&type=plot">Commercial land</a>
+                <a href="search.html?intent=buy&type=plot">Agricultural Land</a>
               </div>
             </div>
           </div>
@@ -48,18 +56,18 @@
             <div class="nav-nested-dropdown">
               <a href="#">Apartments <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
               <div class="nav-nested-dropdown-content">
-                <a href="searchrent.html?bhk=1">1 BHK</a>
-                <a href="searchrent.html?bhk=2">2 BHK</a>
-                <a href="searchrent.html?bhk=3">3 BHK</a>
-                <a href="searchrent.html?bhk=4">4+ BHK</a>
+                <a href="search.html?intent=rent&bhk=1">1 BHK</a>
+                <a href="search.html?intent=rent&bhk=2">2 BHK</a>
+                <a href="search.html?intent=rent&bhk=3">3 BHK</a>
+                <a href="search.html?intent=rent&bhk=4+">4+ BHK</a>
               </div>
             </div>
             <div class="nav-nested-dropdown">
               <a href="#">Commercial Spaces <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
               <div class="nav-nested-dropdown-content">
-                <a href="searchcommercial.html?subtype=shop">Shop/Showroom</a>
-                <a href="searchcommercial.html?subtype=office">Office Space</a>
-                <a href="searchcommercial.html?subtype=warehouse">Warehouse/Godown</a>
+                <a href="search.html?intent=commercial">Shop/Showroom</a>
+                <a href="search.html?intent=commercial">Office Space</a>
+                <a href="search.html?intent=commercial">Warehouse/Godown</a>
               </div>
             </div>
           </div>
@@ -166,8 +174,8 @@
       <div>
         <h4 class="text-h4" style="margin-bottom: 20px;">Quick Links</h4>
         <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
-          <li><a href="searchbuy.html" style="color: var(--text-secondary); text-decoration: none;">Buy Properties</a></li>
-          <li><a href="searchrent.html" style="color: var(--text-secondary); text-decoration: none;">Rent Properties</a></li>
+          <li><a href="search.html?intent=buy" style="color: var(--text-secondary); text-decoration: none;">Buy Properties</a></li>
+          <li><a href="search.html?intent=rent" style="color: var(--text-secondary); text-decoration: none;">Rent Properties</a></li>
           <li><a href="premium-services.html" style="color: var(--text-secondary); text-decoration: none;">Premium Services</a></li>
           <li><a href="post-property.html" style="color: var(--text-secondary); text-decoration: none;">Post Property Free</a></li>
         </ul>

@@ -96,11 +96,20 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const type = heroSearchType.value;
             const query = heroSearchBar.querySelector('input[name="q"]').value;
-            let targetPage = `search${type}.html`;
+            let targetPage = 'search.html';
+            let params = new URLSearchParams();
+            
+            if (type === 'buy') params.set('intent', 'buy');
+            else if (type === 'rent') params.set('intent', 'rent');
+            else if (type === 'commercial') params.set('intent', 'commercial');
+            else if (type === 'plots') params.set('type', 'plot');
+            
             if (query) {
-                targetPage += `?q=${encodeURIComponent(query)}`;
+                params.set('q', query);
             }
-            window.location.href = targetPage;
+            
+            const paramString = params.toString();
+            window.location.href = paramString ? targetPage + '?' + paramString : targetPage;
         });
     }
 });

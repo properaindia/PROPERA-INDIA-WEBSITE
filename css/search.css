@@ -66,9 +66,7 @@ body.search-body {
         /* Sticky magic for Desktop/Laptop */
         position: sticky;
         top: 100px; /* offset from navbar */
-        height: max-content;
-        max-height: calc(100vh - 108px);
-        overflow-y: auto;
+        height: fit-content;
     }
 }
 
@@ -91,15 +89,15 @@ body.search-body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-lg);
-    padding-bottom: var(--space-sm);
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--color-border);
 }
 
 .filter-section {
-    margin-bottom: var(--space-md);
+    margin-bottom: 1rem;
     border-bottom: 1px solid var(--color-border);
-    padding-bottom: var(--space-md);
+    padding-bottom: 1rem;
 }
 
 .filter-section:last-child {
@@ -198,15 +196,25 @@ body.search-body {
 }
 
 .sort-select {
-    padding: 8px 12px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    background: white;
-    font-size: 0.9375rem;
+    padding: 0.65rem 1rem;
+    padding-right: 2.5rem; /* space for arrow */
+    border: 1px solid var(--color-3);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
     font-weight: 500;
     cursor: pointer;
-    color: var(--color-4);
+    color: var(--color-3);
     outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: white;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%232B5C8F%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
 /* ------------------------------------- */
@@ -451,4 +459,202 @@ body.search-body {
 
 .btn-solid:hover {
     background: var(--color-3);
+}
+/* ------------------------------------- */
+/* INTENT TOGGLE SWITCH                  */
+/* ------------------------------------- */
+
+.intent-toggle {
+    display: flex;
+    position: relative;
+    background: var(--color-3);
+    border-radius: 99px;
+    padding: 4px;
+    width: 180px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.intent-toggle input[type="radio"] {
+    display: none;
+}
+
+.intent-toggle label {
+    flex: 1;
+    text-align: center;
+    padding: 0.4rem 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.3s ease;
+}
+
+.intent-toggle input[type="radio"]:checked + label {
+    color: var(--color-3);
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    height: calc(100% - 8px);
+    background: white;
+    border-radius: 99px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    z-index: 1;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#intent-rent:checked ~ .toggle-slider {
+    transform: translateX(100%);
+}
+
+/* ------------------------------------- */
+/* DOUBLE RANGE SLIDER                   */
+/* ------------------------------------- */
+
+.range-slider-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.double-range-slider {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    margin-top: 10px;
+}
+
+.slider-track-bg {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background-color: #d3d6db;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.slider-track {
+    position: absolute;
+    height: 4px;
+    background-color: var(--color-3);
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 4px;
+    z-index: 2;
+}
+
+.double-range-slider input[type="range"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    pointer-events: none;
+    z-index: 3;
+    outline: none;
+    margin: 0;
+    top: 0;
+}
+
+.double-range-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: auto;
+    width: 22px;
+    height: 22px;
+    background-color: white;
+    border: 6px solid var(--color-3);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    margin-top: -9px;
+}
+
+.double-range-slider input[type="range"]::-moz-range-thumb {
+    pointer-events: auto;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border: 6px solid var(--color-3);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* ------------------------------------- */
+/* DUAL THUMB RANGE SLIDER               */
+/* ------------------------------------- */
+
+.range-slider-container {
+    padding: 0.5rem 0;
+}
+
+.range-display {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 1.5rem;
+}
+
+.range-controls {
+    position: relative;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.range-track {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background: #c6c6c6;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.range-fill {
+    position: absolute;
+    height: 4px;
+    background: var(--color-3);
+    border-radius: 4px;
+    z-index: 2;
+}
+
+.range-controls input[type="range"] {
+    position: absolute;
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: none;
+    background: transparent;
+    z-index: 3;
+    outline: none;
+}
+
+.range-controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: all;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 5px solid var(--color-3);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.range-controls input[type="range"]::-moz-range-thumb {
+    pointer-events: all;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+    border: 5px solid var(--color-3);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }

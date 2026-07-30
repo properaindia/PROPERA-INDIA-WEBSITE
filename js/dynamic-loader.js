@@ -517,6 +517,186 @@ async function initHomepage() {
     }
 }
 
+// Helper to parse price strings into numbers for sorting and filtering
+function parsePriceValue(priceStr) {
+    if (!priceStr) return Number.MAX_VALUE;
+    const str = priceStr.toLowerCase().replace(/,/g, '');
+    if (str.includes('request')) return Number.MAX_VALUE;
+    
+    // Match the first number and its optional unit (cr, l, lac, lakh, k)
+    const match = str.match(/([\d\.]+)\s*(cr|crore|l|lac|lakh|k)?/);
+    if (match) {
+        const val = parseFloat(match[1]);
+        const unit = match[2];
+        let multiplier = 1;
+        
+        if (unit) {
+            if (unit.startsWith('cr')) multiplier = 10000000;
+            else if (unit.startsWith('l')) multiplier = 100000;
+            else if (unit === 'k') multiplier = 1000;
+        }
+        
+        return val * multiplier;
+    }
+    return Number.MAX_VALUE;
+}
+
+function formatPriceLabel(value) {
+    if (value >= 10000000) {
+        let cr = value / 10000000;
+        return `₹${cr % 1 === 0 ? cr : cr.toFixed(2)} Cr`;
+    } else if (value >= 100000) {
+        let l = value / 100000;
+        return `₹${l % 1 === 0 ? l : l.toFixed(2)} L`;
+    } else if (value >= 1000) {
+        return `₹${value.toLocaleString('en-IN')}`;
+    }
+    return `₹${value}`;
+}
+
+function updateSliderVisuals() {
+    const minInput = document.getElementById('budget-min');
+    const maxInput = document.getElementById('budget-max');
+    if (!minInput || !maxInput) return;
+    
+    let minVal = parseFloat(minInput.value);
+    let maxVal = parseFloat(maxInput.value);
+    
+    if (minVal > maxVal) {
+        let tmp = minVal;
+        minVal = maxVal;
+        maxVal = tmp;
+    }
+    
+    document.getElementById('range-min-val').textContent = formatPriceLabel(minVal);
+    
+    const absoluteMax = parseFloat(maxInput.max);
+    let maxLabel = formatPriceLabel(maxVal);
+    if (maxVal >= absoluteMax) maxLabel += '+';
+    
+    document.getElementById('range-max-val').textContent = maxLabel;
+    
+    const range = absoluteMax - parseFloat(minInput.min);
+    const leftPercent = ((minVal - parseFloat(minInput.min)) / range) * 100;
+    const rightPercent = ((maxVal - parseFloat(minInput.min)) / range) * 100;
+    const fill = document.getElementById('range-fill');
+    if (fill) {
+        fill.style.left = leftPercent + '%';
+        fill.style.width = (rightPercent - leftPercent) + '%';
+    }
+}
+
+function updateDynamicFilters(onFilterChangeCallback) {
+    const intentChecked = document.querySelector('input[name="intent_switch"]:checked');
+    if (!intentChecked) return;
+    const intent = intentChecked.value.toLowerCase();
+    
+    // 1. Property Type
+    const typeContainer = document.querySelector('.filter-section:nth-of-type(1) .filter-options');
+    if (typeContainer) {
+        if (intent === 'rent') {
+            typeContainer.innerHTML = `
+                <label class="custom-label"><input type="checkbox" value="apartment"> Apartment</label>
+                <label class="custom-label"><input type="checkbox" value="villa"> Villa</label>
+                <label class="custom-label"><input type="checkbox" value="commercial"> Commercial</label>
+            `;
+        } else {
+            typeContainer.innerHTML = `
+                <label class="custom-label"><input type="checkbox" value="apartment"> Apartment</label>
+                <label class="custom-label"><input type="checkbox" value="villa"> Villa</label>
+                <label class="custom-label"><input type="checkbox" value="plot"> Plot</label>
+            `;
+        }
+    }
+    
+    // 2. Budget Slider setup
+    const budgetMinInput = document.getElementById('budget-min');
+    const budgetMaxInput = document.getElementById('budget-max');
+    if (budgetMinInput && budgetMaxInput) {
+        if (intent === 'rent') {
+            budgetMinInput.min = 10000;
+            budgetMinInput.max = 300000;
+            budgetMinInput.step = 1000;
+            budgetMaxInput.min = 10000;
+            budgetMaxInput.max = 300000;
+            budgetMaxInput.step = 1000;
+            budgetMinInput.value = 10000;
+            budgetMaxInput.value = 300000;
+        } else {
+            budgetMinInput.min = 4000000;
+            budgetMinInput.max = 70000000;
+            budgetMinInput.step = 100000;
+            budgetMaxInput.min = 4000000;
+            budgetMaxInput.max = 70000000;
+            budgetMaxInput.step = 100000;
+            budgetMinInput.value = 4000000;
+            budgetMaxInput.value = 70000000;
+        }
+        updateSliderVisuals();
+    }
+
+    // 3. BHK Setup
+    const bhkContainer = document.querySelector('.filter-section:nth-of-type(4) .filter-options');
+    if (bhkContainer) {
+        if (intent === 'rent') {
+            bhkContainer.innerHTML = `
+                <label class="custom-label"><input type="checkbox" value="1 rk"> 1 RK</label>
+                <label class="custom-label"><input type="checkbox" value="1 bhk"> 1 BHK</label>
+                <label class="custom-label"><input type="checkbox" value="2 bhk"> 2 BHK</label>
+                <label class="custom-label"><input type="checkbox" value="3 bhk"> 3 BHK</label>
+                <label class="custom-label"><input type="checkbox" value="4+ bhk"> 4+ BHK</label>
+            `;
+        } else {
+            bhkContainer.innerHTML = `
+                <label class="custom-label"><input type="checkbox" value="2 bhk"> 2 BHK</label>
+                <label class="custom-label"><input type="checkbox" value="3 bhk"> 3 BHK</label>
+                <label class="custom-label"><input type="checkbox" value="4+ bhk"> 4+ BHK</label>
+            `;
+        }
+    }
+    
+    // 4. Localities Extraction
+    const relevantProps = allProperties.filter(p => {
+        const pIntent = (p.specs && p.specs.intent) ? p.specs.intent.toLowerCase() : '';
+        if (intent === 'buy') return pIntent !== 'rent';
+        return pIntent === 'rent';
+    });
+    
+    const localityCounts = {};
+    relevantProps.forEach(p => {
+        if (!p.location) return;
+        const parts = p.location.split(',');
+        parts.forEach(part => {
+            let loc = part.trim();
+            if (!loc) return;
+            if (/bengaluru|bangalore|karnataka|\\b\\d{6}\\b/i.test(loc)) return;
+            
+            const normalized = loc.toLowerCase();
+            if (!localityCounts[normalized]) {
+                localityCounts[normalized] = { name: loc, count: 0 };
+            }
+            localityCounts[normalized].count++;
+        });
+    });
+    
+    const sortedLocalities = Object.values(localityCounts).sort((a, b) => b.count - a.count);
+    
+    const locContainer = document.querySelector('.filter-section:nth-of-type(3) .filter-options');
+    if (locContainer) {
+        locContainer.innerHTML = sortedLocalities.map(loc => 
+            `<label class="custom-label"><input type="checkbox" value="${loc.name.toLowerCase()}"> ${loc.name} (${loc.count})</label>`
+        ).join('');
+    }
+    
+    // Re-attach event listeners to new checkboxes
+    const newInputs = document.querySelectorAll('.search-sidebar input[type="checkbox"]');
+    newInputs.forEach(input => {
+        if (onFilterChangeCallback) {
+            input.addEventListener('change', onFilterChangeCallback);
+        }
+    });
+}
+
 // Initialization for Search Pages
 async function initSearchPage() {
     const resultsContainer = document.getElementById('dynamic-search-results');
@@ -531,36 +711,231 @@ async function initSearchPage() {
     const props = await fetchProperties();
     if (loadersShown) await fastForwardLoadersTo99();
     clearLoaders();
+    
     if (!props || props.length === 0) {
         resultsContainer.innerHTML = '<div style="padding: 2rem; text-align: center;">No properties found.</div>';
         return;
     }
 
-    // Very basic filtering based on URL parameters (can be expanded)
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get('q') ? params.get('q').toLowerCase() : '';
     
-    let filteredProps = props;
+    // Set initial filters based on default selected toggle (Buy/Rent)
+    // BEFORE reading URL parameters so we don't overwrite them!
+    updateDynamicFilters(renderResults);
     
-    if (searchQuery) {
-        filteredProps = filteredProps.filter(p => 
-            p.title.toLowerCase().includes(searchQuery) || 
-            p.location.toLowerCase().includes(searchQuery) ||
-            (p.builder && p.builder.toLowerCase().includes(searchQuery))
-        );
+    // Pre-select filters based on URL parameters
+    const intentParam = params.get('intent');
+    if (intentParam) {
+        const intentRadio = document.querySelector(`input[name="intent_switch"][value="${intentParam.toLowerCase()}"]`);
+        if (intentRadio) intentRadio.checked = true;
     }
     
-    // Render
-    if (filteredProps.length === 0) {
-        resultsContainer.innerHTML = '<div style="padding: 2rem; text-align: center;">No matching properties found.</div>';
-    } else {
-        resultsContainer.innerHTML = filteredProps.map((p, i) => createResultCardHTML(p, i)).join('');
+    const typeParam = params.get('type');
+    if (typeParam) {
+        const typeInputs = document.querySelectorAll('.filter-section:nth-of-type(1) input[type="checkbox"]');
+        typeInputs.forEach(input => {
+            const labelText = input.parentElement.textContent.trim().toLowerCase();
+            if (labelText.includes(typeParam.toLowerCase())) {
+                input.checked = true;
+            }
+        });
     }
     
-    const countElement = document.getElementById('result-count');
-    if (countElement) {
-        countElement.textContent = filteredProps.length;
+    const bhkParam = params.get('bhk');
+    if (bhkParam) {
+        const bhkInputs = document.querySelectorAll('.filter-section:nth-of-type(4) input[type="checkbox"]');
+        bhkInputs.forEach(input => {
+            const labelText = input.parentElement.textContent.trim().toLowerCase().replace(' bhk', '');
+            if (labelText === bhkParam.toLowerCase()) {
+                input.checked = true;
+            }
+        });
     }
+    
+    // Listen for toggle switches to rebuild filters
+    document.querySelectorAll('input[name="intent_switch"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            updateDynamicFilters(renderResults);
+            renderResults();
+        });
+    });
+    
+    // Listen to range sliders
+    const budgetMinInput = document.getElementById('budget-min');
+    const budgetMaxInput = document.getElementById('budget-max');
+    const applyBudgetBtn = document.getElementById('apply-budget-btn');
+    if (budgetMinInput && budgetMaxInput) {
+        budgetMinInput.addEventListener('input', () => {
+            updateSliderVisuals();
+        });
+        budgetMaxInput.addEventListener('input', () => {
+            updateSliderVisuals();
+        });
+        if (applyBudgetBtn) {
+            applyBudgetBtn.addEventListener('click', renderResults);
+        }
+    }
+
+    // Automatically open filter sections if they have a checked input
+    document.querySelectorAll('.filter-section').forEach(section => {
+        const hasChecked = section.querySelector('input:checked');
+        if (hasChecked) {
+            section.setAttribute('open', '');
+        }
+    });
+    
+    // Store original ID to preserve "Newest" sort order
+    props.forEach((p, index) => p._originalIndex = index);
+    
+    function renderResults() {
+        let filteredProps = [...props];
+        
+        // 1. Text Search (from URL)
+        if (searchQuery) {
+            filteredProps = filteredProps.filter(p => 
+                p.title.toLowerCase().includes(searchQuery) || 
+                (p.location && p.location.toLowerCase().includes(searchQuery)) ||
+                (p.builder && p.builder.toLowerCase().includes(searchQuery))
+            );
+        }
+        
+        // 2. Intent Filter
+        const intentChecked = document.querySelector('input[name="intent_switch"]:checked');
+        if (intentChecked) {
+            const intentVal = intentChecked.value.toLowerCase();
+            filteredProps = filteredProps.filter(p => {
+                const pIntent = (p.specs && p.specs.intent) ? p.specs.intent.toLowerCase() : '';
+                const pType = (p.specs && p.specs.type) ? p.specs.type.toLowerCase() : '';
+                if (intentVal === 'buy') return pIntent !== 'rent' && !pType.includes('commercial');
+                if (intentVal === 'rent') return pIntent === 'rent';
+                return true;
+            });
+        }
+        
+        // 3. Property Type Filter
+        const typeInputs = Array.from(document.querySelectorAll('.filter-section:nth-of-type(1) input:checked'));
+        if (typeInputs.length > 0) {
+            const typeVals = typeInputs.map(i => i.value);
+            filteredProps = filteredProps.filter(p => {
+                const pType = (p.specs && p.specs.type) ? p.specs.type.toLowerCase() : '';
+                return typeVals.some(tv => pType.includes(tv) || (tv === 'apartment' && pType.includes('flat')));
+            });
+        }
+        
+        // 4. Budget Filter (Dual-Thumb Slider)
+        const bMin = document.getElementById('budget-min');
+        const bMax = document.getElementById('budget-max');
+        if (bMin && bMax) {
+            let selectedMin = parseFloat(bMin.value);
+            let selectedMax = parseFloat(bMax.value);
+            if (selectedMin > selectedMax) {
+                let tmp = selectedMin;
+                selectedMin = selectedMax;
+                selectedMax = tmp;
+            }
+            const absoluteMax = parseFloat(bMax.max);
+            
+            // Only filter if not at default full extent
+            if (selectedMin > parseFloat(bMin.min) || selectedMax < absoluteMax) {
+                filteredProps = filteredProps.filter(p => {
+                    const price = parsePriceValue(p.priceRange);
+                    if (price === Number.MAX_VALUE) return true; // Keep "Price on Request"
+                    if (price < selectedMin) return false;
+                    if (selectedMax < absoluteMax && price > selectedMax) return false;
+                    return true;
+                });
+            }
+        }
+        
+        // 5. Location Filter
+        const locInputs = Array.from(document.querySelectorAll('.filter-section:nth-of-type(3) input:checked'));
+        if (locInputs.length > 0) {
+            const locVals = locInputs.map(i => i.value);
+            filteredProps = filteredProps.filter(p => {
+                const pLoc = p.location ? p.location.toLowerCase() : '';
+                return locVals.some(lv => pLoc.includes(lv));
+            });
+        }
+        
+        // 6. BHK Filter
+        const bhkInputs = Array.from(document.querySelectorAll('.filter-section:nth-of-type(4) input:checked'));
+        if (bhkInputs.length > 0) {
+            const bhkVals = bhkInputs.map(i => i.value);
+            filteredProps = filteredProps.filter(p => {
+                const pConfig = (p.specs && p.specs.configuration) ? p.specs.configuration.toLowerCase() : '';
+                return bhkVals.some(bv => {
+                    if (bv === '4+ bhk') return pConfig.includes('4') || pConfig.includes('5') || pConfig.includes('6');
+                    return pConfig.includes(bv.replace(' bhk',''));
+                });
+            });
+        }
+        
+        // 7. Sorting
+        const sortSelect = document.getElementById('desktop-sort-select');
+        if (sortSelect) {
+            const sortVal = sortSelect.value;
+            filteredProps.sort((a, b) => {
+                if (sortVal === 'price-asc') {
+                    const priceA = parsePriceValue(a.priceRange);
+                    const priceB = parsePriceValue(b.priceRange);
+                    if (priceA === Number.MAX_VALUE && priceB !== Number.MAX_VALUE) return 1;
+                    if (priceB === Number.MAX_VALUE && priceA !== Number.MAX_VALUE) return -1;
+                    if (priceA === priceB) return a._originalIndex - b._originalIndex;
+                    return priceA - priceB;
+                } else if (sortVal === 'price-desc') {
+                    const priceA = parsePriceValue(a.priceRange);
+                    const priceB = parsePriceValue(b.priceRange);
+                    if (priceA === Number.MAX_VALUE && priceB !== Number.MAX_VALUE) return 1;
+                    if (priceB === Number.MAX_VALUE && priceA !== Number.MAX_VALUE) return -1;
+                    if (priceA === priceB) return a._originalIndex - b._originalIndex;
+                    return priceB - priceA;
+                } else if (sortVal === 'newest') {
+                    return b._originalIndex - a._originalIndex;
+                } else {
+                    // 'relevant' or default
+                    return a._originalIndex - b._originalIndex;
+                }
+            });
+        }
+        
+        // Render
+        if (filteredProps.length === 0) {
+            resultsContainer.innerHTML = '<div style="padding: 2rem; text-align: center;">No matching properties found.</div>';
+        } else {
+            resultsContainer.innerHTML = filteredProps.map((p, i) => createResultCardHTML(p, i)).join('');
+        }
+        
+        const countElement = document.getElementById('result-count');
+        if (countElement) {
+            countElement.textContent = filteredProps.length;
+        }
+    }
+    
+    // Attach event listeners for real-time updates
+    const filterInputs = document.querySelectorAll('.search-sidebar input');
+    filterInputs.forEach(input => {
+        input.addEventListener('change', renderResults);
+    });
+    
+    const sortSelect = document.getElementById('desktop-sort-select');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', renderResults);
+    }
+    
+    const resetBtn = document.getElementById('reset-filters-btn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            document.querySelectorAll('.search-sidebar input[type="checkbox"]').forEach(input => {
+                input.checked = false; // Reset means completely uncheck all boxes
+            });
+            updateDynamicFilters(renderResults);
+            renderResults();
+        });
+    }
+    
+    // Initial Render
+    renderResults();
 }
 
 // Auto-run depending on page
@@ -680,3 +1055,4 @@ document.addEventListener('mouseout', function(e) {
         }
     }
 });
+
