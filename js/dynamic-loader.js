@@ -412,6 +412,31 @@ function fastForwardLoadersTo99() {
     });
 }
 
+// Update Stats Banner dynamically
+function updateStatsBanner(props) {
+    const elListings = document.getElementById('stat-listings');
+    const elBuilders = document.getElementById('stat-builders');
+    const elLocalities = document.getElementById('stat-localities');
+
+    if (elListings && elBuilders && elLocalities) {
+        // Active Project Listings
+        elListings.dataset.target = props.length;
+        
+        // Builders & Developers
+        const builders = new Set(props.map(p => (p.builder || '').trim()).filter(b => b));
+        elBuilders.dataset.target = builders.size;
+        
+        // Localities Tracked in Bangalore
+        const localities = new Set(props.map(p => (p.location || '').trim().toLowerCase()).filter(l => l));
+        elLocalities.dataset.target = localities.size;
+        
+        // Trigger Animation
+        if (typeof window.updateAndAnimateStats === 'function') {
+            window.updateAndAnimateStats();
+        }
+    }
+}
+
 // Initialization for Homepage
 async function initHomepage() {
     let loadersShown = false;
@@ -423,6 +448,9 @@ async function initHomepage() {
     if (loadersShown) await fastForwardLoadersTo99();
     clearLoaders();
     if (!props || props.length === 0) return;
+
+    // Update Live Stats
+    updateStatsBanner(props);
 
     // Priority Premium Track
     const priorityTrack = document.getElementById('premium-track');
