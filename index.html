@@ -26,6 +26,58 @@
 </head>
 <body class="theme-root" style="background: var(--color-5);">
 
+  <!-- FULL SCREEN LOADER -->
+  <style>
+    #loaderWrap {
+      position: fixed;
+      inset: 0;
+      background: #1B3A6B;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      font-family: 'Inter', 'Helvetica Neue', sans-serif;
+      transition: opacity 0.6s ease;
+    }
+    .bg-lines { position: absolute; inset: 0; overflow: hidden; opacity: 0.05; width: 100%; height: 100%; }
+    .bg-lines line { stroke: #ffffff; stroke-width: 1; }
+    .logo-area { display: flex; flex-direction: column; align-items: center; gap: 16px; z-index: 2; animation: fadeUp 0.8s ease both; }
+    .logo-icon { width: 64px; height: 64px; }
+    .logo-text { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .logo-name { color: #ffffff; font-size: 28px; font-weight: 600; letter-spacing: 4px; line-height: 1; }
+    .logo-sub { color: rgba(255,255,255,0.5); font-size: 9px; letter-spacing: 5px; text-transform: uppercase; }
+    .tagline { color: rgba(255,255,255,0.45); font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; margin-top: 8px; animation: fadeUp 0.8s 0.2s ease both; }
+    .progress-area { margin-top: 52px; display: flex; flex-direction: column; align-items: center; gap: 14px; z-index: 2; animation: fadeUp 0.8s 0.4s ease both; }
+    .progress-bar-track { width: 200px; height: 2px; background: rgba(255,255,255,0.12); border-radius: 2px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; width: 0%; background: #6FA8DC; border-radius: 2px; transition: width 0.1s linear; }
+    .progress-label { color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 400; transition: opacity 0.2s ease; }
+    .done-check { opacity: 0; transform: scale(0.6); transition: opacity 0.4s ease, transform 0.4s ease; color: #6FA8DC; font-size: 22px; }
+    .done-check.visible { opacity: 1; transform: scale(1); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  <div id="loaderWrap" style="display: none;">
+    <svg class="bg-lines" viewBox="0 0 700 480" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <line x1="0" y1="480" x2="200" y2="0"/>
+      <line x1="100" y1="480" x2="300" y2="0"/>
+      <line x1="200" y1="480" x2="400" y2="0"/>
+      <line x1="300" y1="480" x2="500" y2="0"/>
+      <line x1="400" y1="480" x2="600" y2="0"/>
+      <line x1="500" y1="480" x2="700" y2="0"/>
+      <line x1="600" y1="480" x2="800" y2="0"/>
+    </svg>
+    <div class="logo-area">
+      <img src="assets/Picture4.png" alt="Propera India Logo" style="max-height: 140px; width: auto; object-fit: contain;">
+    </div>
+    <div class="progress-area">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="bar"></div>
+      </div>
+      <span class="progress-label" id="label">Loading</span>
+      <i class="done-check" id="check" aria-hidden="true" style="font-style: normal; font-weight: bold;">✓</i>
+    </div>
+  </div>
+
   <!-- SECTION 1: NAVBAR -->
   <header class="navbar">
     <div class="navbar-container">

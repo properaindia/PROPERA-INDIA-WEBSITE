@@ -39,83 +39,98 @@ async function fetchProperties(forceFresh = false) {
 async function fetchFreshData() {
     if (fetchPromise) return fetchPromise;
     
+    const maxRetries = 3;
+    
     fetchPromise = (async () => {
-        try {
-            const scriptUrl = typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' ? GOOGLE_APPS_SCRIPT_URL : "https://script.google.com/macros/s/AKfycbxkBu-BIS1bzOKV-lDDeZNtXm3B8wfHHUNzgw6LJ-8QoyttAckjs2-mDYyz5zGOMKFDgQ/exec";
-            const url = scriptUrl + '?action=getProperties&t=' + Date.now();
-            
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            
-            let properties = await response.json();
-            
-            if (properties && properties.length > 0 && !properties.error) {
-                properties = properties.map(prop => {
-                    // 1. Remove hardcoded 'Verified' badge from backend
-                    if (prop.badges) {
-                        prop.badges = prop.badges.filter(b => b.toLowerCase() !== 'verified');
-                    } else {
-                        prop.badges = [];
-                    }
-                    
-                    const isPremium = prop.badges && prop.badges.includes('Premium');
-                    const isBudget = !isPremium;
-                    const type = (prop.specs && prop.specs.type) ? prop.specs.type.toString().toLowerCase() : '';
-                    
-                    if (type.includes('plot')) {
-                        if (!prop.badges.includes('Plots')) prop.badges.unshift('Plots');
-                    } else if (type.includes('commercial')) {
-                        if (!prop.badges.includes('Commercial Space')) prop.badges.unshift('Commercial Space');
-                    } else if (isPremium) {
-                        if (!prop.badges.includes('Premium Flat')) prop.badges.unshift('Premium Flat');
-                    } else if (isBudget) {
-                        if (!prop.badges.includes('Budget Flat')) prop.badges.unshift('Budget Flat');
-                    }
-                    
-                    // 2. Rewrite old Google Drive image URLs to the working lh3 API
-                    if (prop.images) {
-                        prop.images = prop.images.map(url => {
-                            const match = url.match(/id=([a-zA-Z0-9_-]+)/);
-                            if (match && url.includes('drive.google.com')) {
-                                return `https://lh3.googleusercontent.com/d/${match[1]}`;
-                            }
-                            return url;
-                        });
-                    }
-                    // 3. Replace <> with - across all string fields
-                    const sanitize = (obj) => {
-                        for (let key in obj) {
-                            if (typeof obj[key] === 'string') {
-                                obj[key] = obj[key].replace(/<>/g, '-');
-                            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-                                sanitize(obj[key]);
-                            }
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                const scriptUrl = typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' ? GOOGLE_APPS_SCRIPT_URL : "https://script.google.com/macros/s/AKfycbxkBu-BIS1bzOKV-lDDeZNtXm3B8wfHHUNzgw6LJ-8QoyttAckjs2-mDYyz5zGOMKFDgQ/exec";
+                const url = scriptUrl + '?action=getProperties&t=' + Date.now();
+                
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                let properties = await response.json();
+                
+                if (properties && properties.length > 0 && !properties.error) {
+                    properties = properties.map(prop => {
+                        // 1. Remove hardcoded 'Verified' badge from backend
+                        if (prop.badges) {
+                            prop.badges = prop.badges.filter(b => b.toLowerCase() !== 'verified');
+                        } else {
+                            prop.badges = [];
                         }
-                    };
-                    sanitize(prop);
+                        
+                        const isPremium = prop.badges && prop.badges.includes('Premium');
+                        const isBudget = !isPremium;
+                        const type = (prop.specs && prop.specs.type) ? prop.specs.type.toString().toLowerCase() : '';
+                        
+                        if (type.includes('plot')) {
+                            if (!prop.badges.includes('Plots')) prop.badges.unshift('Plots');
+                        } else if (type.includes('commercial')) {
+                            if (!prop.badges.includes('Commercial Space')) prop.badges.unshift('Commercial Space');
+                        } else if (isPremium) {
+                            if (!prop.badges.includes('Premium Flat')) prop.badges.unshift('Premium Flat');
+                        } else if (isBudget) {
+                            if (!prop.badges.includes('Budget Flat')) prop.badges.unshift('Budget Flat');
+                        }
+                        
+                        // 2. Rewrite old Google Drive image URLs to the working lh3 API
+                        if (prop.images) {
+                            prop.images = prop.images.map(url => {
+                                const match = url.match(/id=([a-zA-Z0-9_-]+)/);
+                                if (match && url.includes('drive.google.com')) {
+                                    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+                                }
+                                return url;
+                            });
+                        }
+                        // 3. Replace <> with - across all string fields
+                        const sanitize = (obj) => {
+                            for (let key in obj) {
+                                if (typeof obj[key] === 'string') {
+                                    obj[key] = obj[key].replace(/<>/g, '-');
+                                } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                                    sanitize(obj[key]);
+                                }
+                            }
+                        };
+                        sanitize(prop);
 
-                    return prop;
-                });
-                
-                // If data actually changed from memory, we could trigger a re-render here
-                const dataChanged = JSON.stringify(properties) !== JSON.stringify(allProperties);
-                allProperties = properties;
-                sessionStorage.setItem('propera_data_v5', JSON.stringify(properties));
-                
-                // If data changed in the background, automatically update the UI!
-                if (dataChanged && document.readyState === 'complete') {
-                    if (document.getElementById('track-premium') || document.getElementById('track-buy')) initHomepage();
-                    if (document.getElementById('dynamic-search-results')) initSearchPage();
+                        return prop;
+                    });
+                    
+                    // If data actually changed from memory, we could trigger a re-render here
+                    const dataChanged = JSON.stringify(properties) !== JSON.stringify(allProperties);
+                    allProperties = properties;
+                    sessionStorage.setItem('propera_data_v5', JSON.stringify(properties));
+                    
+                    // If data changed in the background, automatically update the UI!
+                    if (dataChanged && document.readyState === 'complete') {
+                        if (document.getElementById('track-premium') || document.getElementById('track-buy')) initHomepage();
+                        if (document.getElementById('dynamic-search-results')) initSearchPage();
+                    }
+                    return properties;
                 }
+                
+                // If we get here, properties is empty or has an error
+                if (properties && properties.error) throw new Error(properties.error);
+                return properties; // Empty array returned successfully
+                
+            } catch (e) {
+                console.error(`Failed to fetch properties (Attempt ${attempt}/${maxRetries}):`, e);
+                if (attempt === maxRetries) {
+                    return [];
+                }
+                // Wait 1.5 seconds before retrying
+                await new Promise(r => setTimeout(r, 1500));
             }
-            return properties;
-        } catch (e) {
-            console.error("Failed to fetch properties:", e);
-            return [];
-        } finally {
-            fetchPromise = null;
         }
     })();
+    
+    fetchPromise.finally(() => {
+        fetchPromise = null;
+    });
     
     return fetchPromise;
 }
@@ -353,14 +368,32 @@ function showLoaders() {
             <div class="pro-loader-text">Loading Properties... <span class="pro-progress">0%</span></div>
         </div>
     `;
+    const searchLoaderHTML = `
+        <div style="grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; min-height: 50vh; width: 100%; padding-top: 8vh; box-sizing: border-box;">
+            <div class="progress-area" style="position: relative; width: 90%; max-width: 288px; display: flex; flex-direction: column; align-items: center; gap: 0.9rem;">
+                <div class="progress-bar-track" style="width: 100%; height: 4px; background: rgba(27, 58, 107, 0.1); border-radius: 2px; overflow: hidden;">
+                    <div class="progress-bar-fill search-bar-fill" style="width: 0%; height: 100%; background: var(--color-3); transition: width 0.1s linear;"></div>
+                </div>
+                <span class="progress-label search-bar-label" style="font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; color: var(--color-3); opacity: 0.7;">Loading</span>
+                <i class="done-check search-bar-check" aria-hidden="true" style="font-style: normal; font-weight: bold; font-size: 1.35rem; color: var(--color-3); opacity: 0; display: none;">✓</i>
+            </div>
+        </div>
+    `;
+    const fullLoader = document.getElementById('loaderWrap');
     const tracks = ['premium-track', 'track-premium', 'track-buy', 'track-budget', 'track-rent', 'track-plots', 'track-commercial', 'dynamic-search-results'];
     tracks.forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.innerHTML = loaderHTML;
+        if (el && !fullLoader) {
+            el.innerHTML = (id === 'dynamic-search-results') ? searchLoaderHTML : loaderHTML;
+        }
     });
+
+    if (fullLoader) fullLoader.style.display = 'flex';
 
     if (window.proLoaderInterval) clearInterval(window.proLoaderInterval);
     let progress = 0; // use float for smooth slowdowns
+    const msgs = ['Loading', 'Fetching listings', 'Almost there', 'Optimizing results...'];
+
     window.proLoaderInterval = setInterval(() => {
         let increment;
         if (progress < 40) {
@@ -374,7 +407,7 @@ function showLoaders() {
         } else if (progress < 98) {
             increment = Math.random() * 0.3 + 0.05; // 0.05-0.35
         } else {
-            increment = Math.random() * 0.05;      // almost stopped, creeping to 99
+            increment = Math.random() * 0.02;      // almost stopped, creeping to 99
         }
         
         progress += increment;
@@ -382,12 +415,67 @@ function showLoaders() {
         
         let displayProgress = Math.floor(progress);
         document.querySelectorAll('.pro-progress').forEach(el => el.innerText = displayProgress + '%');
+
+        const newIdx = displayProgress < 40 ? 0 : displayProgress < 75 ? 1 : displayProgress < 95 ? 2 : 3;
+
+        // Full screen loader progress
+        const bar = document.getElementById('bar');
+        const label = document.getElementById('label');
+        if (bar && label) {
+            bar.style.width = displayProgress + '%';
+            if (label.dataset.msgIdx != newIdx) {
+                label.dataset.msgIdx = newIdx;
+                label.style.opacity = '0';
+                setTimeout(() => { label.textContent = msgs[newIdx]; label.style.opacity = '1'; }, 200);
+            }
+        }
+        
+        // Search page loader progress
+        document.querySelectorAll('.search-bar-fill').forEach(b => b.style.width = displayProgress + '%');
+        document.querySelectorAll('.search-bar-label').forEach(l => {
+            if (l.dataset.msgIdx != newIdx) {
+                l.dataset.msgIdx = newIdx;
+                l.style.opacity = '0';
+                setTimeout(() => { l.textContent = msgs[newIdx]; l.style.opacity = '1'; }, 200);
+            }
+        });
     }, 100);
 }
 
 function clearLoaders() {
     if (window.proLoaderInterval) clearInterval(window.proLoaderInterval);
     document.querySelectorAll('.pro-progress').forEach(el => el.innerText = '100%');
+    
+    const bar = document.getElementById('bar');
+    const label = document.getElementById('label');
+    const check = document.getElementById('check');
+    const fullLoader = document.getElementById('loaderWrap');
+    
+    // Checkmarks for search page
+    document.querySelectorAll('.search-bar-fill').forEach(b => b.style.width = '100%');
+    document.querySelectorAll('.search-bar-label').forEach(l => l.style.opacity = '0');
+    document.querySelectorAll('.search-bar-check').forEach(c => {
+        c.style.display = 'block';
+        setTimeout(() => c.style.opacity = '1', 50);
+    });
+    
+    if (bar && label && check && fullLoader) {
+        bar.style.width = '100%';
+        label.style.opacity = '0';
+        check.classList.add('visible');
+        setTimeout(() => {
+            fullLoader.style.opacity = '0';
+            setTimeout(() => {
+                fullLoader.style.display = 'none';
+                fullLoader.style.opacity = '1';
+                bar.style.width = '0%';
+                check.classList.remove('visible');
+                label.style.opacity = '1';
+                label.textContent = 'Loading';
+                delete label.dataset.msgIdx;
+            }, 600);
+        }, 600);
+    }
 }
 
 function fastForwardLoadersTo99() {
@@ -395,20 +483,30 @@ function fastForwardLoadersTo99() {
         if (!window.proLoaderInterval) { resolve(); return; }
         clearInterval(window.proLoaderInterval);
         
-        let progress = parseFloat(document.querySelector('.pro-progress')?.innerText || "0");
+        let barWidth = document.getElementById('bar')?.style.width;
+        if (!barWidth) {
+            const searchFill = document.querySelector('.search-bar-fill');
+            if (searchFill) barWidth = searchFill.style.width;
+        }
+        let progress = parseFloat(document.querySelector('.pro-progress')?.innerText || barWidth || "0");
+        
         let fastInterval = setInterval(() => {
             if (progress >= 99) {
                 clearInterval(fastInterval);
-                window.proLoaderInterval = null; // Prevent re-clearing
+                window.proLoaderInterval = null; 
                 resolve();
             } else {
                 let diff = 99 - progress;
                 let inc = Math.max(1, Math.floor(diff / 2));
                 progress += inc;
-                if (progress > 99) progress = 99;
+                
                 document.querySelectorAll('.pro-progress').forEach(el => el.innerText = Math.floor(progress) + '%');
+                const bar = document.getElementById('bar');
+                if (bar) bar.style.width = progress + '%';
+                
+                document.querySelectorAll('.search-bar-fill').forEach(b => b.style.width = progress + '%');
             }
-        }, 30);
+        }, 50);
     });
 }
 
@@ -737,8 +835,14 @@ async function initSearchPage() {
     }
 
     const props = await fetchProperties();
-    if (loadersShown) await fastForwardLoadersTo99();
-    clearLoaders();
+    if (loadersShown) {
+        await fastForwardLoadersTo99();
+        clearLoaders();
+        // Allow the user to see the beautiful checkmark for just a moment before injecting results
+        await new Promise(r => setTimeout(r, 600));
+    } else {
+        clearLoaders();
+    }
     
     if (!props || props.length === 0) {
         resultsContainer.innerHTML = '<div style="padding: 2rem; text-align: center;">No properties found.</div>';
@@ -746,11 +850,20 @@ async function initSearchPage() {
     }
 
     const params = new URLSearchParams(window.location.search);
-    const searchQuery = params.get('q') ? params.get('q').toLowerCase() : '';
+    let searchQuery = params.get('q') ? params.get('q').toLowerCase() : '';
     
     // Set initial filters based on default selected toggle (Buy/Rent)
     // BEFORE reading URL parameters so we don't overwrite them!
     updateDynamicFilters(renderResults);
+    
+    const liveSearchInput = document.getElementById('live-search-input');
+    if (liveSearchInput) {
+        liveSearchInput.value = params.get('q') || '';
+        liveSearchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase();
+            renderResults();
+        });
+    }
     
     // Pre-select filters based on URL parameters
     const intentParam = params.get('intent');
