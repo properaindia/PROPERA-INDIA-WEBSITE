@@ -641,6 +641,55 @@ async function initHomepage() {
             }, 6000); // 6s interval
         }
     }
+    
+    // Setup ping-pong scrolling for all property carousels on the landing page
+    const isLandingPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || !window.location.pathname.includes('.html');
+    if (isLandingPage) {
+        const viewports = document.querySelectorAll('.carousel-viewport');
+        viewports.forEach(viewport => {
+            // Check if it actually has a track
+            const track = viewport.querySelector('.carousel-track');
+            if (!track) return;
+            
+            let isHovered = false;
+            viewport.addEventListener('mouseenter', () => isHovered = true);
+            viewport.addEventListener('mouseleave', () => isHovered = false);
+            // Also pause on touch interactions
+            viewport.addEventListener('touchstart', () => isHovered = true, {passive: true});
+            viewport.addEventListener('touchend', () => isHovered = false, {passive: true});
+            
+            // Adjust CSS properties to allow smooth JS animation
+            viewport.style.scrollSnapType = 'none';
+            viewport.style.scrollBehavior = 'auto';
+            
+            let direction = 1; 
+            let lastTime = 0;
+            const pixelsPerSecond = 50; 
+            
+            function step(time) {
+                if (lastTime === 0) lastTime = time;
+                const dt = time - lastTime;
+                lastTime = time;
+                
+                if (!isHovered && dt < 100) { 
+                    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+                    if (maxScroll > 0) {
+                        const moveAmount = (pixelsPerSecond * dt / 1000) * direction;
+                        viewport.scrollLeft += moveAmount;
+                        
+                        // Check boundaries with a 1px buffer to handle floating point scroll amounts
+                        if (direction === 1 && viewport.scrollLeft >= maxScroll - 1) {
+                            direction = -1;
+                        } else if (direction === -1 && viewport.scrollLeft <= 1) {
+                            direction = 1;
+                        }
+                    }
+                }
+                requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        });
+    }
 }
 
 // Helper to parse price strings into numbers for sorting and filtering
