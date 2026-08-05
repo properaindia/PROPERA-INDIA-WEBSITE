@@ -46,12 +46,71 @@
             Other cities coming soon!
           </div>
         </div>
-      <nav class="nav-links">
-        <a href="search.html?intent=buy" class="nav-item">Buy</a>
-        <a href="search.html?intent=rent" class="nav-item">Rent</a>
-      </nav>
+      <div class="search-ribbon" style="flex: 1; max-width: 601px; margin: 0 1rem; display: flex; gap: 1rem; align-items: center; background: white; padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid var(--color-border); box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="live-search-input" placeholder="Search by locality, builder, or project..." style="flex: 1; border: none; outline: none; font-size: 0.95rem; background: transparent; color: var(--color-3);">
+          
+          <div style="display: flex; gap: 1rem; align-items: center; border-left: 1px solid var(--color-border); padding-left: 1rem; z-index: 100;">
+              <div class="nav-dropdown">
+                <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px; color: var(--color-3); font-weight: 600;">Buy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+                <div class="nav-dropdown-content" style="top: 100%; right: auto; left: 0;">
+                  <a href="search.html?intent=buy&type=apartment">Apartments</a>
+                  <a href="search.html?intent=buy&type=villa">Villas</a>
+                  <div class="nav-nested-dropdown">
+                    <a href="#">Plots <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+                    <div class="nav-nested-dropdown-content">
+                      <a href="search.html?intent=buy&type=plot">Residential Plot</a>
+                      <a href="search.html?intent=commercial&type=plot">Commercial land</a>
+                      <a href="search.html?intent=buy&type=plot">Agricultural Land</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nav-dropdown">
+                <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px; color: var(--color-3); font-weight: 600;">Rent/Lease <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+                <div class="nav-dropdown-content" style="top: 100%; right: auto; left: 0;">
+                  <div class="nav-nested-dropdown">
+                    <a href="#">Apartments <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+                    <div class="nav-nested-dropdown-content">
+                      <a href="search.html?intent=rent&bhk=1">1 BHK</a>
+                      <a href="search.html?intent=rent&bhk=2">2 BHK</a>
+                      <a href="search.html?intent=rent&bhk=3">3 BHK</a>
+                      <a href="search.html?intent=rent&bhk=4+">4+ BHK</a>
+                    </div>
+                  </div>
+                  <div class="nav-nested-dropdown">
+                    <a href="#">Commercial Spaces <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+                    <div class="nav-nested-dropdown-content">
+                      <a href="search.html?intent=commercial">Shop/Showroom</a>
+                      <a href="search.html?intent=commercial">Office Space</a>
+                      <a href="search.html?intent=commercial">Warehouse/Godown</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nav-dropdown">
+                <a href="premium-services.html" class="nav-item" style="display:flex; align-items:center; gap:4px; color: var(--color-3); font-weight: 600;">Premium Services <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+                <div class="nav-dropdown-content" style="top: 100%; right: auto; left: 0;">
+                  <a href="premium-services.html#home-loans">Home Loans</a>
+                  <a href="premium-services.html#legal-services">Legal Assistance</a>
+                  <a href="premium-services.html#interiors">Home Interiors</a>
+                </div>
+              </div>
+          </div>
+      </div>
       <div class="nav-actions">
-        <a href="premium-services.html" class="nav-item" style="color: white;">Premium Services</a>
+
+
+        <a href="post-property.html" class="nav-owner-cta">
+          <div class="cta-default">
+            <span class="sparkle" style="font-size:1.1rem; line-height:1;">&#10022;</span> Property Owner?
+          </div>
+          <div class="cta-hover">
+            Sell/Rent FREE &rsaquo;
+          </div>
+        </a>
         <a href="about-contact.html#contact" class="nav-item contact-expert-btn">Contact Expert</a>
       </div>
     </div>
@@ -123,37 +182,7 @@
             </div>
         </section>
 
-        <!-- Meet Experts -->
-        <section class="team-section">
-            <h2 class="section-title" style="margin-bottom: var(--space-xl);">Meet Our Experts</h2>
-            <div class="team-grid">
-                <div class="team-member">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80" alt="Expert" class="team-avatar">
-                    <h4>Mukesh</h4>
-                    <p class="team-role">Senior Property Consultant</p>
-                </div>
-                <div class="team-member">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" alt="Expert" class="team-avatar">
-                    <h4>Ganesh</h4>
-                    <p class="team-role">Legal Advisor</p>
-                </div>
-                <div class="team-member">
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80" alt="Expert" class="team-avatar">
-                    <h4>Anthony</h4>
-                    <p class="team-role">Commercial Specialist</p>
-                </div>
-                <div class="team-member">
-                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80" alt="Expert" class="team-avatar">
-                    <h4>Nivethan</h4>
-                    <p class="team-role">Client Relations</p>
-                </div>
-                <div class="team-member">
-                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=200&q=80" alt="Expert" class="team-avatar">
-                    <h4>Angela</h4>
-                    <p class="team-role">Property Consultant</p>
-                </div>
-            </div>
-        </section>
+
 
         <!-- Contact Section (Split Layout) -->
         <section id="contact" class="split-section" style="background: var(--color-5);">
