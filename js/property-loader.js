@@ -107,6 +107,18 @@ function updateDynamicSEO(data) {
 
     document.title = title;
 
+    // Set dynamic canonical URL based on clean property slug
+    const cleanSlug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    const canonicalUrl = `https://properaindia.com/property-detail.html?propertyname=${cleanSlug}`;
+    
+    let canonicalTag = document.querySelector('link[rel="canonical"]');
+    if (!canonicalTag) {
+        canonicalTag = document.createElement('link');
+        canonicalTag.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonicalTag);
+    }
+    canonicalTag.setAttribute('href', canonicalUrl);
+
     let metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', desc);
 
@@ -326,6 +338,194 @@ function renderProperty(data) {
         `;
         }).join('');
     }
+
+    // 11. Structured Data JSON-LD
+    updatePropertyStructuredData(data);
+}
+
+function updatePropertyStructuredData(data) {
+    const existingScript = document.getElementById('property-json-ld');
+    if (existingScript) existingScript.remove();
+
+    if (!data || !data.title) return;
+
+    const cleanSlug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    const canonicalUrl = `https://properaindia.com/property-detail.html?propertyname=${cleanSlug}`;
+
+    const typeStr = (data.specs && data.specs.type) ? data.specs.type.toLowerCase() : '';
+    let schemaType = "Accommodation";
+    if (typeStr.includes('apartment') || typeStr.includes('flat')) {
+        schemaType = "Apartment";
+    } else if (typeStr.includes('villa') || typeStr.includes('house')) {
+        schemaType = "SingleFamilyResidence";
+    }
+
+    let description = "";
+    if (Array.isArray(data.description)) {
+        description = data.description.join(' ');
+    } else if (data.description) {
+        description = data.description.toString();
+    }
+
+    let validImages = [];
+    if (currentPropertyImages && currentPropertyImages.length > 0) {
+        validImages = currentPropertyImages.filter(img => img && !img.startsWith('video:') && img.startsWith('http'));
+    }
+
+    let propertyEntity = {
+        "@type": schemaType,
+        "@id": `${canonicalUrl}#property`,
+        "name": data.title,
+        "description": description || undefined,
+        "url": canonicalUrl
+    };
+
+    if (validImages.length > 0) {
+        propertyEntity.image = validImages;
+    }
+
+    if (data.location) {
+        propertyEntity.address = {
+            "@type": "PostalAddress",
+            "addressLocality": data.location
+        };
+    }
+
+    if (data.specs && data.specs.size) {
+        const match = data.specs.size.match(/(\d+(?:\.\d+)?)\s*sqft/i);
+        if (match && match[1]) {
+            propertyEntity.floorSize = {
+                "@type": "QuantitativeValue",
+                "value": parseFloat(match[1]),
+                "unitCode": "FTK"
+            };
+        }
+    }
+
+    if (data.specs && data.specs.configuration) {
+        const configStr = data.specs.configuration.toLowerCase();
+        const match = configStr.match(/^([1-9])\s*bhk/i);
+        if (match && match[1] && !configStr.includes('+')) {
+            propertyEntity.numberOfBedrooms = parseInt(match[1], 10);
+        }
+    }
+
+    if (data.amenities && Array.isArray(data.amenities)) {
+        const amenities = [];
+        data.amenities.forEach(a => {
+            const name = typeof a === 'string' ? a : (a.name || '');
+            if (name.trim()) {
+                amenities.push({
+                    "@type": "LocationFeatureSpecification",
+                    "name": name.trim()
+                });
+            }
+        });
+        if (amenities.length > 0) {
+            propertyEntity.amenityFeature = amenities;
+        }
+    }
+
+    let offerEntity = null;
+    if (data.priceRange) {
+        const priceStr = data.priceRange.toLowerCase();
+        let numericPrice = null;
+        if (!priceStr.includes('request')) {
+            const numMatch = priceStr.match(/[\d\.]+/);
+            if (numMatch) {
+                let basePrice = parseFloat(numMatch[0]);
+                if (priceStr.includes('cr')) {
+                    numericPrice = basePrice * 10000000;
+                } else if (priceStr.includes('lakh') || priceStr.includes('lac')) {
+                    numericPrice = basePrice * 100000;
+                } else if (priceStr.includes('k')) {
+                    numericPrice = basePrice * 1000;
+                } else {
+                    const rawNum = parseFloat(priceStr.replace(/[^\d\.]/g, ''));
+                    if (!isNaN(rawNum) && rawNum > 0) {
+                        numericPrice = rawNum;
+                    }
+                }
+            }
+        }
+        
+        if (numericPrice && !isNaN(numericPrice) && numericPrice > 0) {
+            offerEntity = {
+                "@type": "Offer",
+                "@id": `${canonicalUrl}#offer`,
+                "price": numericPrice,
+                "priceCurrency": "INR",
+                "itemOffered": {
+                    "@id": `${canonicalUrl}#property`
+                }
+            };
+            
+            if (data.specs && data.specs.intent) {
+                const intent = data.specs.intent.toLowerCase();
+                if (intent === 'buy') {
+                    offerEntity.businessFunction = "http://purl.org/goodrelations/v1#Sell";
+                } else if (intent === 'rent') {
+                    offerEntity.businessFunction = "http://purl.org/goodrelations/v1#LeaseOut";
+                }
+            }
+        }
+    }
+
+    const graph = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebPage",
+                "@id": `${canonicalUrl}#webpage`,
+                "url": canonicalUrl,
+                "name": data.title,
+                "description": description || undefined,
+                "mainEntity": {
+                    "@id": `${canonicalUrl}#property`
+                },
+                "breadcrumb": {
+                    "@id": `${canonicalUrl}#breadcrumb`
+                },
+                "publisher": {
+                    "@id": "https://properaindia.com/#organization"
+                }
+            },
+            propertyEntity,
+            {
+                "@type": "BreadcrumbList",
+                "@id": `${canonicalUrl}#breadcrumb`,
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://properaindia.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Search Properties",
+                        "item": "https://properaindia.com/search.html"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": data.title,
+                        "item": canonicalUrl
+                    }
+                ]
+            }
+        ]
+    };
+    if (offerEntity) {
+        graph["@graph"].push(offerEntity);
+    }
+
+    const script = document.createElement('script');
+    script.id = 'property-json-ld';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(graph, null, 2);
+    document.head.appendChild(script);
 }
 
 // Global functions for new gallery/lightbox

@@ -872,8 +872,137 @@ function updateDynamicFilters(onFilterChangeCallback) {
     });
 }
 
+function updateSearchCanonical() {
+    const validIntents = ['buy', 'rent', 'commercial'];
+    const validTypes = ['apartment', 'villa', 'plot', 'commercial'];
+    const validBhks = ['1 rk', '1', '2', '3', '4+'];
+
+    const params = new URLSearchParams(window.location.search);
+    
+    let parts = [];
+    
+    const intent = params.get('intent');
+    if (intent && validIntents.includes(intent.toLowerCase())) {
+        parts.push('intent=' + encodeURIComponent(intent.toLowerCase()));
+    }
+
+    const type = params.get('type');
+    if (type && validTypes.includes(type.toLowerCase())) {
+        parts.push('type=' + encodeURIComponent(type.toLowerCase()));
+    }
+
+    const bhk = params.get('bhk');
+    if (bhk && validBhks.includes(bhk.toLowerCase())) {
+        parts.push('bhk=' + encodeURIComponent(bhk.toLowerCase()));
+    }
+
+    let canonicalUrl = 'https://properaindia.com/search.html';
+    if (parts.length > 0) {
+        canonicalUrl += '?' + parts.join('&');
+    }
+
+    let link = document.querySelector('link[rel="canonical"]');
+    if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'canonical');
+        document.head.appendChild(link);
+    }
+    link.setAttribute('href', canonicalUrl);
+}
+
+function updateSearchMetadata() {
+    const validIntents = ['buy', 'rent', 'commercial'];
+    const validTypes = ['apartment', 'villa', 'plot', 'commercial'];
+    const validBhks = ['1 rk', '1', '2', '3', '4+'];
+
+    const params = new URLSearchParams(window.location.search);
+    
+    const intent = params.get('intent') ? params.get('intent').toLowerCase() : null;
+    const type = params.get('type') ? params.get('type').toLowerCase() : null;
+    const bhk = params.get('bhk') ? params.get('bhk').toLowerCase() : null;
+
+    let isIntentValid = validIntents.includes(intent);
+    let isTypeValid = validTypes.includes(type);
+    let isBhkValid = validBhks.includes(bhk);
+
+    if (!isIntentValid && !isTypeValid && !isBhkValid) {
+        document.title = 'Search Properties - Propera India';
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'Explore premium real estate, luxury villas, and affordable housing options across India with Propera India.');
+        }
+        return;
+    }
+
+    let titleParts = [];
+    
+    if (isBhkValid && isTypeValid) {
+        let bhkStr = bhk === '1 rk' ? '1 RK' : `${bhk.toUpperCase()} BHK`;
+        let typeStr = type === 'apartment' ? 'Apartments' : type === 'villa' ? 'Villas' : type === 'plot' ? 'Plots' : 'Commercial Spaces';
+        titleParts.push(`${bhkStr} ${typeStr}`);
+    } else if (isTypeValid) {
+        let typeStr = type === 'apartment' ? 'Apartments' : type === 'villa' ? 'Villas' : type === 'plot' ? 'Plots' : 'Commercial Spaces';
+        titleParts.push(typeStr);
+    } else if (isBhkValid) {
+        let bhkStr = bhk === '1 rk' ? '1 RK' : `${bhk.toUpperCase()} BHK`;
+        titleParts.push(`${bhkStr} Properties`);
+    } else {
+        if (isIntentValid && intent === 'commercial') {
+            titleParts.push('Commercial Properties');
+        } else {
+            titleParts.push('Properties');
+        }
+    }
+    
+    if (isIntentValid) {
+        if (intent === 'buy') titleParts.push('for Sale');
+        else if (intent === 'rent') titleParts.push('for Rent');
+    }
+
+    const titlePrefix = titleParts.join(' ');
+    document.title = `${titlePrefix} | Propera India`;
+    
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+        metaDesc.setAttribute('content', `Explore ${titlePrefix.toLowerCase()} on Propera India. Browse available real estate options across India matching your requirements.`);
+    }
+}
+
+window.searchRobotsQTriggered = new URLSearchParams(window.location.search).has('q');
+
+function updateSearchRobotsForResults(resultCount = null) {
+    let metaRobots = document.querySelector('meta[name="robots"]');
+    
+    if (window.searchRobotsQTriggered) {
+        if (!metaRobots) {
+            metaRobots = document.createElement('meta');
+            metaRobots.setAttribute('name', 'robots');
+            document.head.appendChild(metaRobots);
+        }
+        metaRobots.setAttribute('content', 'noindex,follow');
+        return;
+    }
+    
+    if (resultCount === 0) {
+        if (!metaRobots) {
+            metaRobots = document.createElement('meta');
+            metaRobots.setAttribute('name', 'robots');
+            document.head.appendChild(metaRobots);
+        }
+        metaRobots.setAttribute('content', 'noindex,follow');
+    } else if (resultCount !== null && resultCount > 0) {
+        if (metaRobots && metaRobots.getAttribute('content') === 'noindex,follow') {
+            metaRobots.remove();
+        }
+    }
+}
+
 // Initialization for Search Pages
 async function initSearchPage() {
+    updateSearchCanonical();
+    updateSearchRobotsForResults();
+    updateSearchMetadata();
+    
     const resultsContainer = document.getElementById('dynamic-search-results');
     if (!resultsContainer) return;
     
@@ -1090,6 +1219,8 @@ async function initSearchPage() {
         }
         
         // Render
+        updateSearchRobotsForResults(filteredProps.length);
+        
         if (filteredProps.length === 0) {
             resultsContainer.innerHTML = '<div style="padding: 2rem; text-align: center;">No matching properties found.</div>';
         } else {
