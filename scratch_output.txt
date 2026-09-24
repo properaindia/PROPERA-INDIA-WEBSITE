@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Favicon for Browser Tab and SEO -->
+    <link rel="icon" type="image/png" href="assets/Picture3.png">
+    <link rel="apple-touch-icon" href="assets/Picture3.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Details - Propera India</title>
+    <meta name="description" content="Explore premium real estate, luxury villas, and affordable housing options across India with Propera India.">
+    <meta name="keywords" content="premium real estate, luxury villas, affordable housing, Propera India, property details">
+    
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:title" content="Propera India | Premium Real Estate in India">
+    <meta property="og:description" content="Explore premium real estate, luxury villas, and affordable housing options across India with Propera India.">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Propera India | Premium Real Estate in India">
+    <meta name="twitter:description" content="Explore premium real estate, luxury villas, and affordable housing options across India with Propera India.">
+    
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/property-detail.css">
+
+
+  
+
+
+  
+    
+    <script src="js/form-handler.js" defer></script>
+    <meta name="description" content="View premium property details, galleries, and configurations with Propera India.">
+    <link rel="stylesheet" href="css/responsive.css">
+  
+  <!-- Vercel Web Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body class="theme-root">
+
+    <!-- NAVBAR (Copied exactly from index.html for correct ribbon hover effects) -->
+    <header class="navbar">
+      <div class="navbar-container">
+        <div class="logo">
+          <a href="index.html" style="display:flex; align-items:center;"><img src="assets/RibbonLogo.png" alt="Propera Logo" style="height: 44px; width: auto; object-fit: contain;"></a>
+        </div>
+        <div class="city-selector">
+          <button class="city-btn">
+            Bangalore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="city-dropdown">
+            Other cities coming soon!
+          </div>
+        </div>
+              <div class="search-ribbon" style="flex: 1; max-width: 601px; margin: 0 1rem; display: flex; gap: 1rem; align-items: center; background: white; padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid var(--color-border); box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="live-search-input" placeholder="Search by locality, builder, or project..." style="flex: 1; border: none; outline: none; font-size: 0.95rem; background: transparent; color: var(--color-3);">
+          
+          <div style="display: flex; gap: 1rem; align-items: center; border-left: 1px solid var(--color-border); padding-left: 1rem; z-index: 100;">
+              <div class="nav-dropdown">
+                <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px; color: var(--color-3); font-weight: 600;">Buy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+                <div class="nav-dropdown-content" style="top: 100%; right: auto; left: 0;">
+                  <a href="search.html?intent=buy&type=apartment">Apartments</a>
+                  <a href="search.html?intent=buy&type=villa">Villas</a>
+                  <div class="nav-nested-dropdown">
+                    <a href="#">Plots <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+                    <div class="nav-nested-dropdown-content">
+                      <a href="search.html?intent=buy&type=plot">Residential Plot</a>
+                      <a href="search.html?intent=commercial&type=plot">Commercial land</a>
+                      <a href="search.html?intent=buy&type=plot">Agricultural Land</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nav-dropdown">
+                <a href="#" class="nav-item" style="display:flex; align-items:center; gap:4px; color: var(--color-3); font-weight: 600;">Rent/Lease <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+                <div class="nav-dropdown-content" style="top: 100%; right: auto; left: 0;">
+                  <div class="nav-nested-dropdown">
+                    <a href="#">Apartments <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+                    <div class="nav-nested-dropdown-content">
+                      <a href="search.html?intent=rent&bhk=1">1 BHK</a>
+                      <a href="search.html?intent=rent&bhk=2">2 BHK</a>
+                      <a href="search.html?intent=rent&bhk=3">3 BHK</a>
+                      <a href="search.html?intent=rent&bhk=4+">4+ BHK</a>
+                    </div>
+                  </div>
+                  <div class="nav-nested-dropdown">
+                    <a href="#">Commercial Spaces <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+                    <div class="nav-nested-dropdown-content">
+                      <a href="search.html?intent=commercial">Shop/Showroom</a>
+                      <a href="search.html?intent=commercial">Office Space</a>
+                      <a href="search.html?intent=commercial">Warehouse/Godown</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nav-dropdown">
+                <a href="premium-services.html" class="nav-item" style="display:flex; align-items:center; gap:4px; color: var(--color-3); font-weight: 600;">Premium Services <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
+                <div class="nav-dropdown-content" style="top: 100%; right: auto; left: 0;">
+                  <a href="premium-services.html#home-loans">Home Loans</a>
+                  <a href="premium-services.html#legal-services">Legal Assistance</a>
+                  <a href="premium-services.html#interiors">Home Interiors</a>
+                </div>
+              </div>
+          </div>
+      </div>
+      <div class="nav-actions">
+        <a href="post-property.html" class="nav-owner-cta">
+          <div class="cta-default">
+            <span class="sparkle" style="font-size:1.1rem; line-height:1;">&#10022;</span> Property Owner?
+          </div>
+          <div class="cta-hover">
+            Sell/Rent FREE &rsaquo;
+          </div>
+        </a>
+        <a href="about-contact.html#contact" class="nav-item contact-expert-btn">Contact Expert</a>
+        <a href="https://wa.me/917975954357" target="_blank" rel="noopener" class="floating-whatsapp" aria-label="Chat on WhatsApp" style="position: static; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #25D366; color: white; margin-left: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+          <svg class="whatsapp-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        </a>
+      </div>
+      <button class="mobile-toggle" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="container property-page">
+        <!-- LEFT COLUMN: CONTENT -->
+        <div class="property-content">
+            
+            <!-- SECTION 1: PROPERTY HERO -->
+            <section class="prop-hero">
+                <div class="prop-header" style="margin-bottom: var(--space-sm); display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+                    <div class="prop-header-left">
+                        <h1 class="prop-title text-h1" style="font-size: 1.5rem; line-height: 1.2; margin-bottom: 0.15rem;">Loading...</h1>
+                        <p class="prop-subtitle text-muted" style="font-size: 0.85rem; margin-bottom: 0;">Loading details...</p>
+                    </div>
+                    <div class="prop-header-right">
+                        <div class="prop-price text-h2" style="color: var(--color-3); font-weight: 700; font-size: 1.3rem; margin-bottom: 0.15rem;">₹ --</div>
+                    </div>
+                </div>
+
+                <div class="prop-gallery" style="width: 100%; margin: 0;">
+                    <div class="main-image-container" style="position: relative;">
+                        <img id="main-prop-image" src="assets/Logo.jpeg" alt="Loading Image" class="main-image" fetchpriority="high">
+                        <iframe id="main-prop-video" src="" style="display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; border: none; z-index: 5;" allow="autoplay" allowfullscreen></iframe>
+                        <button class="carousel-prev gallery-nav-btn" onclick="window.prevMainImage(event)" aria-label="Previous image" style="z-index: 10;">‹</button>
+                        <button class="carousel-next gallery-nav-btn" onclick="window.nextMainImage(event)" aria-label="Next image" style="z-index: 10;">›</button>
+                        <div class="badge-container" style="z-index: 10;">
+                            <!-- Filled dynamically by JS -->
+                        </div>
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <!-- Filled dynamically by JS -->
+                    </div>
+                </div>
+
+                <div class="prop-header-bottom">
+
+                    <ul class="urgency-list">
+                        <!-- Filled dynamically by JS -->
+                    </ul>
+
+                    <div class="quick-facts">
+                        <!-- Filled dynamically by JS -->
+                    </div>
+
+                    <div class="prop-specs-grid">
+                        <!-- Filled dynamically by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <hr class="divider">
+
+            <!-- SECTION 2: ABOUT -->
+            <section class="prop-section" id="description">
+                <h2 class="section-title">About This Property</h2>
+                <div class="content-text">
+                    <p>Loading property description...</p>
+                </div>
+            </section>
+
+            <hr class="divider">
+
+            <!-- SECTION 3: AMENITIES -->
+            <section class="prop-section" id="amenities">
+                <div class="amenity-snapshot" style="margin-bottom: var(--space-sm);">
+                    <!-- Chips go here -->
+                </div>
+                <h2 class="section-title">Premium Amenities</h2>
+                <div class="grid grid-cols-3 amenities-grid">
+                    <!-- Amenities grid goes here -->
+                </div>
+            </section>
+
+            <hr class="divider">
+
+            <!-- SECTION 4: HIGHLIGHTS -->
+            <section class="prop-section" id="highlights">
+                <h2 class="section-title">Property Highlights</h2>
+                <div class="grid grid-cols-2 highlights-grid">
+                    <!-- Highlights go here -->
+                </div>
+            </section>
+
+            <hr class="divider">
+
+            <!-- SECTION 5: LANDMARKS -->
+            <section class="prop-section" id="landmarks">
+                <h2 class="section-title">Nearby Landmarks</h2>
+                <div class="grid grid-cols-2 landmarks-grid">
+                    <!-- Landmarks go here -->
+                </div>
+            </section>
+
+            <hr class="divider">
+
+            <!-- SECTION 6: MAP -->
+            <section class="prop-section" id="location">
+                <h2 class="section-title">Location Map</h2>
+                <div class="map-placeholder" id="prop-map-container" style="background: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80') center/cover; position: relative; cursor: pointer; border-radius: var(--radius-md); overflow: hidden; display: flex; align-items: center; justify-content: center; height: 350px;" onclick="loadMapEmbed()">
+                    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.5);"></div>
+                    <div class="map-inner" style="position: relative; z-index: 2; color: white; text-align: center;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48" style="margin-bottom: var(--space-sm);"><path d="M12 2c-3.3 0-6 2.7-6 6s6 14 6 14 6-10.7 6-14-2.7-6-6-6zm0 9c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/></svg>
+                        <h3 class="text-h4" style="color: white; margin-bottom: 0.5rem;">View Interactive Map</h3>
+                        <p>Click to load the live map & explore the neighborhood.</p>
+                        <button class="btn btn-primary" style="margin-top: var(--space-md); border: none; font-weight: 600;">Load Map</button>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="divider">
+
+
+        </div>
+
+        <!-- RIGHT COLUMN: SIDEBAR -->
+        <aside class="property-sidebar">
+            <div class="floating-card sticky-lead-capture" style="border: 1px solid var(--color-border); box-shadow: var(--shadow-md); border-radius: var(--radius-lg); padding: var(--space-lg); background: var(--bg-white);">
+                <div class="lead-header" style="text-align: center; margin-bottom: var(--space-md);">
+                    <h3 class="text-h3" style="color: var(--text-primary); margin-bottom: 0.5rem; font-family: var(--font-heading);">Interested?</h3>
+                    <p class="text-body-sm text-muted">Get exclusive offers & free site visit.</p>
+                </div>
+
+                <div class="instant-actions" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+                    <button type="button" class="btn btn-primary btn-block" style="font-weight: 600; padding: 0.8rem;" onclick="toggleModal('visit-modal')" data-interest="Buy">Book Free Site Visit</button>
+                    <a href="https://wa.me/917975954357" target="_blank" rel="noopener" class="btn btn-whatsapp btn-block" style="font-weight: 600; padding: 0.8rem;" data-interest="Buy">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px; display:inline-block; vertical-align:middle;"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.204-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
+                        WhatsApp Expert
+                    </a>
+                </div>
+                
+                <hr style="margin: 1.5rem 0; border:none; border-top: 1px solid var(--color-border);">
+
+                <form class="lead-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div class="input-group" style="margin: 0;">
+                        <label class="input-label" style="font-weight: 500;">Full Name</label>
+                        <input type="text" class="input-field" placeholder="e.g. Rahul Sharma" required style="padding: 0.75rem;">
+                    </div>
+                    <div class="input-group" style="margin: 0;">
+                        <label class="input-label" style="font-weight: 500;">Phone Number</label>
+                        <input type="tel" class="input-field" placeholder="+91" required style="padding: 0.75rem;">
+                    </div>
+                    
+                    <div class="grid grid-cols-2" style="gap: 0.75rem;">
+                        <div class="input-group" style="margin: 0;">
+                            <label class="input-label" style="font-weight: 500;">Interested In</label>
+                            <select class="input-field" id="lead-interest" style="padding: 0.75rem;">
+                                <option selected>Buy</option>
+                                <option>Rent</option>
+                            </select>
+                        </div>
+                        <div class="input-group" style="margin: 0;">
+                            <label class="input-label" style="font-weight: 500;">Budget</label>
+                            <select class="input-field" style="padding: 0.75rem;">
+                                <option>Under 1 Cr</option>
+                                <option>1 Cr - 2 Cr</option>
+                                <option>2 Cr+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-outline btn-block" style="margin-top: 0.5rem; font-weight: 600;">Request Callback</button>
+                    
+                    <div class="trust-badges" style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem; color: var(--color-3); font-size: 0.85rem; font-weight: 500;">
+                        <span>✓ No Spam Calls</span>
+                        <span>✓ Free Site Visit</span>
+                    </div>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Mobile Sticky CTA -->
+        <div class="mobile-sticky-cta" style="display: none;">
+            <button class="btn btn-outline" style="flex: 1;" onclick="window.open('https://wa.me/917975954357', '_blank')">WhatsApp</button>
+            <button class="btn btn-primary" style="flex: 2;" onclick="toggleModal('visit-modal')">Book Free Visit</button>
+        </div>
+    </main>
+
+    <!-- SECTION 7: BOOK VISIT MODAL -->
+    <div class="modal-overlay" id="visit-modal" onclick="closeModalOutside(event, 'visit-modal')">
+        <div class="modal-content" style="border-radius: var(--radius-lg); padding: var(--space-xl); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg);">
+                <h3 class="text-h3" style="margin: 0; color: var(--text-primary);">Schedule a Site Visit</h3>
+                <button onclick="toggleModal('visit-modal')" style="font-size: 1.5rem; color: var(--text-primary); background: var(--bg-off-white); border: none; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</button>
+            </div>
+            
+            <form class="lead-form form-auto-submit" data-source="Site Visit">
+                <!-- Hidden property name field so it can be sent to Google Script -->
+                <input type="hidden" name="property" id="visit-property-name" value="">
+                
+                <div class="input-group">
+                    <label class="input-label">Full Name</label>
+                    <input type="text" class="input-field" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="grid grid-cols-2" style="gap: var(--space-sm); margin-bottom: var(--space-md);">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label">Phone Number</label>
+                        <input type="tel" class="input-field" name="phone" placeholder="+91" required>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label">Email (Optional)</label>
+                        <input type="email" class="input-field" name="email" placeholder="Your email">
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2" style="gap: var(--space-sm); margin-bottom: var(--space-md);">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label">Preferred Date</label>
+                        <input type="date" class="input-field" name="visitDate" required>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label">Preferred Time</label>
+                        <input type="time" class="input-field" name="visitTime" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 1rem; font-weight: 600;">Schedule Site Visit</button>
+                <p class="text-body-sm text-muted" style="text-align: center; margin-top: var(--space-sm);">A Propera expert will contact you to confirm.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX OVERLAY -->
+    <div class="lightbox-overlay" id="gallery-lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <button class="lightbox-nav lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</button>
+        <div class="lightbox-img-container">
+            <img src="" alt="Property Preview" class="lightbox-img" id="lightbox-main-img">
+            <iframe id="lightbox-main-video" src="" style="display: none; width: 100%; height: 100%; max-height: 80vh; border: none;" allow="autoplay" allowfullscreen></iframe>
+        </div>
+        <button class="lightbox-nav lightbox-next" onclick="changeLightboxImage(1)">&#10095;</button>
+        <div class="lightbox-counter" id="lightbox-counter">1 / 1</div>
+    </div>
+
+    <!-- LIGHTWEIGHT JS -->
+    <script>
+        document.querySelectorAll('[data-interest]').forEach((trigger) => {
+            trigger.addEventListener('click', () => {
+                const targetValue = trigger.getAttribute('data-interest');
+                const interestSelect = document.getElementById('lead-interest');
+                if (interestSelect && targetValue) {
+                    interestSelect.value = targetValue;
+                }
+            });
+        });
+
+        function toggleModal(modalId) {
+            var modal = document.getElementById(modalId);
+            if (!modal) return;
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModalOutside(e, modalId) {
+            if (e.target.id === modalId) {
+                toggleModal(modalId);
+            }
+        }
+        
+        document.querySelectorAll('form').forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var btn = form.querySelector('button[type="submit"]');
+                if (btn) {
+                    var orig = btn.innerText;
+                    btn.innerText = 'Submitted ✓';
+                    btn.style.background = '#10b981';
+                    btn.style.color = 'white';
+                    btn.style.borderColor = '#10b981';
+                    setTimeout(function() { 
+                        btn.innerText = orig; 
+                        btn.style.background = ''; 
+                        btn.style.color = ''; 
+                        btn.style.borderColor = '';
+                        form.reset(); 
+                        var m = form.closest('.modal-overlay'); 
+                        if (m) toggleModal(m.id); 
+                    }, 3000);
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+    
+    <script src="js/property-loader.js"></script>
+
+<footer style="padding: 60px 20px 20px 20px; background: white; border-top: 1px solid var(--border);">
+    <div class="container grid grid-cols-4" style="gap: 40px; margin-bottom: 40px;">
+      <div>
+        <img src="assets/logoDARK.png" alt="Propera Logo" style="height: 40px; margin-bottom: 20px;">
+        <p class="text-muted text-body-sm">Propera India is your trusted partner in finding premium real estate across the country. 100% verified listings, zero hassle.</p>
+        <div style="margin-top: 24px;">
+          <div style="display: flex; gap: 16px;">
+            <a href="https://www.facebook.com/people/Propera-India-Realty/61590039786236/" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #1877F2; color: white; border-radius: 50%; text-decoration: none; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" aria-label="Facebook">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.597 1.323-1.325V1.325C24 .597 23.403 0 22.675 0z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/propera.india/" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%); color: white; border-radius: 50%; text-decoration: none; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" aria-label="Instagram">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://wa.me/917975954357" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #25D366; color: white; border-radius: 50%; text-decoration: none; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" aria-label="WhatsApp">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/propera-activity-21a532410/" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #0077b5; color: white; border-radius: 50%; text-decoration: none; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" aria-label="LinkedIn">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@ProperaIndiaOfficial" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #FF0000; color: white; border-radius: 50%; text-decoration: none; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" aria-label="YouTube">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.498 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-h4" style="margin-bottom: 20px;">Quick Links</h4>
+        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+          <li><a href="search.html?intent=buy" style="color: var(--text-secondary); text-decoration: none;">Buy Properties</a></li>
+          <li><a href="search.html?intent=rent" style="color: var(--text-secondary); text-decoration: none;">Rent Properties</a></li>
+          <li><a href="premium-services.html" style="color: var(--text-secondary); text-decoration: none;">Premium Services</a></li>
+          <li><a href="post-property.html" style="color: var(--text-secondary); text-decoration: none;">Post Property Free</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-h4" style="margin-bottom: 20px;">Contact</h4>
+        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+          <li style="color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            +91 79759 54357
+          </li>
+          <li style="color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            properaactivity@gmail.com
+          </li>
+          <li style="color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Propera India, Varthur, Bangalore - 560067</span>
+          </li>
+        </ul>
+      </div>
+          <div style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: -16px;">
+        <img src="assets/QR.png" alt="Customer Testimonials QR Code" style="width: 150px; height: 150px; object-fit: contain; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h4 style="margin: 0; font-weight: 700; font-size: 1.2rem; color: var(--text-primary); white-space: nowrap;">Customer's Testimonials!</h4>
+      </div>
+    </div>
+    <div style="text-align: center; color: var(--text-muted); padding-top: 20px; border-top: 1px solid var(--border);">
+      <p style="margin: 0;">&copy; 2026 Propera India. All rights reserved.</p>
+    </div>
+  </footer>
+  </footer>
+
+  <!-- Floating WhatsApp Button (Mobile Only) -->
+  <a href="https://wa.me/917975954357" target="_blank" rel="noopener" class="floating-whatsapp-mobile" aria-label="Chat on WhatsApp">
+    <svg class="whatsapp-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+  </a>
+</body>
