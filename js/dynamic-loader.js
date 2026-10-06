@@ -582,7 +582,10 @@ async function initHomepage() {
     // Budget Track
     const budgetTrack = document.getElementById('track-budget');
     if (budgetTrack) {
-        const budgetProps = props.filter(p => p.badges && p.badges.includes('Budget Flat'));
+        const budgetProps = props.filter(p => {
+            const intent = (p.specs && p.specs.intent) ? p.specs.intent.toString().toLowerCase() : '';
+            return p.badges && p.badges.includes('Budget Flat') && intent !== 'rent';
+        });
         if (budgetProps.length > 0) {
             budgetTrack.innerHTML = budgetProps.map((p, i) => createDiscoveryCardHTML(p, i)).join('');
         } else {
