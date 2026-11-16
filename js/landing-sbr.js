@@ -17,11 +17,11 @@
     leadSource: 'Google Ads - SBR Landing',
 
     // Google Ads conversion tracking. Replace the X placeholders with your own IDs.
-    adsId: 'AW-XXXXXXXXXX',                      // Google Ads > Goals > Conversions > Tag setup
+    adsId: 'AW-16990959723',                      // Google Ads > Goals > Conversions > Tag setup
     labels: {
-      whatsapp: 'XXXXXXXXXXXXXXXXXXX',           // conversion label for "WhatsApp click"
-      call: 'XXXXXXXXXXXXXXXXXXX',               // conversion label for "Call click"
-      form: 'XXXXXXXXXXXXXXXXXXX'                // conversion label for "Form submit"
+      whatsapp: 'DbuMCJ2F17kdEOvw9aU_',           // conversion label for "WhatsApp click"
+      call: '3JYlCJqF17kdEOvw9aU_',               // conversion label for "Call click"
+      form: 'W2OuCJ-E17kdEOvw9aU_'                // conversion label for "Form submit"
     },
     ga4Id: '',                                   // optional, e.g. 'G-ABC123XYZ'
     clarityId: ''                                // optional, Microsoft Clarity project id
