@@ -8,6 +8,10 @@
   ],
   "rewrites": [
     {
+      "source": "/sbr-one-residence-whitefield",
+      "destination": "/sbr-one-residence.html"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
     },

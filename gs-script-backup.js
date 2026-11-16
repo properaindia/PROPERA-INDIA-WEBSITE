@@ -23,6 +23,13 @@
  * I: Status (New Lead, Contacted, etc.)
  * J: Assigned To
  * K: Notes
+ * L: Keyword (utm_term)      <-- added for Google Ads landing pages
+ * M: Match type
+ * N: Campaign ID
+ * O: Ad group ID
+ * P: gclid
+ * Q: Page
+ * (Add these headers in row 1 of Sheet2 before deploying the new version.)
  */
 
 const SPREADSHEET_ID = "1_ChIJqKsQt2_4EZ86v20KxpGMOoW9NwciyC1Oahtp8A"; // Your spreadsheet ID
@@ -39,6 +46,22 @@ function doPost(e) {
     if (!data.name || !data.phone) {
       return ContentService.createTextOutput(
         JSON.stringify({ success: false, error: "Name and Phone are required" })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Honeypot: real visitors never fill this field. Pretend success, store nothing.
+    if (data.company_website) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ success: true, message: "OK", leadId: "IGNORED" })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Phone sanity check for Indian mobiles. Only enforced for Google Ads landing page leads,
+    // so the existing contact / site visit / post property forms (which may take NRI numbers) are unchanged.
+    const digits = String(data.phone).replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "").replace(/^0(?=\d{10}$)/, "");
+    if (String(data.source || "").indexOf("Google Ads") === 0 && !/^[6-9]\d{9}$/.test(digits)) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ success: false, error: "Please enter a valid 10-digit mobile number" })
       ).setMimeType(ContentService.MimeType.JSON);
     }
 
@@ -132,7 +155,7 @@ function doPost(e) {
     // Prepare data row
     const row = [
       leadId,                           // A: Lead ID
-      new Date().toLocaleDateString(),  // B: Date
+      Utilities.formatDate(new Date(), "Asia/Kolkata", "dd-MMM-yyyy HH:mm"),  // B: Date + time (IST)
       data.name || "",                  // C: Name
       data.phone || "",                 // D: Phone
       data.source || "Website Form",    // E: Source
@@ -141,7 +164,13 @@ function doPost(e) {
       data.budget || "",                // H: Budget
       "New Lead",                       // I: Status
       "",                               // J: Assigned To
-      data.message || ""                // K: Notes
+      data.message || "",               // K: Notes
+      data.utm_term || "",              // L: Keyword
+      data.matchtype || "",             // M: Match type
+      data.utm_campaign || "",          // N: Campaign ID
+      data.adgroupid || "",             // O: Ad group ID
+      data.gclid || "",                 // P: gclid
+      data.page || ""                   // Q: Page
     ];
 
     // Insert the row
@@ -341,6 +370,8 @@ Property: ${data.property || "N/A"}
 Interested In: ${data.interestedIn || "N/A"}
 Budget: ${data.budget || "N/A"}
 Message: ${data.message || "N/A"}
+Keyword: ${data.utm_term || "N/A"} (${data.matchtype || "-"})
+Page: ${data.page || "N/A"}
 
 Please log in to your Google Sheet to view and manage this lead.
     `;
