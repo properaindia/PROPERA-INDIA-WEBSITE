@@ -73,7 +73,7 @@
       gtag('event', evt, { event_category: 'sbr_landing', event_label: where || '', keyword: params.utm_term || '' });
       var label = CONFIG.labels[kind];
       if (!isPlaceholder(CONFIG.adsId) && !isPlaceholder(label)) {
-        gtag('event', 'conversion', { send_to: CONFIG.adsId + '/' + label });
+        gtag('event', 'conversion', { send_to: CONFIG.adsId + '/' + label, transport_type: 'beacon' });
       }
     } catch (e) { /* never block the user on tracking errors */ }
   }
@@ -148,7 +148,7 @@
     if (!document.getElementById('f-consent').checked) return showError('Please tick the consent box so we can contact you.');
 
     // Bot checks: honeypot filled, or form submitted unrealistically fast.
-    var tooFast = (Date.now() - pageLoadedAt) < 2500;
+    var tooFast = (Date.now() - pageLoadedAt) < 1200;
     if (form.company_website.value || tooFast) { return showThanks(false); }
 
     if (typeof GOOGLE_APPS_SCRIPT_URL === 'undefined') {

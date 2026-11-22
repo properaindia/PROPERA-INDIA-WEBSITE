@@ -157,3 +157,10 @@ h1,h2,h3{line-height:1.2;margin:0}
 @media(min-width:900px){.sticky-bar{display:none}.site-footer{padding-bottom:32px}}
 
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+
+
+/* --- Mobile: shorter hero and shorter form so the form is reached sooner --- */
+@media(max-width:639px){
+  .hero-points li:nth-child(n+3){display:none}
+  .form-card .row-2{display:none}   /* Interested in / Budget hidden on phones; values still sent as defaults */
+}
