@@ -24,7 +24,7 @@
       form: 'W2OuCJ-E17kdEOvw9aU_'                // conversion label for "Form submit"
     },
     ga4Id: '',                                   // optional, e.g. 'G-ABC123XYZ'
-    clarityId: ''                                // optional, Microsoft Clarity project id
+    clarityId: 'zi4trzl512'                                // optional, Microsoft Clarity project id
   };
   /* ================================================================= */
 
